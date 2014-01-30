@@ -55,11 +55,20 @@ static void DoBeforeEachAction();
   * entries in the Rules section later. 
   */
 
+punct [,.;:!?]
+text [a-zA-Z]
+line_comment \/\/
+start_multiline_comment \/\*
+end_multiline_comment \*\/
 
 %%             /* BEGIN RULES SECTION */
  /* All patterns and actions should be placed between the start and stop
   * %% markers which delimit the Rules section. 
   */ 
+
+{line_comment} {printf("doble-diag");}
+{start_multiline_comment} {printf("inicio_comentario_multilinea");}
+{end_multiline_comment} {printf("fin_comentario_multilinea");}
 
 %%
 /* The closing %% above marks the end of the Rules section and the beginning
