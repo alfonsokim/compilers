@@ -3,6 +3,9 @@
  * Lex inupt file to generate the scanner for the compiler.
  */
 
+%option yylineno
+%option noyywrap
+
 %{
 
 /* The text within this first region delimited by %{ and %} is assumed to
@@ -60,6 +63,35 @@ static void DoBeforeEachAction();
  /* All patterns and actions should be placed between the start and stop
   * %% markers which delimit the Rules section. 
   */ 
+"\n"            { yylineno++; }
+
+"\+"|"\-"       { printf("sim{%s}", yytext); }
+"\*"|"\/"       { printf("sim{%s}", yytext); }
+"\."|"\="       { printf("sim{%s}", yytext); }
+
+"=="|"+="       { printf("doble{%s}", yytext); }
+"--"|"++"       { printf("doble{%s}", yytext); }
+">="|"<="       { printf("doble{%s}", yytext); }
+
+void            { return TokenType::T_Void; } 
+int             { return TokenType::T_Int; }
+double          { return TokenType::T_Double; }
+bool            { return TokenType::T_Bool; }
+string          { return TokenType::T_String; }
+class           { return TokenType::T_Class; }
+interface       { return TokenType::T_Interface; }
+null            { return TokenType::T_Null; }
+this            { return TokenType::T_This; }
+extends         { return TokenType::T_Extends; }
+implements      { return TokenType::T_Implements; }
+for             { return TokenType::T_For; }
+while           { return TokenType::T_While; }
+if              { return TokenType::T_If; }
+else            { return TokenType::T_Else; }
+return          { return TokenType::T_Return; }
+break           { return TokenType::T_Break; }
+New             { return TokenType::T_New; }
+NewArray        { return TokenType::T_NewArray; }
 
 %%
 /* The closing %% above marks the end of the Rules section and the beginning

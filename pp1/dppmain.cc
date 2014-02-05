@@ -23,8 +23,14 @@
  * to strip comments and handle preprocessor directives.
  */
 int main(int argc, char *argv[]){
+  int ch;
+  while ((ch = getc(stdin)) != EOF)
+    putc(ch, stdout);
+  return 0;
+  /*
     InitScanner();
     TokenType token;
     while ((token = (TokenType)yylex()) != 0);
     return (ReportError::NumErrors() == 0? 0 : -1);
+    */
 }
