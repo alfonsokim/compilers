@@ -63,15 +63,35 @@ static void DoBeforeEachAction();
  /* All patterns and actions should be placed between the start and stop
   * %% markers which delimit the Rules section. 
   */ 
+
 "\n"            { yylineno++; }
+[[:space:]]     {  }
 
-"\+"|"\-"       { printf("sim{%s}", yytext); }
-"\*"|"\/"       { printf("sim{%s}", yytext); }
-"\."|"\="       { printf("sim{%s}", yytext); }
+"+"             { return TokenType::T_Plus; }
+"-"             { return TokenType::T_Minus; }
+"\*"            { return TokenType::T_Times; }
+"\/"            { return TokenType::T_Div; }
+"\."            { return TokenType::T_Dot; }    
+";"             { return TokenType::T_Colon; }
+"\%"            { return TokenType::T_Mod; }
+"\!"            { return TokenType::T_Not; }
+"\>"            { return TokenType::T_GreaterThan; }
+"\<"            { return TokenType::T_LessThan; }
+"\,"            { return TokenType::T_Comma; }
+"="             { return TokenType::T_Eq; }
 
-"=="|"+="       { printf("doble{%s}", yytext); }
-"--"|"++"       { printf("doble{%s}", yytext); }
-">="|"<="       { printf("doble{%s}", yytext); }
+"=="            { return TokenType::T_Equal; }
+"!="            { return TokenType::T_NotEqual; }
+"&&"            { return TokenType::T_And; }
+"||"            { return TokenType::T_Or; }
+">="            { return TokenType::T_GreaterEqual; }
+"<="            { return TokenType::T_LessEqual; }
+"\("            { return TokenType::T_OpenParenthesis; }
+"\)"            { return TokenType::T_CloseParenthesis; }
+"\["            { return TokenType::T_OpenBraces; }
+"\]"            { return TokenType::T_CloseBraces; }
+"\{"            { return TokenType::T_OpenCurly; }
+"\}"            { return TokenType::T_CloseCurly; }
 
 void            { return TokenType::T_Void; } 
 int             { return TokenType::T_Int; }
@@ -92,6 +112,18 @@ return          { return TokenType::T_Return; }
 break           { return TokenType::T_Break; }
 New             { return TokenType::T_New; }
 NewArray        { return TokenType::T_NewArray; }
+
+"true"          { yylval.boolConstant = true; return TokenType::T_BoolConstant; }
+"false"         { yylval.boolConstant = false; return TokenType::T_BoolConstant; }
+
+[-+]?[0-9]+     { yylval.integerConstant = atoi(yytext); return TokenType::T_IntConstant; }
+
+[-+]?([0-9]*\.[0-9]+)[eE]?[+-]?[0-9]+ { 
+    yylval.doubleConstant = atof(yytext); 
+    return TokenType::T_DoubleConstant; 
+}
+
+("\"")[^"^\n]*("\"") {yylval.stringConstant = yytext; return TokenType::T_StringConstant; } 
 
 %%
 /* The closing %% above marks the end of the Rules section and the beginning
