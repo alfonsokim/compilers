@@ -50,6 +50,9 @@ struct yyltype yylloc; // manually dclared for pp1, later Yacc provides
 static void DoBeforeEachAction(); 
 #define YY_USER_ACTION DoBeforeEachAction();
 
+int num_chars = 1;
+int num_lines = 1;
+
 %}
 
  /* The section before the first %% is the Definitions section of the lex
@@ -65,6 +68,7 @@ static void DoBeforeEachAction();
   * %% markers which delimit the Rules section. 
   */ 
 
+[\n]            { num_chars = 1; num_lines++; }
 [[:space:]]     {  }
 
 "+"             { return TokenType::T_Plus; }
@@ -94,7 +98,7 @@ static void DoBeforeEachAction();
 "\}"            { return TokenType::T_CloseCurly; }
 
 void            { return TokenType::T_Void; } 
-int             { return TokenType::T_Int; }
+"int"           { return TokenType::T_Int; }
 double          { return TokenType::T_Double; }
 bool            { return TokenType::T_Bool; }
 string          { return TokenType::T_String; }
@@ -125,7 +129,7 @@ NewArray        { return TokenType::T_NewArray; }
 
 "\""[^(\")]*"\"" {yylval.stringConstant = yytext; return TokenType::T_StringConstant; } 
 
-[a-zA-Z]+[a-zA-Z0-9_" "]* { 
+[a-zA-Z]+[a-zA-Z0-9_]* { 
     if(strlen(yytext) > MaxIdentLen){
         ReportError::LongIdentifier(&yylloc, yytext);
     }
@@ -166,4 +170,9 @@ void InitScanner()
  * to group code common to all actions.
  */
 static void DoBeforeEachAction() {
+    yylloc.first_column = num_chars;
+    num_chars += strlen(yytext);
+    yylloc.last_column = num_chars - 1;
+    yylloc.first_line = num_lines;
+    yylloc.last_line = num_lines;
 }
