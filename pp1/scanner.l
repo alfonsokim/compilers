@@ -18,6 +18,7 @@
 #include "scanner.h"
 #include "utility.h" // for PrintDebug()
 #include "errors.h"
+#include "location.h"
 
 /* Global variable: yylval
  * -----------------------
@@ -64,7 +65,6 @@ static void DoBeforeEachAction();
   * %% markers which delimit the Rules section. 
   */ 
 
-"\n"            { yylineno++; }
 [[:space:]]     {  }
 
 "+"             { return TokenType::T_Plus; }
@@ -123,7 +123,15 @@ NewArray        { return TokenType::T_NewArray; }
     return TokenType::T_DoubleConstant; 
 }
 
-("\"")[^"^\n]*("\"") {yylval.stringConstant = yytext; return TokenType::T_StringConstant; } 
+"\""[^(\")]*"\"" {yylval.stringConstant = yytext; return TokenType::T_StringConstant; } 
+
+[a-zA-Z]+[a-zA-Z0-9_" "]* { 
+    if(strlen(yytext) > MaxIdentLen){
+        ReportError::LongIdentifier(&yylloc, yytext);
+    }
+    strcpy(yylval.identifier, yytext);; 
+    return TokenType::T_Identifier; 
+}
 
 %%
 /* The closing %% above marks the end of the Rules section and the beginning
@@ -157,6 +165,5 @@ void InitScanner()
  * This function is installed as the YY_USER_ACTION. This is a place
  * to group code common to all actions.
  */
-static void DoBeforeEachAction()
-{
+static void DoBeforeEachAction() {
 }
