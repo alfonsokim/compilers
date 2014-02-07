@@ -133,7 +133,7 @@ NewArray        { return TokenType::T_NewArray; }
     if(strlen(yytext) > MaxIdentLen){
         ReportError::LongIdentifier(&yylloc, yytext);
     }
-    strcpy(yylval.identifier, yytext);; 
+    strcpy(yylval.identifier, yytext);
     return TokenType::T_Identifier; 
 }
 

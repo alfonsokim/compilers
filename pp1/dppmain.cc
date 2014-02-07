@@ -22,15 +22,15 @@
  * the preprocessor should echo stdin to stdout making the transformations
  * to strip comments and handle preprocessor directives.
  */
+     /*
+      int ch;
+      while ((ch = getc(stdin)) != EOF)
+        putc(ch, stdout);
+      return 0;
+    */
 int main(int argc, char *argv[]){
-  int ch;
-  while ((ch = getc(stdin)) != EOF)
-    putc(ch, stdout);
-  return 0;
-  /*
-    InitScanner();
+    //InitScanner();
     TokenType token;
     while ((token = (TokenType)yylex()) != 0);
     return (ReportError::NumErrors() == 0? 0 : -1);
-    */
 }

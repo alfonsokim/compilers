@@ -7,91 +7,69 @@
  */
 
 %{
-#include "scanner.h"
-#include "utility.h"
-#include "errors.h"
+#include <unordered_map>
 #include <string>
-#include <vector>
 
-void inDefine( char* ); 
-char* macro;
+#include "errors.h"
+
+static void define(char*, char*);
+static void replace(char*);
+char* defining;
+
+typedef std::unordered_map<std::string,std::string> stringmap;
+stringmap replacements;
+
+int line_number = 1;
 %}
 
-/* ************************************************************
-***************************************************************
-************************************************************ */
-
-UPPER_CASE      [A-Z]
-SINGLE_COMMENT  (\/\/).*
-%x IN_COMMENT
+%x COMMENT
+%x STRING
 %x DEFINE
-
-/* ************************************************************
-***************************************************************
-************************************************************ */
+%x IN_DEFINE
+%x REPLACE
 
 %%
 
-<INITIAL>{
-    "/*"        { BEGIN(IN_COMMENT); }
-    "#define "  { BEGIN DEFINE; }
-}
+"\n"                    { printf("\n"); line_number++; }
 
-<IN_COMMENT>{
-    "*/"      BEGIN(INITIAL);
-    [^*\n]+   // eat comment in chunks
-    "*"       // eat the lone star
-    \n        yylineno++;
-    <<EOF>>   { ReportError::UntermComment(); yyterminate(); } 
-}
+\/\/(.*)                {  }
 
-<DEFINE>[A-Z]+ {
-    macro = yytext;
-    printf("D[%s]\n", macro );
-}
+<INITIAL>"/*"           {  BEGIN(COMMENT);  }
+<COMMENT>"*/"           {  BEGIN(INITIAL);  }  
+<COMMENT>"\n"           {  printf("\n");  }
+<COMMENT><<EOF>>        { ReportError::UntermComment(); yyterminate(); }
+<COMMENT>.*             {  }
 
-<DEFINE>[a-z0-9]+([ \.\+]*[a-z0-9]*)* {
-    string aMacro = string(macro);
-    string currentText = string(yytext);
-    string currentMacro = aMacro.substr(0, aMacro.size()-currentText.size()-1);
+<INITIAL>"\""           {  BEGIN(STRING); printf("\"");  }
+<STRING>"\""            {  BEGIN(INITIAL); printf("\""); }
 
-    printf("M[%s] d[%s]\n", currentMacro.c_str(), yytext );
-}
+<INITIAL>"#define "    { BEGIN(DEFINE); }
+<DEFINE>"\n"           { BEGIN(INITIAL); printf("\n"); }
+<DEFINE>[A-Z]+         { BEGIN(IN_DEFINE); defining = strdup(yytext); }
 
-<DEFINE>\n {
-    BEGIN(INITIAL);
-}
+<IN_DEFINE>"\n"        { BEGIN(INITIAL); printf("\n"); }
+<IN_DEFINE>[a-zA-Z0-9" "\.\+\-\*\/]+  { define(defining, yytext); }
 
-{SINGLE_COMMENT}  { }
+<INITIAL>"#"[A-Z]+     {  BEGIN(REPLACE); replace(yytext); }
+<REPLACE>"\n"          {  BEGIN(INITIAL); printf("\n"); }
+
+
 
 %%
 
-// .*              { inDefine(yytext); printf("define[%s]", yytext); } 
-/*
-    \n              BEGIN(INITIAL);
-    [A-Z]+          { printf("D[%s]", yytext ); };
-    [[:alnum:]]+    { printf("d[%s]", yytext ); };
-*/
+// *******************************************************************
 
-/* ************************************************************
-***************************************************************
-************************************************************ */
-
-void inDefine(char* line){
-
+static void define(char*defining, char* replace){
+    replace++; // recortar el primer espacio
+    replacements[std::string(defining)] = std::string(replace);
 }
 
-/*
-std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    split(s, delim, elems);
-    return elems;
-}
-*/
-
-
-void InitScanner()
-{
-    PrintDebug("lex", "Initializing preprocessor");
-    yy_flex_debug = false;
+static void replace(char* replace){
+    replace++; // recortar el primer espacio
+    std::unordered_map<std::string, std::string>::const_iterator got = replacements.find(replace);
+    if ( got == replacements.end() ) {
+        ReportError::InvalidDirective(line_number);
+    } else {
+        printf("%s", got->second.c_str());
+    }
 }
