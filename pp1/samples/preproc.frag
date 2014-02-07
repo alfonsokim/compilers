@@ -10,11 +10,13 @@ multilinea
 " cadena
   multilinea "
 
-#define BATMAN robin
+#define HERO batman
 #define SUMA 1 + 2 + a
 
-llamemos a #BATMAN
+llamemos a #HERO
 
 x = (#SUMA);
 
+#define HERO robin
+mejor a #HERO
 

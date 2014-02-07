@@ -34,14 +34,14 @@ int line_number = 1;
 
 \/\/(.*)                {  }
 
-<INITIAL>"/*"           {  BEGIN(COMMENT);  }
-<COMMENT>"*/"           {  BEGIN(INITIAL);  }  
-<COMMENT>"\n"           {  printf("\n");  }
+<INITIAL>"/*"           { BEGIN(COMMENT);  }
+<COMMENT>"*/"           { BEGIN(INITIAL);  }  
+<COMMENT>"\n"           { printf("\n"); line_number++;  }
+<COMMENT>([^*]|\n)+|.   { }
 <COMMENT><<EOF>>        { ReportError::UntermComment(); yyterminate(); }
-<COMMENT>.*             {  }
 
-<INITIAL>"\""           {  BEGIN(STRING); printf("\"");  }
-<STRING>"\""            {  BEGIN(INITIAL); printf("\""); }
+<INITIAL>"\""           { BEGIN(STRING); printf("\"");  }
+<STRING>"\""            { BEGIN(INITIAL); printf("\""); }
 
 <INITIAL>"#define "    { BEGIN(DEFINE); }
 <DEFINE>"\n"           { BEGIN(INITIAL); printf("\n"); }

@@ -15,6 +15,7 @@
  */
 
 #include <string.h>
+#include <sstream>
 #include "scanner.h"
 #include "utility.h" // for PrintDebug()
 #include "errors.h"
@@ -62,6 +63,7 @@ int num_lines = 1;
   * entries in the Rules section later. 
   */
 
+%x STRING
 
 %%             /* BEGIN RULES SECTION */
  /* All patterns and actions should be placed between the start and stop
@@ -120,14 +122,14 @@ NewArray        { return TokenType::T_NewArray; }
 "true"          { yylval.boolConstant = true; return TokenType::T_BoolConstant; }
 "false"         { yylval.boolConstant = false; return TokenType::T_BoolConstant; }
 
-[-+]?[0-9]+     { yylval.integerConstant = atoi(yytext); return TokenType::T_IntConstant; }
+"\""[^(\")]*"\"" {yylval.stringConstant = yytext; return TokenType::T_StringConstant; }
+
+(0[xX])?[0-9a-fA-F]+     { yylval.integerConstant = atoi(yytext); return TokenType::T_IntConstant; }
 
 [-+]?([0-9]*\.[0-9]+)[eE]?[+-]?[0-9]+ { 
     yylval.doubleConstant = atof(yytext); 
     return TokenType::T_DoubleConstant; 
-}
-
-"\""[^(\")]*"\"" {yylval.stringConstant = yytext; return TokenType::T_StringConstant; } 
+} 
 
 [a-zA-Z]+[a-zA-Z0-9_]* { 
     if(strlen(yytext) > MaxIdentLen){
@@ -138,6 +140,7 @@ NewArray        { return TokenType::T_NewArray; }
 }
 
 %%
+
 /* The closing %% above marks the end of the Rules section and the beginning
  * of the User Subroutines section. All text from here to the end of the
  * file is copied verbatim to the end of the generated lex.yy.c file.
