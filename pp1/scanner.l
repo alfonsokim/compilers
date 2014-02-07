@@ -122,9 +122,11 @@ NewArray        { return TokenType::T_NewArray; }
 "true"          { yylval.boolConstant = true; return TokenType::T_BoolConstant; }
 "false"         { yylval.boolConstant = false; return TokenType::T_BoolConstant; }
 
-"\""[^(\")]*"\"" {yylval.stringConstant = yytext; return TokenType::T_StringConstant; }
+"\""[^(\"\n)]*"\"" { yylval.stringConstant = yytext; return TokenType::T_StringConstant; }
+"\""[^\"]*\n   { /* " */ ReportError::UntermString(&yylloc, yytext); yyterminate(); }
 
-(0[xX])?[0-9a-fA-F]+     { yylval.integerConstant = atoi(yytext); return TokenType::T_IntConstant; }
+[-+]?[0-9]+     { yylval.integerConstant = atoi(yytext); return TokenType::T_IntConstant; }
+[-+]?(0[xX])?[0-9a-fA-F]+     { yylval.integerConstant = strtol(yytext, NULL, 16); return TokenType::T_IntConstant; }
 
 [-+]?([0-9]*\.[0-9]+)[eE]?[+-]?[0-9]+ { 
     yylval.doubleConstant = atof(yytext); 
