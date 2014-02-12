@@ -123,7 +123,7 @@ NewArray        { return TokenType::T_NewArray; }
 "false"         { yylval.boolConstant = false; return TokenType::T_BoolConstant; }
 
 "\""[^(\"\n)]*"\"" { yylval.stringConstant = yytext; return TokenType::T_StringConstant; }
-"\""[^\"]*\n   { /* " */ ReportError::UntermString(&yylloc, yytext); yyterminate(); }
+"\""[^\"]*\n   { /* " */ ReportError::UntermString(&yylloc, yytext); }
 
 [-+]?[0-9]+     { yylval.integerConstant = atoi(yytext); return TokenType::T_IntConstant; }
 [-+]?(0[xX])?[0-9a-fA-F]+     { yylval.integerConstant = strtol(yytext, NULL, 16); return TokenType::T_IntConstant; }

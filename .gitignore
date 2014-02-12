@@ -3,5 +3,6 @@ dcc
 dpp
 *.pdf
 *.zip
+*.tgz
 *.o
 *.out
