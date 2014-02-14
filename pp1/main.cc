@@ -20,7 +20,7 @@
 static void PrintOneToken(TokenType token, const char *text, YYSTYPE value,
                           yyltype loc)
 {
-  char buffer[] = {'\'', token, '\'', '\0'};
+  char buffer[] = {'\'', char(token), '\'', '\0'};
   const char *name = token >= T_Void ? gTokenNames[token - T_Void] : buffer;
   
   printf("%-12s line %d cols %d-%d is %s ", text,

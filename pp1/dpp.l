@@ -7,7 +7,7 @@
  */
 
 %{
-#include <unordered_map>
+#include <map>
 #include <string>
 
 #include "errors.h"
@@ -16,8 +16,7 @@ static void define(char*, char*);
 static void replace(char*);
 char* defining;
 
-typedef std::unordered_map<std::string,std::string> stringmap;
-stringmap replacements;
+std::map<std::string, std::string> replacements;
 
 int line_number = 1;
 %}
@@ -66,7 +65,7 @@ static void define(char*defining, char* replace){
 
 static void replace(char* replace){
     replace++; // recortar el primer espacio
-    std::unordered_map<std::string, std::string>::const_iterator got = replacements.find(replace);
+    std::map<std::string, std::string>::iterator got = replacements.find(replace);
     if ( got == replacements.end() ) {
         ReportError::InvalidDirective(line_number);
     } else {

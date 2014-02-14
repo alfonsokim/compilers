@@ -73,64 +73,64 @@ int num_lines = 1;
 [\n]            { num_chars = 1; num_lines++; }
 [[:space:]]     {  }
 
-"+"             { return TokenType::T_Plus; }
-"-"             { return TokenType::T_Minus; }
-"\*"            { return TokenType::T_Times; }
-"\/"            { return TokenType::T_Div; }
-"\."            { return TokenType::T_Dot; }    
-";"             { return TokenType::T_Colon; }
-"\%"            { return TokenType::T_Mod; }
-"\!"            { return TokenType::T_Not; }
-"\>"            { return TokenType::T_GreaterThan; }
-"\<"            { return TokenType::T_LessThan; }
-"\,"            { return TokenType::T_Comma; }
-"="             { return TokenType::T_Eq; }
+"+"             { return T_Plus; }
+"-"             { return T_Minus; }
+"\*"            { return T_Times; }
+"\/"            { return T_Div; }
+"\."            { return T_Dot; }    
+";"             { return T_Colon; }
+"\%"            { return T_Mod; }
+"\!"            { return T_Not; }
+"\>"            { return T_GreaterThan; }
+"\<"            { return T_LessThan; }
+"\,"            { return T_Comma; }
+"="             { return T_Eq; }
 
-"=="            { return TokenType::T_Equal; }
-"!="            { return TokenType::T_NotEqual; }
-"&&"            { return TokenType::T_And; }
-"||"            { return TokenType::T_Or; }
-">="            { return TokenType::T_GreaterEqual; }
-"<="            { return TokenType::T_LessEqual; }
-"\("            { return TokenType::T_OpenParenthesis; }
-"\)"            { return TokenType::T_CloseParenthesis; }
-"\["            { return TokenType::T_OpenBraces; }
-"\]"            { return TokenType::T_CloseBraces; }
-"\{"            { return TokenType::T_OpenCurly; }
-"\}"            { return TokenType::T_CloseCurly; }
+"=="            { return T_Equal; }
+"!="            { return T_NotEqual; }
+"&&"            { return T_And; }
+"||"            { return T_Or; }
+">="            { return T_GreaterEqual; }
+"<="            { return T_LessEqual; }
+"\("            { return T_OpenParenthesis; }
+"\)"            { return T_CloseParenthesis; }
+"\["            { return T_OpenBraces; }
+"\]"            { return T_CloseBraces; }
+"\{"            { return T_OpenCurly; }
+"\}"            { return T_CloseCurly; }
 
-void            { return TokenType::T_Void; } 
-"int"           { return TokenType::T_Int; }
-double          { return TokenType::T_Double; }
-bool            { return TokenType::T_Bool; }
-string          { return TokenType::T_String; }
-class           { return TokenType::T_Class; }
-interface       { return TokenType::T_Interface; }
-null            { return TokenType::T_Null; }
-this            { return TokenType::T_This; }
-extends         { return TokenType::T_Extends; }
-implements      { return TokenType::T_Implements; }
-for             { return TokenType::T_For; }
-while           { return TokenType::T_While; }
-if              { return TokenType::T_If; }
-else            { return TokenType::T_Else; }
-return          { return TokenType::T_Return; }
-break           { return TokenType::T_Break; }
-New             { return TokenType::T_New; }
-NewArray        { return TokenType::T_NewArray; }
+void            { return T_Void; } 
+"int"           { return T_Int; }
+double          { return T_Double; }
+bool            { return T_Bool; }
+string          { return T_String; }
+class           { return T_Class; }
+interface       { return T_Interface; }
+null            { return T_Null; }
+this            { return T_This; }
+extends         { return T_Extends; }
+implements      { return T_Implements; }
+for             { return T_For; }
+while           { return T_While; }
+if              { return T_If; }
+else            { return T_Else; }
+return          { return T_Return; }
+break           { return T_Break; }
+New             { return T_New; }
+NewArray        { return T_NewArray; }
 
-"true"          { yylval.boolConstant = true; return TokenType::T_BoolConstant; }
-"false"         { yylval.boolConstant = false; return TokenType::T_BoolConstant; }
+"true"          { yylval.boolConstant = true; return T_BoolConstant; }
+"false"         { yylval.boolConstant = false; return T_BoolConstant; }
 
-"\""[^(\"\n)]*"\"" { yylval.stringConstant = yytext; return TokenType::T_StringConstant; }
+"\""[^(\"\n)]*"\"" { yylval.stringConstant = yytext; return T_StringConstant; }
 "\""[^\"]*\n   { /* " */ ReportError::UntermString(&yylloc, yytext); }
 
-[-+]?[0-9]+     { yylval.integerConstant = atoi(yytext); return TokenType::T_IntConstant; }
-[-+]?(0[xX])?[0-9a-fA-F]+     { yylval.integerConstant = strtol(yytext, NULL, 16); return TokenType::T_IntConstant; }
+[-+]?[0-9]+     { yylval.integerConstant = atoi(yytext); return T_IntConstant; }
+[-+]?(0[xX])?[0-9a-fA-F]+     { yylval.integerConstant = strtol(yytext, NULL, 16); return T_IntConstant; }
 
 [-+]?([0-9]*\.[0-9]+)[eE]?[+-]?[0-9]+ { 
     yylval.doubleConstant = atof(yytext); 
-    return TokenType::T_DoubleConstant; 
+    return T_DoubleConstant; 
 } 
 
 [a-zA-Z]+[a-zA-Z0-9_]* { 
@@ -138,7 +138,7 @@ NewArray        { return TokenType::T_NewArray; }
         ReportError::LongIdentifier(&yylloc, yytext);
     }
     strcpy(yylval.identifier, yytext);
-    return TokenType::T_Identifier; 
+    return T_Identifier; 
 }
 
 %%
