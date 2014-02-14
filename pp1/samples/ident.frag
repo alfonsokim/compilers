@@ -16,3 +16,8 @@ variable0
 variable0
 
 Var1
+
+if20
+whiletruedo
+class10
+

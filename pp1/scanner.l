@@ -126,9 +126,12 @@ NewArray        { return T_NewArray; }
 "\""[^\"]*\n   { /* " */ ReportError::UntermString(&yylloc, yytext); }
 
 [-+]?[0-9]+     { yylval.integerConstant = atoi(yytext); return T_IntConstant; }
-[-+]?(0[xX])?[0-9a-fA-F]+     { yylval.integerConstant = strtol(yytext, NULL, 16); return T_IntConstant; }
+[-+]?0[xX][0-9a-fA-F]+     { 
+    yylval.integerConstant = strtol(yytext, NULL, 16); 
+    return T_IntConstant; 
+}
 
-[-+]?([0-9]+\.[0-9]+)[eE]?[+-]?[0-9]+ { 
+[-+]?([0-9]+\.[0-9]*)([eE]?[+-]?[0-9]+)? { 
     yylval.doubleConstant = atof(yytext); 
     return T_DoubleConstant; 
 } 
