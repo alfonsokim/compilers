@@ -45,7 +45,7 @@ int line_number = 1;
 <INITIAL>"#define "    { BEGIN(DEFINE); }
 <DEFINE>"\n"           { BEGIN(INITIAL); printf("\n"); }
 <DEFINE>[A-Z]+         { BEGIN(IN_DEFINE); defining = strdup(yytext); }
-<DEFINE>.*             { ReportError::InvalidDirective(line_number); BEGIN(INITIAL);  }
+<DEFINE>[^A-Z]+        { ReportError::InvalidDirective(line_number); }
 
 <IN_DEFINE>"\n"        { BEGIN(INITIAL); printf("\n"); }
 <IN_DEFINE>[a-zA-Z0-9" "\.\+\-\*\/\{\}]+  { define(defining, yytext); }
