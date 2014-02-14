@@ -45,9 +45,10 @@ int line_number = 1;
 <INITIAL>"#define "    { BEGIN(DEFINE); }
 <DEFINE>"\n"           { BEGIN(INITIAL); printf("\n"); }
 <DEFINE>[A-Z]+         { BEGIN(IN_DEFINE); defining = strdup(yytext); }
+<DEFINE>.*             { ReportError::InvalidDirective(line_number); BEGIN(INITIAL);  }
 
 <IN_DEFINE>"\n"        { BEGIN(INITIAL); printf("\n"); }
-<IN_DEFINE>[a-zA-Z0-9" "\.\+\-\*\/]+  { define(defining, yytext); }
+<IN_DEFINE>[a-zA-Z0-9" "\.\+\-\*\/\{\}]+  { define(defining, yytext); }
 
 <INITIAL>"#"[A-Z]+     {  BEGIN(REPLACE); replace(yytext); }
 <REPLACE>"\n"          {  BEGIN(INITIAL); printf("\n"); }
@@ -58,7 +59,7 @@ int line_number = 1;
 
 // *******************************************************************
 
-static void define(char*defining, char* replace){
+static void define(char* defining, char* replace){
     replace++; // recortar el primer espacio
     replacements[std::string(defining)] = std::string(replace);
 }
