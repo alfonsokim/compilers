@@ -1,0 +1,157 @@
+Terminals unused in grammar
+
+   T_Bool
+   T_Int
+   T_Double
+   T_String
+   T_Class
+   T_LessEqual
+   T_GreaterEqual
+   T_Equal
+   T_NotEqual
+   T_Dims
+   T_And
+   T_Or
+   T_Null
+   T_Extends
+   T_This
+   T_Interface
+   T_Implements
+   T_While
+   T_For
+   T_If
+   T_Else
+   T_Return
+   T_Break
+   T_New
+   T_NewArray
+   T_Print
+   T_ReadInteger
+   T_ReadLine
+   T_Identifier
+   T_StringConstant
+   T_IntConstant
+   T_DoubleConstant
+   T_BoolConstant
+
+
+Gram'atica
+
+    0 $accept: Program $end
+
+    1 Program: DeclList
+
+    2 DeclList: DeclList Decl
+    3         | Decl
+
+    4 Decl: T_Void
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+error (256)
+T_Void (258) 4
+T_Bool (259)
+T_Int (260)
+T_Double (261)
+T_String (262)
+T_Class (263)
+T_LessEqual (264)
+T_GreaterEqual (265)
+T_Equal (266)
+T_NotEqual (267)
+T_Dims (268)
+T_And (269)
+T_Or (270)
+T_Null (271)
+T_Extends (272)
+T_This (273)
+T_Interface (274)
+T_Implements (275)
+T_While (276)
+T_For (277)
+T_If (278)
+T_Else (279)
+T_Return (280)
+T_Break (281)
+T_New (282)
+T_NewArray (283)
+T_Print (284)
+T_ReadInteger (285)
+T_ReadLine (286)
+T_Identifier (287)
+T_StringConstant (288)
+T_IntConstant (289)
+T_DoubleConstant (290)
+T_BoolConstant (291)
+
+
+No terminales con las reglas donde aparecen
+
+$accept (37)
+    en la izquierda: 0
+Program (38)
+    en la izquierda: 1, en la derecha: 0
+DeclList (39)
+    en la izquierda: 2 3, en la derecha: 1 2
+Decl (40)
+    en la izquierda: 4, en la derecha: 2 3
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    T_Void  desplazar e ir al estado 1
+
+    Program   ir al estado 2
+    DeclList  ir al estado 3
+    Decl      ir al estado 4
+
+
+State 1
+
+    4 Decl: T_Void .
+
+    $default  reduce usando la regla 4 (Decl)
+
+
+State 2
+
+    0 $accept: Program . $end
+
+    $end  desplazar e ir al estado 5
+
+
+State 3
+
+    1 Program: DeclList .
+    2 DeclList: DeclList . Decl
+
+    T_Void  desplazar e ir al estado 1
+
+    $default  reduce usando la regla 1 (Program)
+
+    Decl  ir al estado 6
+
+
+State 4
+
+    3 DeclList: Decl .
+
+    $default  reduce usando la regla 3 (DeclList)
+
+
+State 5
+
+    0 $accept: Program $end .
+
+    $default  aceptar
+
+
+State 6
+
+    2 DeclList: DeclList Decl .
+
+    $default  reduce usando la regla 2 (DeclList)
