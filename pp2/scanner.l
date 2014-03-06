@@ -1,6 +1,6 @@
 /* File:  scanner.l
  * ----------------
- * Lex inupt file to generate the scanner for the compiler.
+ * Lex inupt file to generate the scanner for the compiler. 
  */
 
 %{
