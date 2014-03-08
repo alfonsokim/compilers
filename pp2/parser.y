@@ -24,40 +24,46 @@ void yyerror(char *msg); // standard error-handling routine
 
 %}
 
-// Identifier: ast.h
-// Type: ast_decl.h
-// NamedType: ast_decl.h
-// Identifier: ast_decl.h
-// Stmt: ast_decl.h
-// Decl: ast_decl.h
-// VarDecl: ast_decl.h
-// ClassDecl: ast_decl.h
-// InterfaceDecl: ast_decl.h
-// FnDecl: ast_decl.h
-// Type: ast_expr.h
-// Expr: ast_expr.h
-// EmptyExpr: ast_expr.h
-// IntConstant: ast_expr.h
-// DoubleConstant: ast_expr.h
-// BoolConstant: ast_expr.h
-// StringConstant: ast_expr.h
-// NullConstant: ast_expr.h
-// Operator: ast_expr.h
-// CompoundExpr: ast_expr.h
-// ArithmeticExpr: ast_expr.h
-// RelationalExpr: ast_expr.h
-// EqualityExpr: ast_expr.h
-// LogicalExpr: ast_expr.h
-// AssignExpr: ast_expr.h
-// LValue: ast_expr.h
-// This: ast_expr.h
-// ArrayAccess: ast_expr.h
-// FieldAccess: ast_expr.h
-// Call: ast_expr.h
-// NewExpr: ast_expr.h
-// NewArrayExpr: ast_expr.h
-// ReadIntegerExpr: ast_expr.h
-// ReadLineExpr: ast_expr.h
+/*
+=== Donde esta cada clase?? ===
+Identifier: ast.h
+Type: ast_decl.h
+NamedType: ast_decl.h
+Identifier: ast_decl.h
+Stmt: ast_decl.h
+Decl: ast_decl.h
+VarDecl: ast_decl.h
+ClassDecl: ast_decl.h
+InterfaceDecl: ast_decl.h
+FnDecl: ast_decl.h
+Type: ast_expr.h
+Expr: ast_expr.h
+EmptyExpr: ast_expr.h
+IntConstant: ast_expr.h
+DoubleConstant: ast_expr.h
+BoolConstant: ast_expr.h
+StringConstant: ast_expr.h
+NullConstant: ast_expr.h
+Operator: ast_expr.h
+CompoundExpr: ast_expr.h
+ArithmeticExpr: ast_expr.h
+RelationalExpr: ast_expr.h
+EqualityExpr: ast_expr.h
+LogicalExpr: ast_expr.h
+AssignExpr: ast_expr.h
+LValue: ast_expr.h
+This: ast_expr.h
+ArrayAccess: ast_expr.h
+FieldAccess: ast_expr.h
+Call: ast_expr.h
+NewExpr: ast_expr.h
+NewArrayExpr: ast_expr.h
+ReadIntegerExpr: ast_expr.h
+ReadLineExpr: ast_expr.h
+Type: ast_type.h
+NamedType: ast_type.h
+ArrayType: ast_type.h
+*/
 
 /* The section before the first %% is the Definitions section of the yacc
  * input file. Here is where you declare tokens and types, add precedence
@@ -76,9 +82,16 @@ void yyerror(char *msg); // standard error-handling routine
 %union {
     Decl *decl;
     List<Decl*> *declList;
+    List<VarDecl*> *varList;
+    List<VarDecl*> *varDeclList;
+    List<Stmt*> *stmtList;
+    StmtBlock *stmtBlock;
     VarDecl *varDecl;
     VarDecl *var;
     Type  *type;
+    FnDecl *fnDecl;
+    Stmt *stmt;
+    Expr *expr;
     int integerConstant;
     bool boolConstant;
     char *stringConstant;
@@ -118,12 +131,30 @@ void yyerror(char *msg); // standard error-handling routine
  * pp2: You'll need to add many of these of your own.
  */
 
+// ============= DECLARACIONES =============
 %type <declList>      DeclList
+%type <stmtList>      StmtList
+%type <stmtBlock>     StmtBlock
 %type <decl>          Decl
-%type <varDecl>       VarDecl
-%type <var>           Var
-%type <type>          Type
+%type <stmt>          Stmt
+// ArrayType no es necesario declararlo como tipo
 
+
+// ============== EXPRESIONES ==============
+%type <varList>       VarList
+%type <varDeclList>   VarDeclList
+%type <var>           Var
+%type <varDecl>       VarDecl
+%type <type>          Type
+%type <fnDecl>        FnDecl
+%type <expr>          Expr
+%type <expr>          OneExpr
+
+
+
+// =============================================================
+// =============================================================
+// =============================================================
 
 %%
 /* Rules
@@ -131,7 +162,11 @@ void yyerror(char *msg); // standard error-handling routine
  * All productions and actions should be placed between the start and stop
  * %% markers which delimit the Rules section.
 */	 
- 
+
+// en @1 esta yyltype
+
+// =============================================================
+// -------------------------------------------------------------
 Program         :    DeclList   { 
                             @1; 
                             /* pp2: The @1 is needed to convince 
@@ -145,31 +180,125 @@ Program         :    DeclList   {
                       }
                 ;
 
+// =============================================================
+// -------------------------------------------------------------
 DeclList        :    DeclList Decl        { ($$=$1)->Append($2); }
                 |    Decl                 { ($$ = new List<Decl*>)->Append($1); }
                 ;
 
-
-Decl            :    VarDecl  ';'       { $$ = $1; }
+// =============================================================
+// -------------------------------------------------------------
+Decl            :    VarDecl              { $$ = $1; }
+                |    FnDecl               { $$ = $1; }
                 ;
 
-VarDecl         :    Var        { $$ = $1; }
+// =============================================================
+// -------------------------------------------------------------
+VarDecl         :    Var ';'              { $$ = $1; }
                 ;
 
-Var             :    Type T_Identifier   { 
+// =============================================================
+// -------------------------------------------------------------
+Var             :    Type T_Identifier    { 
                               Identifier *id = new Identifier(@2, $2);
                               $$ = new VarDecl(id, $1);
                       }
 
-Type            :   T_Int { $$ = new Type(*Type::intType); }
-                |   T_Double { $$ = new Type(*Type::doubleType); }
-                |   T_Bool { $$ = new Type(*Type::boolType); }
-                |   T_String { $$ = new Type(*Type::stringType); }
-                |   T_Identifier { Identifier *id = new Identifier(@1, $1); }
-                |   Type T_Dims {}
+// =============================================================
+//              |   T_Identifier          { Identifier *id = new Identifier(@1, $1); }
+//              |   T_Void                { $$ = new Type(*Type::voidType); }
+//              void no se puede declarar como tipo por que se permitiria
+//              como variable: void a = 10;
+// -------------------------------------------------------------
+Type            :   T_Int                 { $$ = new Type(*Type::intType); }
+                |   T_Double              { $$ = new Type(*Type::doubleType); }
+                |   T_Bool                { $$ = new Type(*Type::boolType); }
+                |   T_String              { $$ = new Type(*Type::stringType); }
+                |   Type T_Dims           { $$ = new ArrayType(@1, $1); }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+
+VarList         : VarList ',' Var         { ($$ = $1)->Append($3); }
+                | Var                     { ($$ = new List<VarDecl*>)->Append($1); }
+                |                         { ($$ = new List<VarDecl*>); }
+                ;
+
+// =============================================================
+// Constructor del FnDecl:
+// FnDecl(Identifier *name, Type *returnType, List<VarDecl*> *formals);
+// TODO: Llamar a void SetFunctionBody(Stmt *b);
+// -------------------------------------------------------------
+FnDecl          :   Type T_Identifier '(' VarList ')' StmtBlock  {
+                          $$ = new FnDecl(new Identifier(@2, $2), $1, $4);
+                          $$->SetFunctionBody($6);
+                    }
+                |   T_Void T_Identifier '(' VarList ')' StmtBlock  {
+                                              $$ = new FnDecl(new Identifier(@2, $2), 
+                                                              new Type(*Type::voidType),
+                                                              $4);
+                                              $$->SetFunctionBody($6);
+                    }
+                |                         {  }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+VarDeclList     : VarDeclList VarDecl     { ($$ = $1)->Append($2); }
+                | VarDecl                 { ($$ = new List<VarDecl*>)->Append($1); }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+StmtBlock       : '{' VarDeclList StmtList '}' { $$ = new StmtBlock($2, $3); 
+                                          }
+                | '{' VarDeclList '}'     { List<Stmt*> *s = new List<Stmt*>;
+                                            $$ = new StmtBlock($2, s);
+                                          }
+                | '{' StmtList '}'        { List<VarDecl*> *v = new List<VarDecl*>;
+                                            $$ = new StmtBlock(v, $2);  
+                                          }
+                | '{' '}'                 { List<VarDecl*> *v = new List<VarDecl*>;
+                                            List<Stmt*> *s = new List<Stmt*>;
+                                            $$ = new StmtBlock(v, s);
+                                          }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+StmtList        : StmtList Stmt           { ($$ = $1)->Append($2); }
+                | Stmt                    { ($$ = new List<Stmt*>)->Append($1); }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+Stmt            : OneExpr ';'             { ($$ = $1); }
+                | StmtBlock               { ($$ = $1); }
+                ;
+
+
+// =============================================================
+// NewExpr(yyltype loc, NamedType *clsType);
+// -------------------------------------------------------------
+Expr            : T_ReadLine '(' ')'      { ($$ = new ReadLineExpr(@1)); }
+                | T_New T_Identifier      { ($$ = new NewExpr(@1, 
+                                                      new NamedType(new Identifier(@2, $2))
+                                            )); 
+                                          }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+OneExpr         : Expr                    { $$ = $1; }
+                |                         { $$ = new EmptyExpr(); }
                 ;
 
 %%
+
+// =============================================================
+// =============================================================
+// =============================================================
 
 /* The closing %% above marks the end of the Rules section and the beginning
  * of the User Subroutines section. All text from here to the end of the
