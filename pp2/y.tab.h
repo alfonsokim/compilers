@@ -124,19 +124,22 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2053 of yacc.c  */
-#line 41 "parser.y"
+#line 76 "parser.y"
 
+    Decl *decl;
+    List<Decl*> *declList;
+    VarDecl *varDecl;
+    VarDecl *var;
+    Type  *type;
     int integerConstant;
     bool boolConstant;
     char *stringConstant;
     double doubleConstant;
     char identifier[MaxIdentLen+1]; // +1 for terminating null
-    Decl *decl;
-    List<Decl*> *declList;
 
 
 /* Line 2053 of yacc.c  */
-#line 140 "y.tab.h"
+#line 143 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -638,11 +638,11 @@ int yy_flex_debug = 1;
 
 static yyconst flex_int16_t yy_rule_linenum[47] =
     {   0,
-       61,   66,   70,   71,   74,   75,   78,   79,   83,   84,
-       85,   86,   87,   88,   89,   90,   91,   92,   93,   94,
-       95,   96,   97,   98,   99,  100,  101,  102,  103,  104,
-      109,  110,  111,  112,  113,  114,  115,  117,  120,  122,
-      124,  126,  128,  130,  134,  142
+       62,   67,   71,   72,   75,   76,   79,   80,   84,   85,
+       86,   87,   88,   89,   90,   91,   92,   93,   94,   95,
+       96,   97,   98,   99,  100,  101,  102,  103,  104,  105,
+      110,  111,  112,  113,  114,  115,  116,  118,  121,  123,
+      125,  127,  129,  131,  135,  143
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -656,7 +656,7 @@ char *yytext;
 #line 1 "scanner.l"
 /* File:  scanner.l
  * ----------------
- * Lex inupt file to generate the scanner for the compiler.
+ * Lex inupt file to generate the scanner for the compiler. 
  */
 #line 7 "scanner.l"
 
@@ -948,7 +948,7 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 59 "scanner.l"
+#line 60 "scanner.l"
 
 
 #line 955 "lex.yy.c"
@@ -1067,252 +1067,252 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 61 "scanner.l"
+#line 62 "scanner.l"
 { char curLine[512];
                          //strncpy(curLine, yytext, sizeof(curLine));
                          savedLines.Append(strdup(yytext));
                          curColNum = 1; yy_pop_state(); yyless(0); }
 	YY_BREAK
 case YY_STATE_EOF(COPY):
-#line 65 "scanner.l"
+#line 66 "scanner.l"
 { yy_pop_state(); }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 66 "scanner.l"
+#line 67 "scanner.l"
 { curLineNum++; curColNum = 1;
                          if (YYSTATE == COPY) savedLines.Append("");
                          else yy_push_state(COPY); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 70 "scanner.l"
+#line 71 "scanner.l"
 { /* ignore all spaces */  }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 71 "scanner.l"
+#line 72 "scanner.l"
 { curColNum += TAB_SIZE - curColNum%TAB_SIZE + 1; }
 	YY_BREAK
 /* -------------------- Comments ----------------------------- */
 case 5:
 YY_RULE_SETUP
-#line 74 "scanner.l"
+#line 75 "scanner.l"
 { BEGIN(COMM); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 75 "scanner.l"
+#line 76 "scanner.l"
 { BEGIN(N); }
 	YY_BREAK
 case YY_STATE_EOF(COMM):
-#line 76 "scanner.l"
+#line 77 "scanner.l"
 { ReportError::UntermComment();
                          return 0; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 78 "scanner.l"
+#line 79 "scanner.l"
 { /* ignore everything else that doesn't match */ }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 79 "scanner.l"
+#line 80 "scanner.l"
 { /* skip to end of line for // comment */ }
 	YY_BREAK
 /* --------------------- Keywords ------------------------------- */
 case 9:
 YY_RULE_SETUP
-#line 83 "scanner.l"
+#line 84 "scanner.l"
 { return T_Void;        }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 84 "scanner.l"
+#line 85 "scanner.l"
 { return T_Int;         }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 85 "scanner.l"
+#line 86 "scanner.l"
 { return T_Double;      }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 86 "scanner.l"
+#line 87 "scanner.l"
 { return T_Bool;        }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 87 "scanner.l"
+#line 88 "scanner.l"
 { return T_String;      }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 88 "scanner.l"
+#line 89 "scanner.l"
 { return T_Null;        }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 89 "scanner.l"
+#line 90 "scanner.l"
 { return T_Class;       }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 90 "scanner.l"
+#line 91 "scanner.l"
 { return T_Extends;     }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 91 "scanner.l"
+#line 92 "scanner.l"
 { return T_This;        }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 92 "scanner.l"
+#line 93 "scanner.l"
 { return T_Interface;   }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 93 "scanner.l"
+#line 94 "scanner.l"
 { return T_Implements;  }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 94 "scanner.l"
+#line 95 "scanner.l"
 { return T_While;       }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 95 "scanner.l"
+#line 96 "scanner.l"
 { return T_For;         }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 96 "scanner.l"
+#line 97 "scanner.l"
 { return T_If;          }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 97 "scanner.l"
+#line 98 "scanner.l"
 { return T_Else;        }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 98 "scanner.l"
+#line 99 "scanner.l"
 { return T_Return;      }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 99 "scanner.l"
+#line 100 "scanner.l"
 { return T_Break;       }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 100 "scanner.l"
+#line 101 "scanner.l"
 { return T_New;         }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 101 "scanner.l"
+#line 102 "scanner.l"
 { return T_NewArray;    }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 102 "scanner.l"
+#line 103 "scanner.l"
 { return T_Print;       }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 103 "scanner.l"
+#line 104 "scanner.l"
 { return T_ReadInteger; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 104 "scanner.l"
+#line 105 "scanner.l"
 { return T_ReadLine;    }
 	YY_BREAK
 /* -------------------- Operators ----------------------------- */
 case 31:
 YY_RULE_SETUP
-#line 109 "scanner.l"
+#line 110 "scanner.l"
 { return T_LessEqual;   }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 110 "scanner.l"
+#line 111 "scanner.l"
 { return T_GreaterEqual;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 111 "scanner.l"
+#line 112 "scanner.l"
 { return T_Equal;       }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 112 "scanner.l"
+#line 113 "scanner.l"
 { return T_NotEqual;    }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 113 "scanner.l"
+#line 114 "scanner.l"
 { return T_And;         }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 114 "scanner.l"
+#line 115 "scanner.l"
 { return T_Or;          }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 115 "scanner.l"
+#line 116 "scanner.l"
 { return yytext[0];     }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 117 "scanner.l"
+#line 118 "scanner.l"
 { return T_Dims;        }
 	YY_BREAK
 /* -------------------- Constants ------------------------------ */
 case 39:
 YY_RULE_SETUP
-#line 120 "scanner.l"
+#line 121 "scanner.l"
 { yylval.boolConstant = (yytext[0] == 't');
                          return T_BoolConstant; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 122 "scanner.l"
+#line 123 "scanner.l"
 { yylval.integerConstant = strtol(yytext, NULL, 10);
                          return T_IntConstant; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 124 "scanner.l"
+#line 125 "scanner.l"
 { yylval.integerConstant = strtol(yytext, NULL, 16);
                          return T_IntConstant; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 126 "scanner.l"
+#line 127 "scanner.l"
 { yylval.doubleConstant = atof(yytext);
                          return T_DoubleConstant; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 128 "scanner.l"
+#line 129 "scanner.l"
 { yylval.stringConstant = strdup(yytext); 
                          return T_StringConstant; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 130 "scanner.l"
+#line 131 "scanner.l"
 { ReportError::UntermString(&yylloc, yytext); }
 	YY_BREAK
 /* -------------------- Identifiers --------------------------- */
 case 45:
 YY_RULE_SETUP
-#line 134 "scanner.l"
+#line 135 "scanner.l"
 { if (strlen(yytext) > MaxIdentLen)
                          ReportError::LongIdentifier(&yylloc, yytext);
                        strncpy(yylval.identifier, yytext, MaxIdentLen);
@@ -1322,12 +1322,12 @@ YY_RULE_SETUP
 /* -------------------- Default rule (error) -------------------- */
 case 46:
 YY_RULE_SETUP
-#line 142 "scanner.l"
+#line 143 "scanner.l"
 { ReportError::UnrecogChar(&yylloc, yytext[0]); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 144 "scanner.l"
+#line 145 "scanner.l"
 ECHO;
 	YY_BREAK
 #line 1334 "lex.yy.c"
@@ -2512,7 +2512,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 144 "scanner.l"
+#line 145 "scanner.l"
 
 
 

@@ -24,6 +24,41 @@ void yyerror(char *msg); // standard error-handling routine
 
 %}
 
+// Identifier: ast.h
+// Type: ast_decl.h
+// NamedType: ast_decl.h
+// Identifier: ast_decl.h
+// Stmt: ast_decl.h
+// Decl: ast_decl.h
+// VarDecl: ast_decl.h
+// ClassDecl: ast_decl.h
+// InterfaceDecl: ast_decl.h
+// FnDecl: ast_decl.h
+// Type: ast_expr.h
+// Expr: ast_expr.h
+// EmptyExpr: ast_expr.h
+// IntConstant: ast_expr.h
+// DoubleConstant: ast_expr.h
+// BoolConstant: ast_expr.h
+// StringConstant: ast_expr.h
+// NullConstant: ast_expr.h
+// Operator: ast_expr.h
+// CompoundExpr: ast_expr.h
+// ArithmeticExpr: ast_expr.h
+// RelationalExpr: ast_expr.h
+// EqualityExpr: ast_expr.h
+// LogicalExpr: ast_expr.h
+// AssignExpr: ast_expr.h
+// LValue: ast_expr.h
+// This: ast_expr.h
+// ArrayAccess: ast_expr.h
+// FieldAccess: ast_expr.h
+// Call: ast_expr.h
+// NewExpr: ast_expr.h
+// NewArrayExpr: ast_expr.h
+// ReadIntegerExpr: ast_expr.h
+// ReadLineExpr: ast_expr.h
+
 /* The section before the first %% is the Definitions section of the yacc
  * input file. Here is where you declare tokens and types, add precedence
  * and associativity options, and so on.
@@ -39,15 +74,17 @@ void yyerror(char *msg); // standard error-handling routine
  *      attributes to your non-terminal symbols.
  */
 %union {
+    Decl *decl;
+    List<Decl*> *declList;
+    VarDecl *varDecl;
+    VarDecl *var;
+    Type  *type;
     int integerConstant;
     bool boolConstant;
     char *stringConstant;
     double doubleConstant;
     char identifier[MaxIdentLen+1]; // +1 for terminating null
-    Decl *decl;
-    List<Decl*> *declList;
 }
-
 
 /* Tokens
  * ------
@@ -55,6 +92,7 @@ void yyerror(char *msg); // standard error-handling routine
  * Yacc will assign unique numbers to these and export the #define
  * in the generated y.tab.h header file.
  */
+
 %token   T_Void T_Bool T_Int T_Double T_String T_Class 
 %token   T_LessEqual T_GreaterEqual T_Equal T_NotEqual T_Dims
 %token   T_And T_Or T_Null T_Extends T_This T_Interface T_Implements
@@ -79,36 +117,57 @@ void yyerror(char *msg); // standard error-handling routine
  * of the union named "declList" which is of type List<Decl*>.
  * pp2: You'll need to add many of these of your own.
  */
-%type <declList>  DeclList 
-%type <decl>      Decl
+
+%type <declList>      DeclList
+%type <decl>          Decl
+%type <varDecl>       VarDecl
+%type <var>           Var
+%type <type>          Type
+
 
 %%
 /* Rules
  * -----
  * All productions and actions should be placed between the start and stop
  * %% markers which delimit the Rules section.
-	 
- */
-Program   :    DeclList            { 
-                                      @1; 
-                                      /* pp2: The @1 is needed to convince 
-                                       * yacc to set up yylloc. You can remove 
-                                       * it once you have other uses of @n*/
-                                      Program *program = new Program($1);
-                                      // if no errors, advance to next phase
-                                      if (ReportError::NumErrors() == 0) 
-                                          program->Print(0);
-                                    }
-          ;
+*/	 
+ 
+Program         :    DeclList   { 
+                            @1; 
+                            /* pp2: The @1 is needed to convince 
+                             * yacc to set up yylloc. You can remove 
+                             * it once you have other uses of @n*/
+                            Program *program = new Program($1);
+                            if (ReportError::NumErrors() == 0) {
+                                // if no errors, advance to next phase
+                                program->Print(0);
+                            }
+                      }
+                ;
 
-DeclList  :    DeclList Decl        { ($$=$1)->Append($2); }
-          |    Decl                 { ($$ = new List<Decl*>)->Append($1); }
-          ;
+DeclList        :    DeclList Decl        { ($$=$1)->Append($2); }
+                |    Decl                 { ($$ = new List<Decl*>)->Append($1); }
+                ;
 
-Decl      :    T_Void               { /* pp2: replace with correct rules  */ } 
-          ;
-          
 
+Decl            :    VarDecl  ';'       { $$ = $1; }
+                ;
+
+VarDecl         :    Var        { $$ = $1; }
+                ;
+
+Var             :    Type T_Identifier   { 
+                              Identifier *id = new Identifier(@2, $2);
+                              $$ = new VarDecl(id, $1);
+                      }
+
+Type            :   T_Int { $$ = new Type(*Type::intType); }
+                |   T_Double { $$ = new Type(*Type::doubleType); }
+                |   T_Bool { $$ = new Type(*Type::boolType); }
+                |   T_String { $$ = new Type(*Type::stringType); }
+                |   T_Identifier { Identifier *id = new Identifier(@1, $1); }
+                |   Type T_Dims {}
+                ;
 
 %%
 

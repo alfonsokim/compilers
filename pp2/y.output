@@ -1,15 +1,11 @@
 Terminals unused in grammar
 
-   T_Bool
-   T_Int
-   T_Double
-   T_String
+   T_Void
    T_Class
    T_LessEqual
    T_GreaterEqual
    T_Equal
    T_NotEqual
-   T_Dims
    T_And
    T_Or
    T_Null
@@ -28,7 +24,6 @@ Terminals unused in grammar
    T_Print
    T_ReadInteger
    T_ReadLine
-   T_Identifier
    T_StringConstant
    T_IntConstant
    T_DoubleConstant
@@ -44,24 +39,36 @@ Gram'atica
     2 DeclList: DeclList Decl
     3         | Decl
 
-    4 Decl: T_Void
+    4 Decl: VarDecl ';'
+
+    5 VarDecl: Var
+
+    6 Var: Type T_Identifier
+
+    7 Type: T_Int
+    8     | T_Double
+    9     | T_Bool
+   10     | T_String
+   11     | T_Identifier
+   12     | Type T_Dims
 
 
 Terminales con las reglas donde aparecen
 
 $end (0) 0
+';' (59) 4
 error (256)
-T_Void (258) 4
-T_Bool (259)
-T_Int (260)
-T_Double (261)
-T_String (262)
+T_Void (258)
+T_Bool (259) 9
+T_Int (260) 7
+T_Double (261) 8
+T_String (262) 10
 T_Class (263)
 T_LessEqual (264)
 T_GreaterEqual (265)
 T_Equal (266)
 T_NotEqual (267)
-T_Dims (268)
+T_Dims (268) 12
 T_And (269)
 T_Or (270)
 T_Null (271)
@@ -80,7 +87,7 @@ T_NewArray (283)
 T_Print (284)
 T_ReadInteger (285)
 T_ReadLine (286)
-T_Identifier (287)
+T_Identifier (287) 6 11
 T_StringConstant (288)
 T_IntConstant (289)
 T_DoubleConstant (290)
@@ -89,69 +96,161 @@ T_BoolConstant (291)
 
 No terminales con las reglas donde aparecen
 
-$accept (37)
+$accept (38)
     en la izquierda: 0
-Program (38)
+Program (39)
     en la izquierda: 1, en la derecha: 0
-DeclList (39)
+DeclList (40)
     en la izquierda: 2 3, en la derecha: 1 2
-Decl (40)
+Decl (41)
     en la izquierda: 4, en la derecha: 2 3
+VarDecl (42)
+    en la izquierda: 5, en la derecha: 4
+Var (43)
+    en la izquierda: 6, en la derecha: 5
+Type (44)
+    en la izquierda: 7 8 9 10 11 12, en la derecha: 6 12
 
 
 State 0
 
     0 $accept: . Program $end
 
-    T_Void  desplazar e ir al estado 1
+    T_Bool        desplazar e ir al estado 1
+    T_Int         desplazar e ir al estado 2
+    T_Double      desplazar e ir al estado 3
+    T_String      desplazar e ir al estado 4
+    T_Identifier  desplazar e ir al estado 5
 
-    Program   ir al estado 2
-    DeclList  ir al estado 3
-    Decl      ir al estado 4
+    Program   ir al estado 6
+    DeclList  ir al estado 7
+    Decl      ir al estado 8
+    VarDecl   ir al estado 9
+    Var       ir al estado 10
+    Type      ir al estado 11
 
 
 State 1
 
-    4 Decl: T_Void .
+    9 Type: T_Bool .
 
-    $default  reduce usando la regla 4 (Decl)
+    $default  reduce usando la regla 9 (Type)
 
 
 State 2
 
-    0 $accept: Program . $end
+    7 Type: T_Int .
 
-    $end  desplazar e ir al estado 5
+    $default  reduce usando la regla 7 (Type)
 
 
 State 3
 
-    1 Program: DeclList .
-    2 DeclList: DeclList . Decl
+    8 Type: T_Double .
 
-    T_Void  desplazar e ir al estado 1
-
-    $default  reduce usando la regla 1 (Program)
-
-    Decl  ir al estado 6
+    $default  reduce usando la regla 8 (Type)
 
 
 State 4
+
+   10 Type: T_String .
+
+    $default  reduce usando la regla 10 (Type)
+
+
+State 5
+
+   11 Type: T_Identifier .
+
+    $default  reduce usando la regla 11 (Type)
+
+
+State 6
+
+    0 $accept: Program . $end
+
+    $end  desplazar e ir al estado 12
+
+
+State 7
+
+    1 Program: DeclList .
+    2 DeclList: DeclList . Decl
+
+    T_Bool        desplazar e ir al estado 1
+    T_Int         desplazar e ir al estado 2
+    T_Double      desplazar e ir al estado 3
+    T_String      desplazar e ir al estado 4
+    T_Identifier  desplazar e ir al estado 5
+
+    $default  reduce usando la regla 1 (Program)
+
+    Decl     ir al estado 13
+    VarDecl  ir al estado 9
+    Var      ir al estado 10
+    Type     ir al estado 11
+
+
+State 8
 
     3 DeclList: Decl .
 
     $default  reduce usando la regla 3 (DeclList)
 
 
-State 5
+State 9
+
+    4 Decl: VarDecl . ';'
+
+    ';'  desplazar e ir al estado 14
+
+
+State 10
+
+    5 VarDecl: Var .
+
+    $default  reduce usando la regla 5 (VarDecl)
+
+
+State 11
+
+    6 Var: Type . T_Identifier
+   12 Type: Type . T_Dims
+
+    T_Dims        desplazar e ir al estado 15
+    T_Identifier  desplazar e ir al estado 16
+
+
+State 12
 
     0 $accept: Program $end .
 
     $default  aceptar
 
 
-State 6
+State 13
 
     2 DeclList: DeclList Decl .
 
     $default  reduce usando la regla 2 (DeclList)
+
+
+State 14
+
+    4 Decl: VarDecl ';' .
+
+    $default  reduce usando la regla 4 (Decl)
+
+
+State 15
+
+   12 Type: Type T_Dims .
+
+    $default  reduce usando la regla 12 (Type)
+
+
+State 16
+
+    6 Var: Type T_Identifier .
+
+    $default  reduce usando la regla 6 (Var)
