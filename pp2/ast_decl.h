@@ -17,6 +17,8 @@ class NamedType;
 class Identifier;
 class Stmt;
 
+void yyerror(char *msg); 
+
 class Decl : public Node 
 {
   protected:

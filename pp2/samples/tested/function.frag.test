@@ -1,0 +1,51 @@
+
+   Program: 
+  1   FnDecl: 
+         (return type) Type: int
+  1      Identifier: MyFunc
+         (body) StmtBlock: 
+  5   FnDecl: 
+         (return type) Type: double
+  5      Identifier: SuperFunc
+  5      (formals) VarDecl: 
+            Type: bool
+  5         Identifier: a
+         (body) StmtBlock: 
+  9   FnDecl: 
+         (return type) Type: void
+  9      Identifier: SuperFunc
+  9      (formals) VarDecl: 
+            Type: int
+  9         Identifier: a
+  9      (formals) VarDecl: 
+            Type: double
+  9         Identifier: b
+  9      (formals) VarDecl: 
+            Type: string
+  9         Identifier: c
+         (body) StmtBlock: 
+ 13   FnDecl: 
+         (return type) Type: int
+ 13      Identifier: Joe
+         (body) StmtBlock: 
+ 14         VarDecl: 
+               Type: string
+ 14            Identifier: batman
+ 15         VarDecl: 
+               Type: double
+ 15            Identifier: algo
+ 16         ReadLineExpr: 
+            IfStmt: 
+ 17            (test) ReadLineExpr: 
+               (then) StmtBlock: 
+ 18               ReadLineExpr: 
+ 22   FnDecl: 
+         (return type) Type: void
+ 22      Identifier: test
+         (body) StmtBlock: 
+            IfStmt: 
+ 23            (test) ReadLineExpr: 
+               (then) StmtBlock: 
+ 24               ReadLineExpr: 
+               (else) StmtBlock: 
+ 26               ReadLineExpr: 

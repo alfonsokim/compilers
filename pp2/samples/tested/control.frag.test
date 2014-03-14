@@ -1,0 +1,50 @@
+
+   Program: 
+  1   ClassDecl: 
+  1      Identifier: Control
+  3      FnDecl: 
+            (return type) Type: void
+  3         Identifier: Batman
+            (body) StmtBlock: 
+  4            VarDecl: 
+                  Type: int
+  4               Identifier: i
+               WhileStmt: 
+  5               (test) ReadLineExpr: 
+                  (body) StmtBlock: 
+  6                  AssignExpr: 
+  6                     FieldAccess: 
+  6                        Identifier: i
+  6                     Operator: =
+  6                     This: 
+  7                  BreakStmt: 
+  9            ReturnStmt: 
+  9               ReadLineExpr: 
+ 12      FnDecl: 
+            (return type) Type: bool
+ 12         Identifier: Robin
+ 12         (formals) VarDecl: 
+               Type: int
+ 12            Identifier: m
+            (body) StmtBlock: 
+ 13            VarDecl: 
+                  Type: int
+ 13               Identifier: i
+ 14            AssignExpr: 
+ 14               FieldAccess: 
+ 14                  Identifier: i
+ 14               Operator: =
+ 14               IntConstant: 10
+               ForStmt: 
+ 15               (init) ReadLineExpr: 
+ 15               (test) ReadLineExpr: 
+ 15               (step) ReadLineExpr: 
+                  (body) StmtBlock: 
+ 16                  AssignExpr: 
+ 16                     FieldAccess: 
+ 16                        Identifier: i
+ 16                     Operator: =
+ 16                     IntConstant: 100
+ 17                  BreakStmt: 
+ 19            ReturnStmt: 
+ 19               ReadLineExpr: 

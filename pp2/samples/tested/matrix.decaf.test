@@ -1,0 +1,6 @@
+
+*** Error line 16.
+	   Print(Get(i,j), "\t");
+                      ^
+*** syntax error
+

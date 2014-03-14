@@ -1,27 +1,33 @@
 Terminals unused in grammar
 
-   T_LessEqual
-   T_GreaterEqual
-   T_Equal
-   T_NotEqual
-   T_And
-   T_Or
-   T_Null
-   T_This
-   T_Break
    T_NewArray
-   T_Print
-   T_ReadInteger
-   T_StringConstant
-   T_IntConstant
-   T_DoubleConstant
-   T_BoolConstant
+   T_Joe
 
 
 Estado 0 conflictos: 7 desplazamiento(s)/reducci'on(ones)
 Estado 9 conflictos: 7 desplazamiento/reducci'on, 1 reducci'on/reducci'on
 Estado 56 conflictos: 6 desplazamiento(s)/reducci'on(ones)
-Estado 112 conflictos: 1 desplazamiento(s)/reducci'on(ones)
+Estado 72 conflictos: 1 desplazamiento(s)/reducci'on(ones)
+Estado 117 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 118 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 152 conflictos: 1 desplazamiento(s)/reducci'on(ones)
+Estado 157 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 158 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 159 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 160 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 161 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 162 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 163 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 164 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 165 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 166 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 167 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 168 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 169 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 170 conflictos: 1 desplazamiento(s)/reducci'on(ones)
+Estado 172 conflictos: 15 desplazamiento(s)/reducci'on(ones)
+Estado 182 conflictos: 1 desplazamiento(s)/reducci'on(ones)
+Estado 187 conflictos: 1 desplazamiento(s)/reducci'on(ones)
 
 
 Gram'atica
@@ -73,153 +79,258 @@ Gram'atica
    32     | WhileStmt
    33     | ForStmt
    34     | ReturnStmt
+   35     | BreakStmt
+   36     | PrintStmt
+   37     | SwitchStmt
 
-   35 Expr: T_ReadLine '(' ')'
-   36     | T_New T_Identifier
+   38 Expr: LValue
+   39     | LValue '=' Expr
+   40     | T_ReadLine '(' ')'
+   41     | T_New T_Identifier
+   42     | T_This
+   43     | Constant
+   44     | Call
+   45     | T_ReadInteger '(' ')'
+   46     | '(' Expr ')'
+   47     | Expr '+' Expr
+   48     | Expr '-' Expr
+   49     | Expr '*' Expr
+   50     | Expr '/' Expr
+   51     | Expr '%' Expr
+   52     | '-' Expr
+   53     | Expr '<' Expr
+   54     | Expr T_LessEqual Expr
+   55     | Expr '>' Expr
+   56     | Expr T_GreaterEqual Expr
+   57     | Expr T_Equal Expr
+   58     | Expr T_NotEqual Expr
+   59     | Expr T_And Expr
+   60     | Expr T_Or Expr
+   61     | '!' Expr
 
-   37 OneExpr: Expr
-   38        | /* vac'io */
+   62 OneExpr: Expr
+   63        | /* vac'io */
 
-   39 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList '}'
+   64 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList '}'
 
-   40 Extends: T_Extends T_Identifier
-   41        | /* vac'io */
+   65 Extends: T_Extends T_Identifier
+   66        | /* vac'io */
 
-   42 IdentifierList: IdentifierList ',' T_Identifier
-   43               | T_Identifier
+   67 IdentifierList: IdentifierList ',' T_Identifier
+   68               | T_Identifier
 
-   44 Implements: T_Implements IdentifierList
-   45           | /* vac'io */
+   69 Implements: T_Implements IdentifierList
+   70           | /* vac'io */
 
-   46 Field: VarDecl
-   47      | FnDecl
+   71 Field: VarDecl
+   72      | FnDecl
 
-   48 FieldList: FieldList Field
-   49          | /* vac'io */
+   73 FieldList: FieldList Field
+   74          | /* vac'io */
 
-   50 Prototype: Type T_Identifier '(' VarList ')' ';'
-   51          | T_Void T_Identifier '(' VarList ')' ';'
+   75 Prototype: Type T_Identifier '(' VarList ')' ';'
+   76          | T_Void T_Identifier '(' VarList ')' ';'
 
-   52 PrototypeList: PrototypeList Prototype
-   53              | Prototype
+   77 PrototypeList: PrototypeList Prototype
+   78              | Prototype
 
-   54 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList '}'
+   79 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList '}'
 
-   55 IfStmt: T_If '(' Expr ')' Stmt
-   56       | T_If '(' Expr ')' Stmt T_Else Stmt
+   80 IfStmt: T_If '(' Expr ')' Stmt
+   81       | T_If '(' Expr ')' Stmt T_Else Stmt
 
-   57 WhileStmt: T_While '(' Expr ')' Stmt
+   82 WhileStmt: T_While '(' Expr ')' Stmt
 
-   58 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr ')' Stmt
+   83 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr ')' Stmt
 
-   59 ReturnStmt: T_Return OneExpr ';'
+   84 ReturnStmt: T_Return OneExpr ';'
+
+   85 BreakStmt: T_Break ';'
+
+   86 LValue: T_Identifier
+   87       | Expr '.' T_Identifier
+   88       | Expr '[' Expr ']'
+
+   89 Constant: T_IntConstant
+   90         | T_DoubleConstant
+   91         | T_BoolConstant
+   92         | T_StringConstant
+   93         | T_Null
+
+   94 Call: T_Identifier '(' Actuals ')'
+   95     | Expr '.' T_Identifier '(' Actuals ')'
+
+   96 Actuals: ExprList
+   97        | /* vac'io */
+
+   98 ExprList: ExprList Expr
+   99         | Expr
+
+  100 CommaExprList: CommaExprList ',' Expr
+  101              | Expr
+
+  102 PrintStmt: T_Print '(' CommaExprList ')' ';'
+
+  103 Case: T_Case T_IntConstant ':' StmtList
+
+  104 CaseList: CaseList Case
+  105         | Case
+
+  106 Default: T_Default ':' StmtList
+
+  107 SwitchStmt: T_Switch '(' Expr ')' '{' CaseList '}'
+  108           | T_Switch '(' Expr ')' '{' CaseList Default '}'
 
 
 Terminales con las reglas donde aparecen
 
 $end (0) 0
-'(' (40) 18 19 35 50 51 55 56 57 58
-')' (41) 18 19 35 50 51 55 56 57 58
-',' (44) 15 42
-';' (59) 8 29 50 51 58 59
-'{' (123) 23 24 25 26 39 54
-'}' (125) 23 24 25 26 39 54
+'!' (33) 61
+'%' (37) 51
+'(' (40) 18 19 40 45 46 75 76 80 81 82 83 94 95 102 107 108
+')' (41) 18 19 40 45 46 75 76 80 81 82 83 94 95 102 107 108
+'*' (42) 49
+'+' (43) 47
+',' (44) 15 67 100
+'-' (45) 48 52
+'.' (46) 87 95
+'/' (47) 50
+':' (58) 103 106
+';' (59) 8 29 75 76 83 84 85 102
+'<' (60) 53
+'=' (61) 39
+'>' (62) 55
+'[' (91) 88
+']' (93) 88
+'{' (123) 23 24 25 26 64 79 107 108
+'}' (125) 23 24 25 26 64 79 107 108
 error (256)
-T_Void (258) 19 51
+T_Void (258) 19 76
 T_Bool (259) 12
 T_Int (260) 10
 T_Double (261) 11
 T_String (262) 13
-T_Class (263) 39
-T_LessEqual (264)
-T_GreaterEqual (265)
-T_Equal (266)
-T_NotEqual (267)
+T_Class (263) 64
+T_LessEqual (264) 54
+T_GreaterEqual (265) 56
+T_Equal (266) 57
+T_NotEqual (267) 58
 T_Dims (268) 14
-T_And (269)
-T_Or (270)
-T_Null (271)
-T_Extends (272) 40
-T_This (273)
-T_Interface (274) 54
-T_Implements (275) 44
-T_While (276) 57
-T_For (277) 58
-T_If (278) 55 56
-T_Else (279) 56
-T_Return (280) 59
-T_Break (281)
-T_New (282) 36
+T_And (269) 59
+T_Or (270) 60
+T_Null (271) 93
+T_Extends (272) 65
+T_This (273) 42
+T_Interface (274) 79
+T_Implements (275) 69
+T_While (276) 82
+T_For (277) 83
+T_If (278) 80 81
+T_Else (279) 81
+T_Return (280) 84
+T_Break (281) 85
+T_New (282) 41
 T_NewArray (283)
-T_Print (284)
-T_ReadInteger (285)
-T_ReadLine (286) 35
-T_Identifier (287) 9 18 19 36 39 40 42 43 50 51 54
-T_StringConstant (288)
-T_IntConstant (289)
-T_DoubleConstant (290)
-T_BoolConstant (291)
+T_Print (284) 102
+T_ReadInteger (285) 45
+T_ReadLine (286) 40
+T_Joe (287)
+T_Switch (288) 107 108
+T_Case (289) 103
+T_Default (290) 106
+T_Identifier (291) 9 18 19 41 64 65 67 68 75 76 79 86 87 94 95
+T_StringConstant (292) 92
+T_IntConstant (293) 89 103
+T_DoubleConstant (294) 90
+T_BoolConstant (295) 91
 
 
 No terminales con las reglas donde aparecen
 
-$accept (43)
+$accept (60)
     en la izquierda: 0
-Program (44)
+Program (61)
     en la izquierda: 1, en la derecha: 0
-DeclList (45)
+DeclList (62)
     en la izquierda: 2 3, en la derecha: 1 2
-Decl (46)
+Decl (63)
     en la izquierda: 4 5 6 7, en la derecha: 2 3
-VarDecl (47)
-    en la izquierda: 8, en la derecha: 4 21 22 46
-Var (48)
+VarDecl (64)
+    en la izquierda: 8, en la derecha: 4 21 22 71
+Var (65)
     en la izquierda: 9, en la derecha: 8 15 16
-Type (49)
-    en la izquierda: 10 11 12 13 14, en la derecha: 9 14 18 50
-VarList (50)
-    en la izquierda: 15 16 17, en la derecha: 15 18 19 50 51
-FnDecl (51)
-    en la izquierda: 18 19 20, en la derecha: 5 47
-VarDeclList (52)
+Type (66)
+    en la izquierda: 10 11 12 13 14, en la derecha: 9 14 18 75
+VarList (67)
+    en la izquierda: 15 16 17, en la derecha: 15 18 19 75 76
+FnDecl (68)
+    en la izquierda: 18 19 20, en la derecha: 5 72
+VarDeclList (69)
     en la izquierda: 21 22, en la derecha: 21 23 24
-StmtBlock (53)
+StmtBlock (70)
     en la izquierda: 23 24 25 26, en la derecha: 18 19 30
-StmtList (54)
-    en la izquierda: 27 28, en la derecha: 23 25 27
-Stmt (55)
-    en la izquierda: 29 30 31 32 33 34, en la derecha: 27 28 55 56
-    57 58
-Expr (56)
-    en la izquierda: 35 36, en la derecha: 37 55 56 57 58
-OneExpr (57)
-    en la izquierda: 37 38, en la derecha: 29 58 59
-ClassDecl (58)
-    en la izquierda: 39, en la derecha: 6
-Extends (59)
-    en la izquierda: 40 41, en la derecha: 39
-IdentifierList (60)
-    en la izquierda: 42 43, en la derecha: 42 44
-Implements (61)
-    en la izquierda: 44 45, en la derecha: 39
-Field (62)
-    en la izquierda: 46 47, en la derecha: 48
-FieldList (63)
-    en la izquierda: 48 49, en la derecha: 39 48
-Prototype (64)
-    en la izquierda: 50 51, en la derecha: 52 53
-PrototypeList (65)
-    en la izquierda: 52 53, en la derecha: 52 54
-InterfaceDecl (66)
-    en la izquierda: 54, en la derecha: 7
-IfStmt (67)
-    en la izquierda: 55 56, en la derecha: 31
-WhileStmt (68)
-    en la izquierda: 57, en la derecha: 32
-ForStmt (69)
-    en la izquierda: 58, en la derecha: 33
-ReturnStmt (70)
-    en la izquierda: 59, en la derecha: 34
+StmtList (71)
+    en la izquierda: 27 28, en la derecha: 23 25 27 103 106
+Stmt (72)
+    en la izquierda: 29 30 31 32 33 34 35 36 37, en la derecha: 27
+    28 80 81 82 83
+Expr (73)
+    en la izquierda: 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53
+    54 55 56 57 58 59 60 61, en la derecha: 39 46 47 48 49 50 51 52
+    53 54 55 56 57 58 59 60 61 62 80 81 82 83 87 88 95 98 99 100 101
+    107 108
+OneExpr (74)
+    en la izquierda: 62 63, en la derecha: 29 83 84
+ClassDecl (75)
+    en la izquierda: 64, en la derecha: 6
+Extends (76)
+    en la izquierda: 65 66, en la derecha: 64
+IdentifierList (77)
+    en la izquierda: 67 68, en la derecha: 67 69
+Implements (78)
+    en la izquierda: 69 70, en la derecha: 64
+Field (79)
+    en la izquierda: 71 72, en la derecha: 73
+FieldList (80)
+    en la izquierda: 73 74, en la derecha: 64 73
+Prototype (81)
+    en la izquierda: 75 76, en la derecha: 77 78
+PrototypeList (82)
+    en la izquierda: 77 78, en la derecha: 77 79
+InterfaceDecl (83)
+    en la izquierda: 79, en la derecha: 7
+IfStmt (84)
+    en la izquierda: 80 81, en la derecha: 31
+WhileStmt (85)
+    en la izquierda: 82, en la derecha: 32
+ForStmt (86)
+    en la izquierda: 83, en la derecha: 33
+ReturnStmt (87)
+    en la izquierda: 84, en la derecha: 34
+BreakStmt (88)
+    en la izquierda: 85, en la derecha: 35
+LValue (89)
+    en la izquierda: 86 87 88, en la derecha: 38 39
+Constant (90)
+    en la izquierda: 89 90 91 92 93, en la derecha: 43
+Call (91)
+    en la izquierda: 94 95, en la derecha: 44
+Actuals (92)
+    en la izquierda: 96 97, en la derecha: 94 95
+ExprList (93)
+    en la izquierda: 98 99, en la derecha: 96 98
+CommaExprList (94)
+    en la izquierda: 100 101, en la derecha: 100 102
+PrintStmt (95)
+    en la izquierda: 102, en la derecha: 36
+Case (96)
+    en la izquierda: 103, en la derecha: 104 105
+CaseList (97)
+    en la izquierda: 104 105, en la derecha: 104 107 108
+Default (98)
+    en la izquierda: 106, en la derecha: 108
+SwitchStmt (99)
+    en la izquierda: 107 108, en la derecha: 37
 
 
 State 0
@@ -291,14 +402,14 @@ State 5
 
 State 6
 
-   39 ClassDecl: T_Class . T_Identifier Extends Implements '{' FieldList '}'
+   64 ClassDecl: T_Class . T_Identifier Extends Implements '{' FieldList '}'
 
     T_Identifier  desplazar e ir al estado 18
 
 
 State 7
 
-   54 InterfaceDecl: T_Interface . T_Identifier '{' PrototypeList '}'
+   79 InterfaceDecl: T_Interface . T_Identifier '{' PrototypeList '}'
 
     T_Identifier  desplazar e ir al estado 19
 
@@ -404,18 +515,18 @@ State 17
 
 State 18
 
-   39 ClassDecl: T_Class T_Identifier . Extends Implements '{' FieldList '}'
+   64 ClassDecl: T_Class T_Identifier . Extends Implements '{' FieldList '}'
 
     T_Extends  desplazar e ir al estado 26
 
-    $default  reduce usando la regla 41 (Extends)
+    $default  reduce usando la regla 66 (Extends)
 
     Extends  ir al estado 27
 
 
 State 19
 
-   54 InterfaceDecl: T_Interface T_Identifier . '{' PrototypeList '}'
+   79 InterfaceDecl: T_Interface T_Identifier . '{' PrototypeList '}'
 
     '{'  desplazar e ir al estado 28
 
@@ -476,25 +587,25 @@ State 25
 
 State 26
 
-   40 Extends: T_Extends . T_Identifier
+   65 Extends: T_Extends . T_Identifier
 
     T_Identifier  desplazar e ir al estado 33
 
 
 State 27
 
-   39 ClassDecl: T_Class T_Identifier Extends . Implements '{' FieldList '}'
+   64 ClassDecl: T_Class T_Identifier Extends . Implements '{' FieldList '}'
 
     T_Implements  desplazar e ir al estado 34
 
-    $default  reduce usando la regla 45 (Implements)
+    $default  reduce usando la regla 70 (Implements)
 
     Implements  ir al estado 35
 
 
 State 28
 
-   54 InterfaceDecl: T_Interface T_Identifier '{' . PrototypeList '}'
+   79 InterfaceDecl: T_Interface T_Identifier '{' . PrototypeList '}'
 
     T_Void    desplazar e ir al estado 36
     T_Bool    desplazar e ir al estado 2
@@ -550,14 +661,14 @@ State 32
 
 State 33
 
-   40 Extends: T_Extends T_Identifier .
+   65 Extends: T_Extends T_Identifier .
 
-    $default  reduce usando la regla 40 (Extends)
+    $default  reduce usando la regla 65 (Extends)
 
 
 State 34
 
-   44 Implements: T_Implements . IdentifierList
+   69 Implements: T_Implements . IdentifierList
 
     T_Identifier  desplazar e ir al estado 44
 
@@ -566,14 +677,14 @@ State 34
 
 State 35
 
-   39 ClassDecl: T_Class T_Identifier Extends Implements . '{' FieldList '}'
+   64 ClassDecl: T_Class T_Identifier Extends Implements . '{' FieldList '}'
 
     '{'  desplazar e ir al estado 46
 
 
 State 36
 
-   51 Prototype: T_Void . T_Identifier '(' VarList ')' ';'
+   76 Prototype: T_Void . T_Identifier '(' VarList ')' ';'
 
     T_Identifier  desplazar e ir al estado 47
 
@@ -581,7 +692,7 @@ State 36
 State 37
 
    14 Type: Type . T_Dims
-   50 Prototype: Type . T_Identifier '(' VarList ')' ';'
+   75 Prototype: Type . T_Identifier '(' VarList ')' ';'
 
     T_Dims        desplazar e ir al estado 23
     T_Identifier  desplazar e ir al estado 48
@@ -589,15 +700,15 @@ State 37
 
 State 38
 
-   53 PrototypeList: Prototype .
+   78 PrototypeList: Prototype .
 
-    $default  reduce usando la regla 53 (PrototypeList)
+    $default  reduce usando la regla 78 (PrototypeList)
 
 
 State 39
 
-   52 PrototypeList: PrototypeList . Prototype
-   54 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList . '}'
+   77 PrototypeList: PrototypeList . Prototype
+   79 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList . '}'
 
     T_Void    desplazar e ir al estado 36
     T_Bool    desplazar e ir al estado 2
@@ -650,56 +761,56 @@ State 43
 
 State 44
 
-   43 IdentifierList: T_Identifier .
+   68 IdentifierList: T_Identifier .
 
-    $default  reduce usando la regla 43 (IdentifierList)
+    $default  reduce usando la regla 68 (IdentifierList)
 
 
 State 45
 
-   42 IdentifierList: IdentifierList . ',' T_Identifier
-   44 Implements: T_Implements IdentifierList .
+   67 IdentifierList: IdentifierList . ',' T_Identifier
+   69 Implements: T_Implements IdentifierList .
 
     ','  desplazar e ir al estado 55
 
-    $default  reduce usando la regla 44 (Implements)
+    $default  reduce usando la regla 69 (Implements)
 
 
 State 46
 
-   39 ClassDecl: T_Class T_Identifier Extends Implements '{' . FieldList '}'
+   64 ClassDecl: T_Class T_Identifier Extends Implements '{' . FieldList '}'
 
-    $default  reduce usando la regla 49 (FieldList)
+    $default  reduce usando la regla 74 (FieldList)
 
     FieldList  ir al estado 56
 
 
 State 47
 
-   51 Prototype: T_Void T_Identifier . '(' VarList ')' ';'
+   76 Prototype: T_Void T_Identifier . '(' VarList ')' ';'
 
     '('  desplazar e ir al estado 57
 
 
 State 48
 
-   50 Prototype: Type T_Identifier . '(' VarList ')' ';'
+   75 Prototype: Type T_Identifier . '(' VarList ')' ';'
 
     '('  desplazar e ir al estado 58
 
 
 State 49
 
-   54 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList '}' .
+   79 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList '}' .
 
-    $default  reduce usando la regla 54 (InterfaceDecl)
+    $default  reduce usando la regla 79 (InterfaceDecl)
 
 
 State 50
 
-   52 PrototypeList: PrototypeList Prototype .
+   77 PrototypeList: PrototypeList Prototype .
 
-    $default  reduce usando la regla 52 (PrototypeList)
+    $default  reduce usando la regla 77 (PrototypeList)
 
 
 State 51
@@ -725,34 +836,54 @@ State 53
    25          | '{' . StmtList '}'
    26          | '{' . '}'
 
-    T_Bool      desplazar e ir al estado 2
-    T_Int       desplazar e ir al estado 3
-    T_Double    desplazar e ir al estado 4
-    T_String    desplazar e ir al estado 5
-    T_While     desplazar e ir al estado 60
-    T_For       desplazar e ir al estado 61
-    T_If        desplazar e ir al estado 62
-    T_Return    desplazar e ir al estado 63
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-    '{'         desplazar e ir al estado 53
-    '}'         desplazar e ir al estado 66
+    T_Bool            desplazar e ir al estado 2
+    T_Int             desplazar e ir al estado 3
+    T_Double          desplazar e ir al estado 4
+    T_String          desplazar e ir al estado 5
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '}'               desplazar e ir al estado 78
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
 
-    $default  reduce usando la regla 38 (OneExpr)
+    $default  reduce usando la regla 63 (OneExpr)
 
-    VarDecl      ir al estado 67
+    VarDecl      ir al estado 81
     Var          ir al estado 12
     Type         ir al estado 31
-    VarDeclList  ir al estado 68
-    StmtBlock    ir al estado 69
-    StmtList     ir al estado 70
-    Stmt         ir al estado 71
-    Expr         ir al estado 72
-    OneExpr      ir al estado 73
-    IfStmt       ir al estado 74
-    WhileStmt    ir al estado 75
-    ForStmt      ir al estado 76
-    ReturnStmt   ir al estado 77
+    VarDeclList  ir al estado 82
+    StmtBlock    ir al estado 83
+    StmtList     ir al estado 84
+    Stmt         ir al estado 85
+    Expr         ir al estado 86
+    OneExpr      ir al estado 87
+    IfStmt       ir al estado 88
+    WhileStmt    ir al estado 89
+    ForStmt      ir al estado 90
+    ReturnStmt   ir al estado 91
+    BreakStmt    ir al estado 92
+    LValue       ir al estado 93
+    Constant     ir al estado 94
+    Call         ir al estado 95
+    PrintStmt    ir al estado 96
+    SwitchStmt   ir al estado 97
 
 
 State 54
@@ -764,22 +895,22 @@ State 54
 
 State 55
 
-   42 IdentifierList: IdentifierList ',' . T_Identifier
+   67 IdentifierList: IdentifierList ',' . T_Identifier
 
-    T_Identifier  desplazar e ir al estado 78
+    T_Identifier  desplazar e ir al estado 98
 
 
 State 56
 
-   39 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList . '}'
-   48 FieldList: FieldList . Field
+   64 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList . '}'
+   73 FieldList: FieldList . Field
 
     T_Void    desplazar e ir al estado 1
     T_Bool    desplazar e ir al estado 2
     T_Int     desplazar e ir al estado 3
     T_Double  desplazar e ir al estado 4
     T_String  desplazar e ir al estado 5
-    '}'       desplazar e ir al estado 79
+    '}'       desplazar e ir al estado 99
 
     T_Void    [reduce usando la regla 20 (FnDecl)]
     T_Bool    [reduce usando la regla 20 (FnDecl)]
@@ -788,16 +919,16 @@ State 56
     T_String  [reduce usando la regla 20 (FnDecl)]
     '}'       [reduce usando la regla 20 (FnDecl)]
 
-    VarDecl  ir al estado 80
+    VarDecl  ir al estado 100
     Var      ir al estado 12
     Type     ir al estado 13
-    FnDecl   ir al estado 81
-    Field    ir al estado 82
+    FnDecl   ir al estado 101
+    Field    ir al estado 102
 
 
 State 57
 
-   51 Prototype: T_Void T_Identifier '(' . VarList ')' ';'
+   76 Prototype: T_Void T_Identifier '(' . VarList ')' ';'
 
     T_Bool    desplazar e ir al estado 2
     T_Int     desplazar e ir al estado 3
@@ -808,12 +939,12 @@ State 57
 
     Var      ir al estado 30
     Type     ir al estado 31
-    VarList  ir al estado 83
+    VarList  ir al estado 103
 
 
 State 58
 
-   50 Prototype: Type T_Identifier '(' . VarList ')' ';'
+   75 Prototype: Type T_Identifier '(' . VarList ')' ';'
 
     T_Bool    desplazar e ir al estado 2
     T_Int     desplazar e ir al estado 3
@@ -824,7 +955,7 @@ State 58
 
     Var      ir al estado 30
     Type     ir al estado 31
-    VarList  ir al estado 84
+    VarList  ir al estado 104
 
 
 State 59
@@ -836,585 +967,3163 @@ State 59
 
 State 60
 
-   57 WhileStmt: T_While . '(' Expr ')' Stmt
+   93 Constant: T_Null .
 
-    '('  desplazar e ir al estado 85
+    $default  reduce usando la regla 93 (Constant)
 
 
 State 61
 
-   58 ForStmt: T_For . '(' OneExpr ';' Expr ';' OneExpr ')' Stmt
+   42 Expr: T_This .
 
-    '('  desplazar e ir al estado 86
+    $default  reduce usando la regla 42 (Expr)
 
 
 State 62
 
-   55 IfStmt: T_If . '(' Expr ')' Stmt
-   56       | T_If . '(' Expr ')' Stmt T_Else Stmt
+   82 WhileStmt: T_While . '(' Expr ')' Stmt
 
-    '('  desplazar e ir al estado 87
+    '('  desplazar e ir al estado 105
 
 
 State 63
 
-   59 ReturnStmt: T_Return . OneExpr ';'
+   83 ForStmt: T_For . '(' OneExpr ';' Expr ';' OneExpr ')' Stmt
 
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-
-    $default  reduce usando la regla 38 (OneExpr)
-
-    Expr     ir al estado 72
-    OneExpr  ir al estado 88
+    '('  desplazar e ir al estado 106
 
 
 State 64
 
-   36 Expr: T_New . T_Identifier
+   80 IfStmt: T_If . '(' Expr ')' Stmt
+   81       | T_If . '(' Expr ')' Stmt T_Else Stmt
 
-    T_Identifier  desplazar e ir al estado 89
+    '('  desplazar e ir al estado 107
 
 
 State 65
 
-   35 Expr: T_ReadLine . '(' ')'
+   84 ReturnStmt: T_Return . OneExpr ';'
 
-    '('  desplazar e ir al estado 90
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 63 (OneExpr)
+
+    Expr      ir al estado 86
+    OneExpr   ir al estado 108
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
 
 
 State 66
+
+   85 BreakStmt: T_Break . ';'
+
+    ';'  desplazar e ir al estado 109
+
+
+State 67
+
+   41 Expr: T_New . T_Identifier
+
+    T_Identifier  desplazar e ir al estado 110
+
+
+State 68
+
+  102 PrintStmt: T_Print . '(' CommaExprList ')' ';'
+
+    '('  desplazar e ir al estado 111
+
+
+State 69
+
+   45 Expr: T_ReadInteger . '(' ')'
+
+    '('  desplazar e ir al estado 112
+
+
+State 70
+
+   40 Expr: T_ReadLine . '(' ')'
+
+    '('  desplazar e ir al estado 113
+
+
+State 71
+
+  107 SwitchStmt: T_Switch . '(' Expr ')' '{' CaseList '}'
+  108           | T_Switch . '(' Expr ')' '{' CaseList Default '}'
+
+    '('  desplazar e ir al estado 114
+
+
+State 72
+
+   86 LValue: T_Identifier .
+   94 Call: T_Identifier . '(' Actuals ')'
+
+    '('  desplazar e ir al estado 115
+
+    '('       [reduce usando la regla 86 (LValue)]
+    $default  reduce usando la regla 86 (LValue)
+
+
+State 73
+
+   92 Constant: T_StringConstant .
+
+    $default  reduce usando la regla 92 (Constant)
+
+
+State 74
+
+   89 Constant: T_IntConstant .
+
+    $default  reduce usando la regla 89 (Constant)
+
+
+State 75
+
+   90 Constant: T_DoubleConstant .
+
+    $default  reduce usando la regla 90 (Constant)
+
+
+State 76
+
+   91 Constant: T_BoolConstant .
+
+    $default  reduce usando la regla 91 (Constant)
+
+
+State 77
+
+   46 Expr: '(' . Expr ')'
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 116
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 78
 
    26 StmtBlock: '{' '}' .
 
     $default  reduce usando la regla 26 (StmtBlock)
 
 
-State 67
+State 79
+
+   52 Expr: '-' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 117
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 80
+
+   61 Expr: '!' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 118
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 81
 
    22 VarDeclList: VarDecl .
 
     $default  reduce usando la regla 22 (VarDeclList)
 
 
-State 68
+State 82
 
    21 VarDeclList: VarDeclList . VarDecl
    23 StmtBlock: '{' VarDeclList . StmtList '}'
    24          | '{' VarDeclList . '}'
 
-    T_Bool      desplazar e ir al estado 2
-    T_Int       desplazar e ir al estado 3
-    T_Double    desplazar e ir al estado 4
-    T_String    desplazar e ir al estado 5
-    T_While     desplazar e ir al estado 60
-    T_For       desplazar e ir al estado 61
-    T_If        desplazar e ir al estado 62
-    T_Return    desplazar e ir al estado 63
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-    '{'         desplazar e ir al estado 53
-    '}'         desplazar e ir al estado 91
+    T_Bool            desplazar e ir al estado 2
+    T_Int             desplazar e ir al estado 3
+    T_Double          desplazar e ir al estado 4
+    T_String          desplazar e ir al estado 5
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '}'               desplazar e ir al estado 119
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
 
-    $default  reduce usando la regla 38 (OneExpr)
+    $default  reduce usando la regla 63 (OneExpr)
 
-    VarDecl     ir al estado 92
+    VarDecl     ir al estado 120
     Var         ir al estado 12
     Type        ir al estado 31
-    StmtBlock   ir al estado 69
-    StmtList    ir al estado 93
-    Stmt        ir al estado 71
-    Expr        ir al estado 72
-    OneExpr     ir al estado 73
-    IfStmt      ir al estado 74
-    WhileStmt   ir al estado 75
-    ForStmt     ir al estado 76
-    ReturnStmt  ir al estado 77
+    StmtBlock   ir al estado 83
+    StmtList    ir al estado 121
+    Stmt        ir al estado 85
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
 
 
-State 69
+State 83
 
    30 Stmt: StmtBlock .
 
     $default  reduce usando la regla 30 (Stmt)
 
 
-State 70
+State 84
 
    25 StmtBlock: '{' StmtList . '}'
    27 StmtList: StmtList . Stmt
 
-    T_While     desplazar e ir al estado 60
-    T_For       desplazar e ir al estado 61
-    T_If        desplazar e ir al estado 62
-    T_Return    desplazar e ir al estado 63
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-    '{'         desplazar e ir al estado 53
-    '}'         desplazar e ir al estado 94
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '}'               desplazar e ir al estado 122
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
 
-    $default  reduce usando la regla 38 (OneExpr)
+    $default  reduce usando la regla 63 (OneExpr)
 
-    StmtBlock   ir al estado 69
-    Stmt        ir al estado 95
-    Expr        ir al estado 72
-    OneExpr     ir al estado 73
-    IfStmt      ir al estado 74
-    WhileStmt   ir al estado 75
-    ForStmt     ir al estado 76
-    ReturnStmt  ir al estado 77
+    StmtBlock   ir al estado 83
+    Stmt        ir al estado 123
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
 
 
-State 71
+State 85
 
    28 StmtList: Stmt .
 
     $default  reduce usando la regla 28 (StmtList)
 
 
-State 72
+State 86
 
-   37 OneExpr: Expr .
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   62 OneExpr: Expr .
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
 
-    $default  reduce usando la regla 37 (OneExpr)
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    $default  reduce usando la regla 62 (OneExpr)
 
 
-State 73
+State 87
 
    29 Stmt: OneExpr . ';'
 
-    ';'  desplazar e ir al estado 96
+    ';'  desplazar e ir al estado 139
 
 
-State 74
+State 88
 
    31 Stmt: IfStmt .
 
     $default  reduce usando la regla 31 (Stmt)
 
 
-State 75
+State 89
 
    32 Stmt: WhileStmt .
 
     $default  reduce usando la regla 32 (Stmt)
 
 
-State 76
+State 90
 
    33 Stmt: ForStmt .
 
     $default  reduce usando la regla 33 (Stmt)
 
 
-State 77
+State 91
 
    34 Stmt: ReturnStmt .
 
     $default  reduce usando la regla 34 (Stmt)
 
 
-State 78
+State 92
 
-   42 IdentifierList: IdentifierList ',' T_Identifier .
+   35 Stmt: BreakStmt .
 
-    $default  reduce usando la regla 42 (IdentifierList)
-
-
-State 79
-
-   39 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList '}' .
-
-    $default  reduce usando la regla 39 (ClassDecl)
+    $default  reduce usando la regla 35 (Stmt)
 
 
-State 80
+State 93
 
-   46 Field: VarDecl .
+   38 Expr: LValue .
+   39     | LValue . '=' Expr
 
-    $default  reduce usando la regla 46 (Field)
+    '='  desplazar e ir al estado 140
 
-
-State 81
-
-   47 Field: FnDecl .
-
-    $default  reduce usando la regla 47 (Field)
+    $default  reduce usando la regla 38 (Expr)
 
 
-State 82
+State 94
 
-   48 FieldList: FieldList Field .
+   43 Expr: Constant .
 
-    $default  reduce usando la regla 48 (FieldList)
+    $default  reduce usando la regla 43 (Expr)
 
 
-State 83
+State 95
+
+   44 Expr: Call .
+
+    $default  reduce usando la regla 44 (Expr)
+
+
+State 96
+
+   36 Stmt: PrintStmt .
+
+    $default  reduce usando la regla 36 (Stmt)
+
+
+State 97
+
+   37 Stmt: SwitchStmt .
+
+    $default  reduce usando la regla 37 (Stmt)
+
+
+State 98
+
+   67 IdentifierList: IdentifierList ',' T_Identifier .
+
+    $default  reduce usando la regla 67 (IdentifierList)
+
+
+State 99
+
+   64 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList '}' .
+
+    $default  reduce usando la regla 64 (ClassDecl)
+
+
+State 100
+
+   71 Field: VarDecl .
+
+    $default  reduce usando la regla 71 (Field)
+
+
+State 101
+
+   72 Field: FnDecl .
+
+    $default  reduce usando la regla 72 (Field)
+
+
+State 102
+
+   73 FieldList: FieldList Field .
+
+    $default  reduce usando la regla 73 (FieldList)
+
+
+State 103
 
    15 VarList: VarList . ',' Var
-   51 Prototype: T_Void T_Identifier '(' VarList . ')' ';'
+   76 Prototype: T_Void T_Identifier '(' VarList . ')' ';'
 
     ','  desplazar e ir al estado 42
-    ')'  desplazar e ir al estado 97
+    ')'  desplazar e ir al estado 141
 
 
-State 84
+State 104
 
    15 VarList: VarList . ',' Var
-   50 Prototype: Type T_Identifier '(' VarList . ')' ';'
+   75 Prototype: Type T_Identifier '(' VarList . ')' ';'
 
     ','  desplazar e ir al estado 42
-    ')'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 142
 
 
-State 85
+State 105
 
-   57 WhileStmt: T_While '(' . Expr ')' Stmt
+   82 WhileStmt: T_While '(' . Expr ')' Stmt
 
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
 
-    Expr  ir al estado 99
-
-
-State 86
-
-   58 ForStmt: T_For '(' . OneExpr ';' Expr ';' OneExpr ')' Stmt
-
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-
-    $default  reduce usando la regla 38 (OneExpr)
-
-    Expr     ir al estado 72
-    OneExpr  ir al estado 100
-
-
-State 87
-
-   55 IfStmt: T_If '(' . Expr ')' Stmt
-   56       | T_If '(' . Expr ')' Stmt T_Else Stmt
-
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-
-    Expr  ir al estado 101
+    Expr      ir al estado 143
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
 
 
-State 88
+State 106
 
-   59 ReturnStmt: T_Return OneExpr . ';'
+   83 ForStmt: T_For '(' . OneExpr ';' Expr ';' OneExpr ')' Stmt
 
-    ';'  desplazar e ir al estado 102
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 63 (OneExpr)
+
+    Expr      ir al estado 86
+    OneExpr   ir al estado 144
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
 
 
-State 89
+State 107
 
-   36 Expr: T_New T_Identifier .
+   80 IfStmt: T_If '(' . Expr ')' Stmt
+   81       | T_If '(' . Expr ')' Stmt T_Else Stmt
 
-    $default  reduce usando la regla 36 (Expr)
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 145
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
 
 
-State 90
+State 108
 
-   35 Expr: T_ReadLine '(' . ')'
+   84 ReturnStmt: T_Return OneExpr . ';'
 
-    ')'  desplazar e ir al estado 103
+    ';'  desplazar e ir al estado 146
 
 
-State 91
+State 109
+
+   85 BreakStmt: T_Break ';' .
+
+    $default  reduce usando la regla 85 (BreakStmt)
+
+
+State 110
+
+   41 Expr: T_New T_Identifier .
+
+    $default  reduce usando la regla 41 (Expr)
+
+
+State 111
+
+  102 PrintStmt: T_Print '(' . CommaExprList ')' ';'
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr           ir al estado 147
+    LValue         ir al estado 93
+    Constant       ir al estado 94
+    Call           ir al estado 95
+    CommaExprList  ir al estado 148
+
+
+State 112
+
+   45 Expr: T_ReadInteger '(' . ')'
+
+    ')'  desplazar e ir al estado 149
+
+
+State 113
+
+   40 Expr: T_ReadLine '(' . ')'
+
+    ')'  desplazar e ir al estado 150
+
+
+State 114
+
+  107 SwitchStmt: T_Switch '(' . Expr ')' '{' CaseList '}'
+  108           | T_Switch '(' . Expr ')' '{' CaseList Default '}'
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 151
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 115
+
+   94 Call: T_Identifier '(' . Actuals ')'
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 97 (Actuals)
+
+    Expr      ir al estado 152
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+    Actuals   ir al estado 153
+    ExprList  ir al estado 154
+
+
+State 116
+
+   46 Expr: '(' Expr . ')'
+   47     | Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    ')'             desplazar e ir al estado 155
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+
+State 117
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   52     | '-' Expr .
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 52 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 52 (Expr)]
+    T_Equal         [reduce usando la regla 52 (Expr)]
+    T_NotEqual      [reduce usando la regla 52 (Expr)]
+    T_And           [reduce usando la regla 52 (Expr)]
+    T_Or            [reduce usando la regla 52 (Expr)]
+    '+'             [reduce usando la regla 52 (Expr)]
+    '-'             [reduce usando la regla 52 (Expr)]
+    '*'             [reduce usando la regla 52 (Expr)]
+    '/'             [reduce usando la regla 52 (Expr)]
+    '%'             [reduce usando la regla 52 (Expr)]
+    '<'             [reduce usando la regla 52 (Expr)]
+    '>'             [reduce usando la regla 52 (Expr)]
+    '.'             [reduce usando la regla 52 (Expr)]
+    '['             [reduce usando la regla 52 (Expr)]
+    $default        reduce usando la regla 52 (Expr)
+
+
+State 118
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   61     | '!' Expr .
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 61 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 61 (Expr)]
+    T_Equal         [reduce usando la regla 61 (Expr)]
+    T_NotEqual      [reduce usando la regla 61 (Expr)]
+    T_And           [reduce usando la regla 61 (Expr)]
+    T_Or            [reduce usando la regla 61 (Expr)]
+    '+'             [reduce usando la regla 61 (Expr)]
+    '-'             [reduce usando la regla 61 (Expr)]
+    '*'             [reduce usando la regla 61 (Expr)]
+    '/'             [reduce usando la regla 61 (Expr)]
+    '%'             [reduce usando la regla 61 (Expr)]
+    '<'             [reduce usando la regla 61 (Expr)]
+    '>'             [reduce usando la regla 61 (Expr)]
+    '.'             [reduce usando la regla 61 (Expr)]
+    '['             [reduce usando la regla 61 (Expr)]
+    $default        reduce usando la regla 61 (Expr)
+
+
+State 119
 
    24 StmtBlock: '{' VarDeclList '}' .
 
     $default  reduce usando la regla 24 (StmtBlock)
 
 
-State 92
+State 120
 
    21 VarDeclList: VarDeclList VarDecl .
 
     $default  reduce usando la regla 21 (VarDeclList)
 
 
-State 93
+State 121
 
    23 StmtBlock: '{' VarDeclList StmtList . '}'
    27 StmtList: StmtList . Stmt
 
-    T_While     desplazar e ir al estado 60
-    T_For       desplazar e ir al estado 61
-    T_If        desplazar e ir al estado 62
-    T_Return    desplazar e ir al estado 63
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-    '{'         desplazar e ir al estado 53
-    '}'         desplazar e ir al estado 104
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '}'               desplazar e ir al estado 156
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
 
-    $default  reduce usando la regla 38 (OneExpr)
+    $default  reduce usando la regla 63 (OneExpr)
 
-    StmtBlock   ir al estado 69
-    Stmt        ir al estado 95
-    Expr        ir al estado 72
-    OneExpr     ir al estado 73
-    IfStmt      ir al estado 74
-    WhileStmt   ir al estado 75
-    ForStmt     ir al estado 76
-    ReturnStmt  ir al estado 77
+    StmtBlock   ir al estado 83
+    Stmt        ir al estado 123
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
 
 
-State 94
+State 122
 
    25 StmtBlock: '{' StmtList '}' .
 
     $default  reduce usando la regla 25 (StmtBlock)
 
 
-State 95
+State 123
 
    27 StmtList: StmtList Stmt .
 
     $default  reduce usando la regla 27 (StmtList)
 
 
-State 96
+State 124
+
+   54 Expr: Expr T_LessEqual . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 157
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 125
+
+   56 Expr: Expr T_GreaterEqual . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 158
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 126
+
+   57 Expr: Expr T_Equal . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 159
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 127
+
+   58 Expr: Expr T_NotEqual . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 160
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 128
+
+   59 Expr: Expr T_And . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 161
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 129
+
+   60 Expr: Expr T_Or . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 162
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 130
+
+   47 Expr: Expr '+' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 163
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 131
+
+   48 Expr: Expr '-' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 164
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 132
+
+   49 Expr: Expr '*' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 165
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 133
+
+   50 Expr: Expr '/' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 166
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 134
+
+   51 Expr: Expr '%' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 167
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 135
+
+   53 Expr: Expr '<' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 168
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 136
+
+   55 Expr: Expr '>' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 169
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 137
+
+   87 LValue: Expr '.' . T_Identifier
+   95 Call: Expr '.' . T_Identifier '(' Actuals ')'
+
+    T_Identifier  desplazar e ir al estado 170
+
+
+State 138
+
+   88 LValue: Expr '[' . Expr ']'
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 171
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 139
 
    29 Stmt: OneExpr ';' .
 
     $default  reduce usando la regla 29 (Stmt)
 
 
-State 97
+State 140
 
-   51 Prototype: T_Void T_Identifier '(' VarList ')' . ';'
+   39 Expr: LValue '=' . Expr
 
-    ';'  desplazar e ir al estado 105
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
 
-
-State 98
-
-   50 Prototype: Type T_Identifier '(' VarList ')' . ';'
-
-    ';'  desplazar e ir al estado 106
-
-
-State 99
-
-   57 WhileStmt: T_While '(' Expr . ')' Stmt
-
-    ')'  desplazar e ir al estado 107
-
-
-State 100
-
-   58 ForStmt: T_For '(' OneExpr . ';' Expr ';' OneExpr ')' Stmt
-
-    ';'  desplazar e ir al estado 108
+    Expr      ir al estado 172
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
 
 
-State 101
+State 141
 
-   55 IfStmt: T_If '(' Expr . ')' Stmt
-   56       | T_If '(' Expr . ')' Stmt T_Else Stmt
+   76 Prototype: T_Void T_Identifier '(' VarList ')' . ';'
 
-    ')'  desplazar e ir al estado 109
-
-
-State 102
-
-   59 ReturnStmt: T_Return OneExpr ';' .
-
-    $default  reduce usando la regla 59 (ReturnStmt)
+    ';'  desplazar e ir al estado 173
 
 
-State 103
+State 142
 
-   35 Expr: T_ReadLine '(' ')' .
+   75 Prototype: Type T_Identifier '(' VarList ')' . ';'
 
-    $default  reduce usando la regla 35 (Expr)
+    ';'  desplazar e ir al estado 174
 
 
-State 104
+State 143
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   82 WhileStmt: T_While '(' Expr . ')' Stmt
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    ')'             desplazar e ir al estado 175
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+
+State 144
+
+   83 ForStmt: T_For '(' OneExpr . ';' Expr ';' OneExpr ')' Stmt
+
+    ';'  desplazar e ir al estado 176
+
+
+State 145
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   80 IfStmt: T_If '(' Expr . ')' Stmt
+   81       | T_If '(' Expr . ')' Stmt T_Else Stmt
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    ')'             desplazar e ir al estado 177
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+
+State 146
+
+   84 ReturnStmt: T_Return OneExpr ';' .
+
+    $default  reduce usando la regla 84 (ReturnStmt)
+
+
+State 147
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+  101 CommaExprList: Expr .
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    $default  reduce usando la regla 101 (CommaExprList)
+
+
+State 148
+
+  100 CommaExprList: CommaExprList . ',' Expr
+  102 PrintStmt: T_Print '(' CommaExprList . ')' ';'
+
+    ','  desplazar e ir al estado 178
+    ')'  desplazar e ir al estado 179
+
+
+State 149
+
+   45 Expr: T_ReadInteger '(' ')' .
+
+    $default  reduce usando la regla 45 (Expr)
+
+
+State 150
+
+   40 Expr: T_ReadLine '(' ')' .
+
+    $default  reduce usando la regla 40 (Expr)
+
+
+State 151
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+  107 SwitchStmt: T_Switch '(' Expr . ')' '{' CaseList '}'
+  108           | T_Switch '(' Expr . ')' '{' CaseList Default '}'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    ')'             desplazar e ir al estado 180
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+
+State 152
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+   99 ExprList: Expr .
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    '-'       [reduce usando la regla 99 (ExprList)]
+    $default  reduce usando la regla 99 (ExprList)
+
+
+State 153
+
+   94 Call: T_Identifier '(' Actuals . ')'
+
+    ')'  desplazar e ir al estado 181
+
+
+State 154
+
+   96 Actuals: ExprList .
+   98 ExprList: ExprList . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 96 (Actuals)
+
+    Expr      ir al estado 182
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 155
+
+   46 Expr: '(' Expr ')' .
+
+    $default  reduce usando la regla 46 (Expr)
+
+
+State 156
 
    23 StmtBlock: '{' VarDeclList StmtList '}' .
 
     $default  reduce usando la regla 23 (StmtBlock)
 
 
-State 105
-
-   51 Prototype: T_Void T_Identifier '(' VarList ')' ';' .
-
-    $default  reduce usando la regla 51 (Prototype)
-
-
-State 106
-
-   50 Prototype: Type T_Identifier '(' VarList ')' ';' .
-
-    $default  reduce usando la regla 50 (Prototype)
-
-
-State 107
-
-   57 WhileStmt: T_While '(' Expr ')' . Stmt
-
-    T_While     desplazar e ir al estado 60
-    T_For       desplazar e ir al estado 61
-    T_If        desplazar e ir al estado 62
-    T_Return    desplazar e ir al estado 63
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-    '{'         desplazar e ir al estado 53
-
-    $default  reduce usando la regla 38 (OneExpr)
-
-    StmtBlock   ir al estado 69
-    Stmt        ir al estado 110
-    Expr        ir al estado 72
-    OneExpr     ir al estado 73
-    IfStmt      ir al estado 74
-    WhileStmt   ir al estado 75
-    ForStmt     ir al estado 76
-    ReturnStmt  ir al estado 77
-
-
-State 108
-
-   58 ForStmt: T_For '(' OneExpr ';' . Expr ';' OneExpr ')' Stmt
-
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-
-    Expr  ir al estado 111
-
-
-State 109
-
-   55 IfStmt: T_If '(' Expr ')' . Stmt
-   56       | T_If '(' Expr ')' . Stmt T_Else Stmt
-
-    T_While     desplazar e ir al estado 60
-    T_For       desplazar e ir al estado 61
-    T_If        desplazar e ir al estado 62
-    T_Return    desplazar e ir al estado 63
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-    '{'         desplazar e ir al estado 53
-
-    $default  reduce usando la regla 38 (OneExpr)
-
-    StmtBlock   ir al estado 69
-    Stmt        ir al estado 112
-    Expr        ir al estado 72
-    OneExpr     ir al estado 73
-    IfStmt      ir al estado 74
-    WhileStmt   ir al estado 75
-    ForStmt     ir al estado 76
-    ReturnStmt  ir al estado 77
-
-
-State 110
-
-   57 WhileStmt: T_While '(' Expr ')' Stmt .
-
-    $default  reduce usando la regla 57 (WhileStmt)
-
-
-State 111
-
-   58 ForStmt: T_For '(' OneExpr ';' Expr . ';' OneExpr ')' Stmt
-
-    ';'  desplazar e ir al estado 113
-
-
-State 112
-
-   55 IfStmt: T_If '(' Expr ')' Stmt .
-   56       | T_If '(' Expr ')' Stmt . T_Else Stmt
-
-    T_Else  desplazar e ir al estado 114
-
-    T_Else    [reduce usando la regla 55 (IfStmt)]
-    $default  reduce usando la regla 55 (IfStmt)
-
-
-State 113
-
-   58 ForStmt: T_For '(' OneExpr ';' Expr ';' . OneExpr ')' Stmt
-
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-
-    $default  reduce usando la regla 38 (OneExpr)
-
-    Expr     ir al estado 72
-    OneExpr  ir al estado 115
-
-
-State 114
-
-   56 IfStmt: T_If '(' Expr ')' Stmt T_Else . Stmt
-
-    T_While     desplazar e ir al estado 60
-    T_For       desplazar e ir al estado 61
-    T_If        desplazar e ir al estado 62
-    T_Return    desplazar e ir al estado 63
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-    '{'         desplazar e ir al estado 53
-
-    $default  reduce usando la regla 38 (OneExpr)
-
-    StmtBlock   ir al estado 69
-    Stmt        ir al estado 116
-    Expr        ir al estado 72
-    OneExpr     ir al estado 73
-    IfStmt      ir al estado 74
-    WhileStmt   ir al estado 75
-    ForStmt     ir al estado 76
-    ReturnStmt  ir al estado 77
-
-
-State 115
-
-   58 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr . ')' Stmt
-
-    ')'  desplazar e ir al estado 117
-
-
-State 116
-
-   56 IfStmt: T_If '(' Expr ')' Stmt T_Else Stmt .
-
-    $default  reduce usando la regla 56 (IfStmt)
-
-
-State 117
-
-   58 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr ')' . Stmt
-
-    T_While     desplazar e ir al estado 60
-    T_For       desplazar e ir al estado 61
-    T_If        desplazar e ir al estado 62
-    T_Return    desplazar e ir al estado 63
-    T_New       desplazar e ir al estado 64
-    T_ReadLine  desplazar e ir al estado 65
-    '{'         desplazar e ir al estado 53
-
-    $default  reduce usando la regla 38 (OneExpr)
-
-    StmtBlock   ir al estado 69
-    Stmt        ir al estado 118
-    Expr        ir al estado 72
-    OneExpr     ir al estado 73
-    IfStmt      ir al estado 74
-    WhileStmt   ir al estado 75
-    ForStmt     ir al estado 76
-    ReturnStmt  ir al estado 77
-
-
-State 118
-
-   58 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr ')' Stmt .
-
-    $default  reduce usando la regla 58 (ForStmt)
+State 157
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   54     | Expr T_LessEqual Expr .
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 54 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 54 (Expr)]
+    T_Equal         [reduce usando la regla 54 (Expr)]
+    T_NotEqual      [reduce usando la regla 54 (Expr)]
+    T_And           [reduce usando la regla 54 (Expr)]
+    T_Or            [reduce usando la regla 54 (Expr)]
+    '+'             [reduce usando la regla 54 (Expr)]
+    '-'             [reduce usando la regla 54 (Expr)]
+    '*'             [reduce usando la regla 54 (Expr)]
+    '/'             [reduce usando la regla 54 (Expr)]
+    '%'             [reduce usando la regla 54 (Expr)]
+    '<'             [reduce usando la regla 54 (Expr)]
+    '>'             [reduce usando la regla 54 (Expr)]
+    '.'             [reduce usando la regla 54 (Expr)]
+    '['             [reduce usando la regla 54 (Expr)]
+    $default        reduce usando la regla 54 (Expr)
+
+
+State 158
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   56     | Expr T_GreaterEqual Expr .
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 56 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 56 (Expr)]
+    T_Equal         [reduce usando la regla 56 (Expr)]
+    T_NotEqual      [reduce usando la regla 56 (Expr)]
+    T_And           [reduce usando la regla 56 (Expr)]
+    T_Or            [reduce usando la regla 56 (Expr)]
+    '+'             [reduce usando la regla 56 (Expr)]
+    '-'             [reduce usando la regla 56 (Expr)]
+    '*'             [reduce usando la regla 56 (Expr)]
+    '/'             [reduce usando la regla 56 (Expr)]
+    '%'             [reduce usando la regla 56 (Expr)]
+    '<'             [reduce usando la regla 56 (Expr)]
+    '>'             [reduce usando la regla 56 (Expr)]
+    '.'             [reduce usando la regla 56 (Expr)]
+    '['             [reduce usando la regla 56 (Expr)]
+    $default        reduce usando la regla 56 (Expr)
+
+
+State 159
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   57     | Expr T_Equal Expr .
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 57 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 57 (Expr)]
+    T_Equal         [reduce usando la regla 57 (Expr)]
+    T_NotEqual      [reduce usando la regla 57 (Expr)]
+    T_And           [reduce usando la regla 57 (Expr)]
+    T_Or            [reduce usando la regla 57 (Expr)]
+    '+'             [reduce usando la regla 57 (Expr)]
+    '-'             [reduce usando la regla 57 (Expr)]
+    '*'             [reduce usando la regla 57 (Expr)]
+    '/'             [reduce usando la regla 57 (Expr)]
+    '%'             [reduce usando la regla 57 (Expr)]
+    '<'             [reduce usando la regla 57 (Expr)]
+    '>'             [reduce usando la regla 57 (Expr)]
+    '.'             [reduce usando la regla 57 (Expr)]
+    '['             [reduce usando la regla 57 (Expr)]
+    $default        reduce usando la regla 57 (Expr)
+
+
+State 160
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   58     | Expr T_NotEqual Expr .
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 58 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 58 (Expr)]
+    T_Equal         [reduce usando la regla 58 (Expr)]
+    T_NotEqual      [reduce usando la regla 58 (Expr)]
+    T_And           [reduce usando la regla 58 (Expr)]
+    T_Or            [reduce usando la regla 58 (Expr)]
+    '+'             [reduce usando la regla 58 (Expr)]
+    '-'             [reduce usando la regla 58 (Expr)]
+    '*'             [reduce usando la regla 58 (Expr)]
+    '/'             [reduce usando la regla 58 (Expr)]
+    '%'             [reduce usando la regla 58 (Expr)]
+    '<'             [reduce usando la regla 58 (Expr)]
+    '>'             [reduce usando la regla 58 (Expr)]
+    '.'             [reduce usando la regla 58 (Expr)]
+    '['             [reduce usando la regla 58 (Expr)]
+    $default        reduce usando la regla 58 (Expr)
+
+
+State 161
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   59     | Expr T_And Expr .
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 59 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 59 (Expr)]
+    T_Equal         [reduce usando la regla 59 (Expr)]
+    T_NotEqual      [reduce usando la regla 59 (Expr)]
+    T_And           [reduce usando la regla 59 (Expr)]
+    T_Or            [reduce usando la regla 59 (Expr)]
+    '+'             [reduce usando la regla 59 (Expr)]
+    '-'             [reduce usando la regla 59 (Expr)]
+    '*'             [reduce usando la regla 59 (Expr)]
+    '/'             [reduce usando la regla 59 (Expr)]
+    '%'             [reduce usando la regla 59 (Expr)]
+    '<'             [reduce usando la regla 59 (Expr)]
+    '>'             [reduce usando la regla 59 (Expr)]
+    '.'             [reduce usando la regla 59 (Expr)]
+    '['             [reduce usando la regla 59 (Expr)]
+    $default        reduce usando la regla 59 (Expr)
+
+
+State 162
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   60     | Expr T_Or Expr .
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 60 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 60 (Expr)]
+    T_Equal         [reduce usando la regla 60 (Expr)]
+    T_NotEqual      [reduce usando la regla 60 (Expr)]
+    T_And           [reduce usando la regla 60 (Expr)]
+    T_Or            [reduce usando la regla 60 (Expr)]
+    '+'             [reduce usando la regla 60 (Expr)]
+    '-'             [reduce usando la regla 60 (Expr)]
+    '*'             [reduce usando la regla 60 (Expr)]
+    '/'             [reduce usando la regla 60 (Expr)]
+    '%'             [reduce usando la regla 60 (Expr)]
+    '<'             [reduce usando la regla 60 (Expr)]
+    '>'             [reduce usando la regla 60 (Expr)]
+    '.'             [reduce usando la regla 60 (Expr)]
+    '['             [reduce usando la regla 60 (Expr)]
+    $default        reduce usando la regla 60 (Expr)
+
+
+State 163
+
+   47 Expr: Expr . '+' Expr
+   47     | Expr '+' Expr .
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 47 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 47 (Expr)]
+    T_Equal         [reduce usando la regla 47 (Expr)]
+    T_NotEqual      [reduce usando la regla 47 (Expr)]
+    T_And           [reduce usando la regla 47 (Expr)]
+    T_Or            [reduce usando la regla 47 (Expr)]
+    '+'             [reduce usando la regla 47 (Expr)]
+    '-'             [reduce usando la regla 47 (Expr)]
+    '*'             [reduce usando la regla 47 (Expr)]
+    '/'             [reduce usando la regla 47 (Expr)]
+    '%'             [reduce usando la regla 47 (Expr)]
+    '<'             [reduce usando la regla 47 (Expr)]
+    '>'             [reduce usando la regla 47 (Expr)]
+    '.'             [reduce usando la regla 47 (Expr)]
+    '['             [reduce usando la regla 47 (Expr)]
+    $default        reduce usando la regla 47 (Expr)
+
+
+State 164
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   48     | Expr '-' Expr .
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 48 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 48 (Expr)]
+    T_Equal         [reduce usando la regla 48 (Expr)]
+    T_NotEqual      [reduce usando la regla 48 (Expr)]
+    T_And           [reduce usando la regla 48 (Expr)]
+    T_Or            [reduce usando la regla 48 (Expr)]
+    '+'             [reduce usando la regla 48 (Expr)]
+    '-'             [reduce usando la regla 48 (Expr)]
+    '*'             [reduce usando la regla 48 (Expr)]
+    '/'             [reduce usando la regla 48 (Expr)]
+    '%'             [reduce usando la regla 48 (Expr)]
+    '<'             [reduce usando la regla 48 (Expr)]
+    '>'             [reduce usando la regla 48 (Expr)]
+    '.'             [reduce usando la regla 48 (Expr)]
+    '['             [reduce usando la regla 48 (Expr)]
+    $default        reduce usando la regla 48 (Expr)
+
+
+State 165
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   49     | Expr '*' Expr .
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 49 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 49 (Expr)]
+    T_Equal         [reduce usando la regla 49 (Expr)]
+    T_NotEqual      [reduce usando la regla 49 (Expr)]
+    T_And           [reduce usando la regla 49 (Expr)]
+    T_Or            [reduce usando la regla 49 (Expr)]
+    '+'             [reduce usando la regla 49 (Expr)]
+    '-'             [reduce usando la regla 49 (Expr)]
+    '*'             [reduce usando la regla 49 (Expr)]
+    '/'             [reduce usando la regla 49 (Expr)]
+    '%'             [reduce usando la regla 49 (Expr)]
+    '<'             [reduce usando la regla 49 (Expr)]
+    '>'             [reduce usando la regla 49 (Expr)]
+    '.'             [reduce usando la regla 49 (Expr)]
+    '['             [reduce usando la regla 49 (Expr)]
+    $default        reduce usando la regla 49 (Expr)
+
+
+State 166
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   50     | Expr '/' Expr .
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 50 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 50 (Expr)]
+    T_Equal         [reduce usando la regla 50 (Expr)]
+    T_NotEqual      [reduce usando la regla 50 (Expr)]
+    T_And           [reduce usando la regla 50 (Expr)]
+    T_Or            [reduce usando la regla 50 (Expr)]
+    '+'             [reduce usando la regla 50 (Expr)]
+    '-'             [reduce usando la regla 50 (Expr)]
+    '*'             [reduce usando la regla 50 (Expr)]
+    '/'             [reduce usando la regla 50 (Expr)]
+    '%'             [reduce usando la regla 50 (Expr)]
+    '<'             [reduce usando la regla 50 (Expr)]
+    '>'             [reduce usando la regla 50 (Expr)]
+    '.'             [reduce usando la regla 50 (Expr)]
+    '['             [reduce usando la regla 50 (Expr)]
+    $default        reduce usando la regla 50 (Expr)
+
+
+State 167
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   51     | Expr '%' Expr .
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 51 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 51 (Expr)]
+    T_Equal         [reduce usando la regla 51 (Expr)]
+    T_NotEqual      [reduce usando la regla 51 (Expr)]
+    T_And           [reduce usando la regla 51 (Expr)]
+    T_Or            [reduce usando la regla 51 (Expr)]
+    '+'             [reduce usando la regla 51 (Expr)]
+    '-'             [reduce usando la regla 51 (Expr)]
+    '*'             [reduce usando la regla 51 (Expr)]
+    '/'             [reduce usando la regla 51 (Expr)]
+    '%'             [reduce usando la regla 51 (Expr)]
+    '<'             [reduce usando la regla 51 (Expr)]
+    '>'             [reduce usando la regla 51 (Expr)]
+    '.'             [reduce usando la regla 51 (Expr)]
+    '['             [reduce usando la regla 51 (Expr)]
+    $default        reduce usando la regla 51 (Expr)
+
+
+State 168
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   53     | Expr '<' Expr .
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 53 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 53 (Expr)]
+    T_Equal         [reduce usando la regla 53 (Expr)]
+    T_NotEqual      [reduce usando la regla 53 (Expr)]
+    T_And           [reduce usando la regla 53 (Expr)]
+    T_Or            [reduce usando la regla 53 (Expr)]
+    '+'             [reduce usando la regla 53 (Expr)]
+    '-'             [reduce usando la regla 53 (Expr)]
+    '*'             [reduce usando la regla 53 (Expr)]
+    '/'             [reduce usando la regla 53 (Expr)]
+    '%'             [reduce usando la regla 53 (Expr)]
+    '<'             [reduce usando la regla 53 (Expr)]
+    '>'             [reduce usando la regla 53 (Expr)]
+    '.'             [reduce usando la regla 53 (Expr)]
+    '['             [reduce usando la regla 53 (Expr)]
+    $default        reduce usando la regla 53 (Expr)
+
+
+State 169
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   55     | Expr '>' Expr .
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 55 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 55 (Expr)]
+    T_Equal         [reduce usando la regla 55 (Expr)]
+    T_NotEqual      [reduce usando la regla 55 (Expr)]
+    T_And           [reduce usando la regla 55 (Expr)]
+    T_Or            [reduce usando la regla 55 (Expr)]
+    '+'             [reduce usando la regla 55 (Expr)]
+    '-'             [reduce usando la regla 55 (Expr)]
+    '*'             [reduce usando la regla 55 (Expr)]
+    '/'             [reduce usando la regla 55 (Expr)]
+    '%'             [reduce usando la regla 55 (Expr)]
+    '<'             [reduce usando la regla 55 (Expr)]
+    '>'             [reduce usando la regla 55 (Expr)]
+    '.'             [reduce usando la regla 55 (Expr)]
+    '['             [reduce usando la regla 55 (Expr)]
+    $default        reduce usando la regla 55 (Expr)
+
+
+State 170
+
+   87 LValue: Expr '.' T_Identifier .
+   95 Call: Expr '.' T_Identifier . '(' Actuals ')'
+
+    '('  desplazar e ir al estado 183
+
+    '('       [reduce usando la regla 87 (LValue)]
+    $default  reduce usando la regla 87 (LValue)
+
+
+State 171
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   88       | Expr '[' Expr . ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+    ']'             desplazar e ir al estado 184
+
+
+State 172
+
+   39 Expr: LValue '=' Expr .
+   47     | Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    T_LessEqual     [reduce usando la regla 39 (Expr)]
+    T_GreaterEqual  [reduce usando la regla 39 (Expr)]
+    T_Equal         [reduce usando la regla 39 (Expr)]
+    T_NotEqual      [reduce usando la regla 39 (Expr)]
+    T_And           [reduce usando la regla 39 (Expr)]
+    T_Or            [reduce usando la regla 39 (Expr)]
+    '+'             [reduce usando la regla 39 (Expr)]
+    '-'             [reduce usando la regla 39 (Expr)]
+    '*'             [reduce usando la regla 39 (Expr)]
+    '/'             [reduce usando la regla 39 (Expr)]
+    '%'             [reduce usando la regla 39 (Expr)]
+    '<'             [reduce usando la regla 39 (Expr)]
+    '>'             [reduce usando la regla 39 (Expr)]
+    '.'             [reduce usando la regla 39 (Expr)]
+    '['             [reduce usando la regla 39 (Expr)]
+    $default        reduce usando la regla 39 (Expr)
+
+
+State 173
+
+   76 Prototype: T_Void T_Identifier '(' VarList ')' ';' .
+
+    $default  reduce usando la regla 76 (Prototype)
+
+
+State 174
+
+   75 Prototype: Type T_Identifier '(' VarList ')' ';' .
+
+    $default  reduce usando la regla 75 (Prototype)
+
+
+State 175
+
+   82 WhileStmt: T_While '(' Expr ')' . Stmt
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 63 (OneExpr)
+
+    StmtBlock   ir al estado 83
+    Stmt        ir al estado 185
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
+
+
+State 176
+
+   83 ForStmt: T_For '(' OneExpr ';' . Expr ';' OneExpr ')' Stmt
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 186
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 177
+
+   80 IfStmt: T_If '(' Expr ')' . Stmt
+   81       | T_If '(' Expr ')' . Stmt T_Else Stmt
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 63 (OneExpr)
+
+    StmtBlock   ir al estado 83
+    Stmt        ir al estado 187
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
+
+
+State 178
+
+  100 CommaExprList: CommaExprList ',' . Expr
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    Expr      ir al estado 188
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 179
+
+  102 PrintStmt: T_Print '(' CommaExprList ')' . ';'
+
+    ';'  desplazar e ir al estado 189
+
+
+State 180
+
+  107 SwitchStmt: T_Switch '(' Expr ')' . '{' CaseList '}'
+  108           | T_Switch '(' Expr ')' . '{' CaseList Default '}'
+
+    '{'  desplazar e ir al estado 190
+
+
+State 181
+
+   94 Call: T_Identifier '(' Actuals ')' .
+
+    $default  reduce usando la regla 94 (Call)
+
+
+State 182
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+   98 ExprList: ExprList Expr .
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    '-'       [reduce usando la regla 98 (ExprList)]
+    $default  reduce usando la regla 98 (ExprList)
+
+
+State 183
+
+   95 Call: Expr '.' T_Identifier '(' . Actuals ')'
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 97 (Actuals)
+
+    Expr      ir al estado 152
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+    Actuals   ir al estado 191
+    ExprList  ir al estado 154
+
+
+State 184
+
+   88 LValue: Expr '[' Expr ']' .
+
+    $default  reduce usando la regla 88 (LValue)
+
+
+State 185
+
+   82 WhileStmt: T_While '(' Expr ')' Stmt .
+
+    $default  reduce usando la regla 82 (WhileStmt)
+
+
+State 186
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   83 ForStmt: T_For '(' OneExpr ';' Expr . ';' OneExpr ')' Stmt
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    ';'             desplazar e ir al estado 192
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+
+State 187
+
+   80 IfStmt: T_If '(' Expr ')' Stmt .
+   81       | T_If '(' Expr ')' Stmt . T_Else Stmt
+
+    T_Else  desplazar e ir al estado 193
+
+    T_Else    [reduce usando la regla 80 (IfStmt)]
+    $default  reduce usando la regla 80 (IfStmt)
+
+
+State 188
+
+   47 Expr: Expr . '+' Expr
+   48     | Expr . '-' Expr
+   49     | Expr . '*' Expr
+   50     | Expr . '/' Expr
+   51     | Expr . '%' Expr
+   53     | Expr . '<' Expr
+   54     | Expr . T_LessEqual Expr
+   55     | Expr . '>' Expr
+   56     | Expr . T_GreaterEqual Expr
+   57     | Expr . T_Equal Expr
+   58     | Expr . T_NotEqual Expr
+   59     | Expr . T_And Expr
+   60     | Expr . T_Or Expr
+   87 LValue: Expr . '.' T_Identifier
+   88       | Expr . '[' Expr ']'
+   95 Call: Expr . '.' T_Identifier '(' Actuals ')'
+  100 CommaExprList: CommaExprList ',' Expr .
+
+    T_LessEqual     desplazar e ir al estado 124
+    T_GreaterEqual  desplazar e ir al estado 125
+    T_Equal         desplazar e ir al estado 126
+    T_NotEqual      desplazar e ir al estado 127
+    T_And           desplazar e ir al estado 128
+    T_Or            desplazar e ir al estado 129
+    '+'             desplazar e ir al estado 130
+    '-'             desplazar e ir al estado 131
+    '*'             desplazar e ir al estado 132
+    '/'             desplazar e ir al estado 133
+    '%'             desplazar e ir al estado 134
+    '<'             desplazar e ir al estado 135
+    '>'             desplazar e ir al estado 136
+    '.'             desplazar e ir al estado 137
+    '['             desplazar e ir al estado 138
+
+    $default  reduce usando la regla 100 (CommaExprList)
+
+
+State 189
+
+  102 PrintStmt: T_Print '(' CommaExprList ')' ';' .
+
+    $default  reduce usando la regla 102 (PrintStmt)
+
+
+State 190
+
+  107 SwitchStmt: T_Switch '(' Expr ')' '{' . CaseList '}'
+  108           | T_Switch '(' Expr ')' '{' . CaseList Default '}'
+
+    T_Case  desplazar e ir al estado 194
+
+    Case      ir al estado 195
+    CaseList  ir al estado 196
+
+
+State 191
+
+   95 Call: Expr '.' T_Identifier '(' Actuals . ')'
+
+    ')'  desplazar e ir al estado 197
+
+
+State 192
+
+   83 ForStmt: T_For '(' OneExpr ';' Expr ';' . OneExpr ')' Stmt
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_New             desplazar e ir al estado 67
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 63 (OneExpr)
+
+    Expr      ir al estado 86
+    OneExpr   ir al estado 198
+    LValue    ir al estado 93
+    Constant  ir al estado 94
+    Call      ir al estado 95
+
+
+State 193
+
+   81 IfStmt: T_If '(' Expr ')' Stmt T_Else . Stmt
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 63 (OneExpr)
+
+    StmtBlock   ir al estado 83
+    Stmt        ir al estado 199
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
+
+
+State 194
+
+  103 Case: T_Case . T_IntConstant ':' StmtList
+
+    T_IntConstant  desplazar e ir al estado 200
+
+
+State 195
+
+  105 CaseList: Case .
+
+    $default  reduce usando la regla 105 (CaseList)
+
+
+State 196
+
+  104 CaseList: CaseList . Case
+  107 SwitchStmt: T_Switch '(' Expr ')' '{' CaseList . '}'
+  108           | T_Switch '(' Expr ')' '{' CaseList . Default '}'
+
+    T_Case     desplazar e ir al estado 194
+    T_Default  desplazar e ir al estado 201
+    '}'        desplazar e ir al estado 202
+
+    Case     ir al estado 203
+    Default  ir al estado 204
+
+
+State 197
+
+   95 Call: Expr '.' T_Identifier '(' Actuals ')' .
+
+    $default  reduce usando la regla 95 (Call)
+
+
+State 198
+
+   83 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr . ')' Stmt
+
+    ')'  desplazar e ir al estado 205
+
+
+State 199
+
+   81 IfStmt: T_If '(' Expr ')' Stmt T_Else Stmt .
+
+    $default  reduce usando la regla 81 (IfStmt)
+
+
+State 200
+
+  103 Case: T_Case T_IntConstant . ':' StmtList
+
+    ':'  desplazar e ir al estado 206
+
+
+State 201
+
+  106 Default: T_Default . ':' StmtList
+
+    ':'  desplazar e ir al estado 207
+
+
+State 202
+
+  107 SwitchStmt: T_Switch '(' Expr ')' '{' CaseList '}' .
+
+    $default  reduce usando la regla 107 (SwitchStmt)
+
+
+State 203
+
+  104 CaseList: CaseList Case .
+
+    $default  reduce usando la regla 104 (CaseList)
+
+
+State 204
+
+  108 SwitchStmt: T_Switch '(' Expr ')' '{' CaseList Default . '}'
+
+    '}'  desplazar e ir al estado 208
+
+
+State 205
+
+   83 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr ')' . Stmt
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 63 (OneExpr)
+
+    StmtBlock   ir al estado 83
+    Stmt        ir al estado 209
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
+
+
+State 206
+
+  103 Case: T_Case T_IntConstant ':' . StmtList
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 63 (OneExpr)
+
+    StmtBlock   ir al estado 83
+    StmtList    ir al estado 210
+    Stmt        ir al estado 85
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
+
+
+State 207
+
+  106 Default: T_Default ':' . StmtList
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    $default  reduce usando la regla 63 (OneExpr)
+
+    StmtBlock   ir al estado 83
+    StmtList    ir al estado 211
+    Stmt        ir al estado 85
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
+
+
+State 208
+
+  108 SwitchStmt: T_Switch '(' Expr ')' '{' CaseList Default '}' .
+
+    $default  reduce usando la regla 108 (SwitchStmt)
+
+
+State 209
+
+   83 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr ')' Stmt .
+
+    $default  reduce usando la regla 83 (ForStmt)
+
+
+State 210
+
+   27 StmtList: StmtList . Stmt
+  103 Case: T_Case T_IntConstant ':' StmtList .
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    ';'       reduce usando la regla 63 (OneExpr)
+    $default  reduce usando la regla 103 (Case)
+
+    StmtBlock   ir al estado 83
+    Stmt        ir al estado 123
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97
+
+
+State 211
+
+   27 StmtList: StmtList . Stmt
+  106 Default: T_Default ':' StmtList .
+
+    T_Null            desplazar e ir al estado 60
+    T_This            desplazar e ir al estado 61
+    T_While           desplazar e ir al estado 62
+    T_For             desplazar e ir al estado 63
+    T_If              desplazar e ir al estado 64
+    T_Return          desplazar e ir al estado 65
+    T_Break           desplazar e ir al estado 66
+    T_New             desplazar e ir al estado 67
+    T_Print           desplazar e ir al estado 68
+    T_ReadInteger     desplazar e ir al estado 69
+    T_ReadLine        desplazar e ir al estado 70
+    T_Switch          desplazar e ir al estado 71
+    T_Identifier      desplazar e ir al estado 72
+    T_StringConstant  desplazar e ir al estado 73
+    T_IntConstant     desplazar e ir al estado 74
+    T_DoubleConstant  desplazar e ir al estado 75
+    T_BoolConstant    desplazar e ir al estado 76
+    '('               desplazar e ir al estado 77
+    '{'               desplazar e ir al estado 53
+    '-'               desplazar e ir al estado 79
+    '!'               desplazar e ir al estado 80
+
+    '}'       reduce usando la regla 106 (Default)
+    $default  reduce usando la regla 63 (OneExpr)
+
+    StmtBlock   ir al estado 83
+    Stmt        ir al estado 123
+    Expr        ir al estado 86
+    OneExpr     ir al estado 87
+    IfStmt      ir al estado 88
+    WhileStmt   ir al estado 89
+    ForStmt     ir al estado 90
+    ReturnStmt  ir al estado 91
+    BreakStmt   ir al estado 92
+    LValue      ir al estado 93
+    Constant    ir al estado 94
+    Call        ir al estado 95
+    PrintStmt   ir al estado 96
+    SwitchStmt  ir al estado 97

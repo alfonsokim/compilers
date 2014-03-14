@@ -1,0 +1,6 @@
+
+*** Error line 13.
+  b = NewArray(3, int);
+      ^^^^^^^^
+*** syntax error
+

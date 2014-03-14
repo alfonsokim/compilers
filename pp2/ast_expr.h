@@ -16,6 +16,7 @@
 
 class NamedType; // for new
 class Type; // for NewArray
+void yyerror(char *msg); 
 
 
 class Expr : public Stmt 

@@ -1,0 +1,42 @@
+
+   Program: 
+  1   ClassDecl: 
+  1      Identifier: Meee
+  3      VarDecl: 
+            Type: int
+  3         Identifier: joe
+  5      FnDecl: 
+            (return type) Type: double
+  5         Identifier: SuperFunc
+  5         (formals) VarDecl: 
+               Type: bool
+  5            Identifier: a
+            (body) StmtBlock: 
+  8      FnDecl: 
+            (return type) Type: void
+  8         Identifier: Robin
+  8         (formals) VarDecl: 
+               Type: string
+  8            Identifier: bam
+            (body) StmtBlock: 
+  9            ReadLineExpr: 
+ 13   ClassDecl: 
+ 13      Identifier: Batman
+ 13      (extends) NamedType: 
+ 13         Identifier: Hero
+ 13      (implements) NamedType: 
+ 13         Identifier: DarkKnite
+ 13      (implements) NamedType: 
+ 13         Identifier: Bat
+ 15      VarDecl: 
+            Type: bool
+ 15         Identifier: enabled
+ 16      VarDecl: 
+            Type: int
+ 16         Identifier: count
+ 17      VarDecl: 
+            Type: string
+ 17         Identifier: name
+ 18      VarDecl: 
+            Type: double
+ 18         Identifier: table

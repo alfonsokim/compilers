@@ -1,0 +1,6 @@
+
+*** Error line 16.
+  foo(a, d, !true);
+       ^
+*** syntax error
+

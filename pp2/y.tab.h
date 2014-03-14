@@ -75,11 +75,15 @@ extern int yydebug;
      T_Print = 284,
      T_ReadInteger = 285,
      T_ReadLine = 286,
-     T_Identifier = 287,
-     T_StringConstant = 288,
-     T_IntConstant = 289,
-     T_DoubleConstant = 290,
-     T_BoolConstant = 291
+     T_Joe = 287,
+     T_Switch = 288,
+     T_Case = 289,
+     T_Default = 290,
+     T_Identifier = 291,
+     T_StringConstant = 292,
+     T_IntConstant = 293,
+     T_DoubleConstant = 294,
+     T_BoolConstant = 295
    };
 #endif
 /* Tokens.  */
@@ -112,11 +116,15 @@ extern int yydebug;
 #define T_Print 284
 #define T_ReadInteger 285
 #define T_ReadLine 286
-#define T_Identifier 287
-#define T_StringConstant 288
-#define T_IntConstant 289
-#define T_DoubleConstant 290
-#define T_BoolConstant 291
+#define T_Joe 287
+#define T_Switch 288
+#define T_Case 289
+#define T_Default 290
+#define T_Identifier 291
+#define T_StringConstant 292
+#define T_IntConstant 293
+#define T_DoubleConstant 294
+#define T_BoolConstant 295
 
 
 
@@ -151,15 +159,24 @@ typedef union YYSTYPE
     WhileStmt *whileStmt;
     ForStmt *forStmt;
     ReturnStmt *returnStmt;
+    BreakStmt *breakStmt;
     int integerConstant;
     bool boolConstant;
     char *stringConstant;
     double doubleConstant;
+    LValue *lValue;
+    Call *call;
+    List<Expr*> *exprList;
+    PrintStmt *printStmt;
+    Case *caseStmt;
+    List<Case*> *caseList;
+    Default *defaultExpr;
+    SwitchStmt *switchStmt;
     char identifier[MaxIdentLen+1]; // +1 for terminating null
 
 
 /* Line 2053 of yacc.c  */
-#line 163 "y.tab.h"
+#line 180 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
