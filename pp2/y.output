@@ -8,9 +8,6 @@ Terminals unused in grammar
    T_Or
    T_Null
    T_This
-   T_While
-   T_For
-   T_Return
    T_Break
    T_NewArray
    T_Print
@@ -24,7 +21,7 @@ Terminals unused in grammar
 Estado 0 conflictos: 7 desplazamiento(s)/reducci'on(ones)
 Estado 9 conflictos: 7 desplazamiento/reducci'on, 1 reducci'on/reducci'on
 Estado 56 conflictos: 6 desplazamiento(s)/reducci'on(ones)
-Estado 96 conflictos: 1 desplazamiento(s)/reducci'on(ones)
+Estado 112 conflictos: 1 desplazamiento(s)/reducci'on(ones)
 
 
 Gram'atica
@@ -73,58 +70,67 @@ Gram'atica
    29 Stmt: OneExpr ';'
    30     | StmtBlock
    31     | IfStmt
+   32     | WhileStmt
+   33     | ForStmt
+   34     | ReturnStmt
 
-   32 Expr: T_ReadLine '(' ')'
-   33     | T_New T_Identifier
+   35 Expr: T_ReadLine '(' ')'
+   36     | T_New T_Identifier
 
-   34 OneExpr: Expr
-   35        | /* vac'io */
-
-   36 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList '}'
-
-   37 Extends: T_Extends T_Identifier
+   37 OneExpr: Expr
    38        | /* vac'io */
 
-   39 IdentifierList: IdentifierList ',' T_Identifier
-   40               | T_Identifier
+   39 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList '}'
 
-   41 Implements: T_Implements IdentifierList
-   42           | /* vac'io */
+   40 Extends: T_Extends T_Identifier
+   41        | /* vac'io */
 
-   43 Field: VarDecl
-   44      | FnDecl
+   42 IdentifierList: IdentifierList ',' T_Identifier
+   43               | T_Identifier
 
-   45 FieldList: FieldList Field
-   46          | /* vac'io */
+   44 Implements: T_Implements IdentifierList
+   45           | /* vac'io */
 
-   47 Prototype: Type T_Identifier '(' VarList ')' ';'
-   48          | T_Void T_Identifier '(' VarList ')' ';'
+   46 Field: VarDecl
+   47      | FnDecl
 
-   49 PrototypeList: PrototypeList Prototype
-   50              | Prototype
+   48 FieldList: FieldList Field
+   49          | /* vac'io */
 
-   51 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList '}'
+   50 Prototype: Type T_Identifier '(' VarList ')' ';'
+   51          | T_Void T_Identifier '(' VarList ')' ';'
 
-   52 IfStmt: T_If '(' Expr ')' Stmt
-   53       | T_If '(' Expr ')' Stmt T_Else Stmt
+   52 PrototypeList: PrototypeList Prototype
+   53              | Prototype
+
+   54 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList '}'
+
+   55 IfStmt: T_If '(' Expr ')' Stmt
+   56       | T_If '(' Expr ')' Stmt T_Else Stmt
+
+   57 WhileStmt: T_While '(' Expr ')' Stmt
+
+   58 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr ')' Stmt
+
+   59 ReturnStmt: T_Return OneExpr ';'
 
 
 Terminales con las reglas donde aparecen
 
 $end (0) 0
-'(' (40) 18 19 32 47 48 52 53
-')' (41) 18 19 32 47 48 52 53
-',' (44) 15 39
-';' (59) 8 29 47 48
-'{' (123) 23 24 25 26 36 51
-'}' (125) 23 24 25 26 36 51
+'(' (40) 18 19 35 50 51 55 56 57 58
+')' (41) 18 19 35 50 51 55 56 57 58
+',' (44) 15 42
+';' (59) 8 29 50 51 58 59
+'{' (123) 23 24 25 26 39 54
+'}' (125) 23 24 25 26 39 54
 error (256)
-T_Void (258) 19 48
+T_Void (258) 19 51
 T_Bool (259) 12
 T_Int (260) 10
 T_Double (261) 11
 T_String (262) 13
-T_Class (263) 36
+T_Class (263) 39
 T_LessEqual (264)
 T_GreaterEqual (265)
 T_Equal (266)
@@ -133,22 +139,22 @@ T_Dims (268) 14
 T_And (269)
 T_Or (270)
 T_Null (271)
-T_Extends (272) 37
+T_Extends (272) 40
 T_This (273)
-T_Interface (274) 51
-T_Implements (275) 41
-T_While (276)
-T_For (277)
-T_If (278) 52 53
-T_Else (279) 53
-T_Return (280)
+T_Interface (274) 54
+T_Implements (275) 44
+T_While (276) 57
+T_For (277) 58
+T_If (278) 55 56
+T_Else (279) 56
+T_Return (280) 59
 T_Break (281)
-T_New (282) 33
+T_New (282) 36
 T_NewArray (283)
 T_Print (284)
 T_ReadInteger (285)
-T_ReadLine (286) 32
-T_Identifier (287) 9 18 19 33 36 37 39 40 47 48 51
+T_ReadLine (286) 35
+T_Identifier (287) 9 18 19 36 39 40 42 43 50 51 54
 T_StringConstant (288)
 T_IntConstant (289)
 T_DoubleConstant (290)
@@ -166,15 +172,15 @@ DeclList (45)
 Decl (46)
     en la izquierda: 4 5 6 7, en la derecha: 2 3
 VarDecl (47)
-    en la izquierda: 8, en la derecha: 4 21 22 43
+    en la izquierda: 8, en la derecha: 4 21 22 46
 Var (48)
     en la izquierda: 9, en la derecha: 8 15 16
 Type (49)
-    en la izquierda: 10 11 12 13 14, en la derecha: 9 14 18 47
+    en la izquierda: 10 11 12 13 14, en la derecha: 9 14 18 50
 VarList (50)
-    en la izquierda: 15 16 17, en la derecha: 15 18 19 47 48
+    en la izquierda: 15 16 17, en la derecha: 15 18 19 50 51
 FnDecl (51)
-    en la izquierda: 18 19 20, en la derecha: 5 44
+    en la izquierda: 18 19 20, en la derecha: 5 47
 VarDeclList (52)
     en la izquierda: 21 22, en la derecha: 21 23 24
 StmtBlock (53)
@@ -182,31 +188,38 @@ StmtBlock (53)
 StmtList (54)
     en la izquierda: 27 28, en la derecha: 23 25 27
 Stmt (55)
-    en la izquierda: 29 30 31, en la derecha: 27 28 52 53
+    en la izquierda: 29 30 31 32 33 34, en la derecha: 27 28 55 56
+    57 58
 Expr (56)
-    en la izquierda: 32 33, en la derecha: 34 52 53
+    en la izquierda: 35 36, en la derecha: 37 55 56 57 58
 OneExpr (57)
-    en la izquierda: 34 35, en la derecha: 29
+    en la izquierda: 37 38, en la derecha: 29 58 59
 ClassDecl (58)
-    en la izquierda: 36, en la derecha: 6
+    en la izquierda: 39, en la derecha: 6
 Extends (59)
-    en la izquierda: 37 38, en la derecha: 36
+    en la izquierda: 40 41, en la derecha: 39
 IdentifierList (60)
-    en la izquierda: 39 40, en la derecha: 39 41
+    en la izquierda: 42 43, en la derecha: 42 44
 Implements (61)
-    en la izquierda: 41 42, en la derecha: 36
+    en la izquierda: 44 45, en la derecha: 39
 Field (62)
-    en la izquierda: 43 44, en la derecha: 45
+    en la izquierda: 46 47, en la derecha: 48
 FieldList (63)
-    en la izquierda: 45 46, en la derecha: 36 45
+    en la izquierda: 48 49, en la derecha: 39 48
 Prototype (64)
-    en la izquierda: 47 48, en la derecha: 49 50
+    en la izquierda: 50 51, en la derecha: 52 53
 PrototypeList (65)
-    en la izquierda: 49 50, en la derecha: 49 51
+    en la izquierda: 52 53, en la derecha: 52 54
 InterfaceDecl (66)
-    en la izquierda: 51, en la derecha: 7
+    en la izquierda: 54, en la derecha: 7
 IfStmt (67)
-    en la izquierda: 52 53, en la derecha: 31
+    en la izquierda: 55 56, en la derecha: 31
+WhileStmt (68)
+    en la izquierda: 57, en la derecha: 32
+ForStmt (69)
+    en la izquierda: 58, en la derecha: 33
+ReturnStmt (70)
+    en la izquierda: 59, en la derecha: 34
 
 
 State 0
@@ -278,14 +291,14 @@ State 5
 
 State 6
 
-   36 ClassDecl: T_Class . T_Identifier Extends Implements '{' FieldList '}'
+   39 ClassDecl: T_Class . T_Identifier Extends Implements '{' FieldList '}'
 
     T_Identifier  desplazar e ir al estado 18
 
 
 State 7
 
-   51 InterfaceDecl: T_Interface . T_Identifier '{' PrototypeList '}'
+   54 InterfaceDecl: T_Interface . T_Identifier '{' PrototypeList '}'
 
     T_Identifier  desplazar e ir al estado 19
 
@@ -391,18 +404,18 @@ State 17
 
 State 18
 
-   36 ClassDecl: T_Class T_Identifier . Extends Implements '{' FieldList '}'
+   39 ClassDecl: T_Class T_Identifier . Extends Implements '{' FieldList '}'
 
     T_Extends  desplazar e ir al estado 26
 
-    $default  reduce usando la regla 38 (Extends)
+    $default  reduce usando la regla 41 (Extends)
 
     Extends  ir al estado 27
 
 
 State 19
 
-   51 InterfaceDecl: T_Interface T_Identifier . '{' PrototypeList '}'
+   54 InterfaceDecl: T_Interface T_Identifier . '{' PrototypeList '}'
 
     '{'  desplazar e ir al estado 28
 
@@ -463,25 +476,25 @@ State 25
 
 State 26
 
-   37 Extends: T_Extends . T_Identifier
+   40 Extends: T_Extends . T_Identifier
 
     T_Identifier  desplazar e ir al estado 33
 
 
 State 27
 
-   36 ClassDecl: T_Class T_Identifier Extends . Implements '{' FieldList '}'
+   39 ClassDecl: T_Class T_Identifier Extends . Implements '{' FieldList '}'
 
     T_Implements  desplazar e ir al estado 34
 
-    $default  reduce usando la regla 42 (Implements)
+    $default  reduce usando la regla 45 (Implements)
 
     Implements  ir al estado 35
 
 
 State 28
 
-   51 InterfaceDecl: T_Interface T_Identifier '{' . PrototypeList '}'
+   54 InterfaceDecl: T_Interface T_Identifier '{' . PrototypeList '}'
 
     T_Void    desplazar e ir al estado 36
     T_Bool    desplazar e ir al estado 2
@@ -537,14 +550,14 @@ State 32
 
 State 33
 
-   37 Extends: T_Extends T_Identifier .
+   40 Extends: T_Extends T_Identifier .
 
-    $default  reduce usando la regla 37 (Extends)
+    $default  reduce usando la regla 40 (Extends)
 
 
 State 34
 
-   41 Implements: T_Implements . IdentifierList
+   44 Implements: T_Implements . IdentifierList
 
     T_Identifier  desplazar e ir al estado 44
 
@@ -553,14 +566,14 @@ State 34
 
 State 35
 
-   36 ClassDecl: T_Class T_Identifier Extends Implements . '{' FieldList '}'
+   39 ClassDecl: T_Class T_Identifier Extends Implements . '{' FieldList '}'
 
     '{'  desplazar e ir al estado 46
 
 
 State 36
 
-   48 Prototype: T_Void . T_Identifier '(' VarList ')' ';'
+   51 Prototype: T_Void . T_Identifier '(' VarList ')' ';'
 
     T_Identifier  desplazar e ir al estado 47
 
@@ -568,7 +581,7 @@ State 36
 State 37
 
    14 Type: Type . T_Dims
-   47 Prototype: Type . T_Identifier '(' VarList ')' ';'
+   50 Prototype: Type . T_Identifier '(' VarList ')' ';'
 
     T_Dims        desplazar e ir al estado 23
     T_Identifier  desplazar e ir al estado 48
@@ -576,15 +589,15 @@ State 37
 
 State 38
 
-   50 PrototypeList: Prototype .
+   53 PrototypeList: Prototype .
 
-    $default  reduce usando la regla 50 (PrototypeList)
+    $default  reduce usando la regla 53 (PrototypeList)
 
 
 State 39
 
-   49 PrototypeList: PrototypeList . Prototype
-   51 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList . '}'
+   52 PrototypeList: PrototypeList . Prototype
+   54 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList . '}'
 
     T_Void    desplazar e ir al estado 36
     T_Bool    desplazar e ir al estado 2
@@ -637,56 +650,56 @@ State 43
 
 State 44
 
-   40 IdentifierList: T_Identifier .
+   43 IdentifierList: T_Identifier .
 
-    $default  reduce usando la regla 40 (IdentifierList)
+    $default  reduce usando la regla 43 (IdentifierList)
 
 
 State 45
 
-   39 IdentifierList: IdentifierList . ',' T_Identifier
-   41 Implements: T_Implements IdentifierList .
+   42 IdentifierList: IdentifierList . ',' T_Identifier
+   44 Implements: T_Implements IdentifierList .
 
     ','  desplazar e ir al estado 55
 
-    $default  reduce usando la regla 41 (Implements)
+    $default  reduce usando la regla 44 (Implements)
 
 
 State 46
 
-   36 ClassDecl: T_Class T_Identifier Extends Implements '{' . FieldList '}'
+   39 ClassDecl: T_Class T_Identifier Extends Implements '{' . FieldList '}'
 
-    $default  reduce usando la regla 46 (FieldList)
+    $default  reduce usando la regla 49 (FieldList)
 
     FieldList  ir al estado 56
 
 
 State 47
 
-   48 Prototype: T_Void T_Identifier . '(' VarList ')' ';'
+   51 Prototype: T_Void T_Identifier . '(' VarList ')' ';'
 
     '('  desplazar e ir al estado 57
 
 
 State 48
 
-   47 Prototype: Type T_Identifier . '(' VarList ')' ';'
+   50 Prototype: Type T_Identifier . '(' VarList ')' ';'
 
     '('  desplazar e ir al estado 58
 
 
 State 49
 
-   51 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList '}' .
+   54 InterfaceDecl: T_Interface T_Identifier '{' PrototypeList '}' .
 
-    $default  reduce usando la regla 51 (InterfaceDecl)
+    $default  reduce usando la regla 54 (InterfaceDecl)
 
 
 State 50
 
-   49 PrototypeList: PrototypeList Prototype .
+   52 PrototypeList: PrototypeList Prototype .
 
-    $default  reduce usando la regla 49 (PrototypeList)
+    $default  reduce usando la regla 52 (PrototypeList)
 
 
 State 51
@@ -716,24 +729,30 @@ State 53
     T_Int       desplazar e ir al estado 3
     T_Double    desplazar e ir al estado 4
     T_String    desplazar e ir al estado 5
-    T_If        desplazar e ir al estado 60
-    T_New       desplazar e ir al estado 61
-    T_ReadLine  desplazar e ir al estado 62
+    T_While     desplazar e ir al estado 60
+    T_For       desplazar e ir al estado 61
+    T_If        desplazar e ir al estado 62
+    T_Return    desplazar e ir al estado 63
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
     '{'         desplazar e ir al estado 53
-    '}'         desplazar e ir al estado 63
+    '}'         desplazar e ir al estado 66
 
-    $default  reduce usando la regla 35 (OneExpr)
+    $default  reduce usando la regla 38 (OneExpr)
 
-    VarDecl      ir al estado 64
+    VarDecl      ir al estado 67
     Var          ir al estado 12
     Type         ir al estado 31
-    VarDeclList  ir al estado 65
-    StmtBlock    ir al estado 66
-    StmtList     ir al estado 67
-    Stmt         ir al estado 68
-    Expr         ir al estado 69
-    OneExpr      ir al estado 70
-    IfStmt       ir al estado 71
+    VarDeclList  ir al estado 68
+    StmtBlock    ir al estado 69
+    StmtList     ir al estado 70
+    Stmt         ir al estado 71
+    Expr         ir al estado 72
+    OneExpr      ir al estado 73
+    IfStmt       ir al estado 74
+    WhileStmt    ir al estado 75
+    ForStmt      ir al estado 76
+    ReturnStmt   ir al estado 77
 
 
 State 54
@@ -745,22 +764,22 @@ State 54
 
 State 55
 
-   39 IdentifierList: IdentifierList ',' . T_Identifier
+   42 IdentifierList: IdentifierList ',' . T_Identifier
 
-    T_Identifier  desplazar e ir al estado 72
+    T_Identifier  desplazar e ir al estado 78
 
 
 State 56
 
-   36 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList . '}'
-   45 FieldList: FieldList . Field
+   39 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList . '}'
+   48 FieldList: FieldList . Field
 
     T_Void    desplazar e ir al estado 1
     T_Bool    desplazar e ir al estado 2
     T_Int     desplazar e ir al estado 3
     T_Double  desplazar e ir al estado 4
     T_String  desplazar e ir al estado 5
-    '}'       desplazar e ir al estado 73
+    '}'       desplazar e ir al estado 79
 
     T_Void    [reduce usando la regla 20 (FnDecl)]
     T_Bool    [reduce usando la regla 20 (FnDecl)]
@@ -769,16 +788,16 @@ State 56
     T_String  [reduce usando la regla 20 (FnDecl)]
     '}'       [reduce usando la regla 20 (FnDecl)]
 
-    VarDecl  ir al estado 74
+    VarDecl  ir al estado 80
     Var      ir al estado 12
     Type     ir al estado 13
-    FnDecl   ir al estado 75
-    Field    ir al estado 76
+    FnDecl   ir al estado 81
+    Field    ir al estado 82
 
 
 State 57
 
-   48 Prototype: T_Void T_Identifier '(' . VarList ')' ';'
+   51 Prototype: T_Void T_Identifier '(' . VarList ')' ';'
 
     T_Bool    desplazar e ir al estado 2
     T_Int     desplazar e ir al estado 3
@@ -789,12 +808,12 @@ State 57
 
     Var      ir al estado 30
     Type     ir al estado 31
-    VarList  ir al estado 77
+    VarList  ir al estado 83
 
 
 State 58
 
-   47 Prototype: Type T_Identifier '(' . VarList ')' ';'
+   50 Prototype: Type T_Identifier '(' . VarList ')' ';'
 
     T_Bool    desplazar e ir al estado 2
     T_Int     desplazar e ir al estado 3
@@ -805,7 +824,7 @@ State 58
 
     Var      ir al estado 30
     Type     ir al estado 31
-    VarList  ir al estado 78
+    VarList  ir al estado 84
 
 
 State 59
@@ -817,41 +836,68 @@ State 59
 
 State 60
 
-   52 IfStmt: T_If . '(' Expr ')' Stmt
-   53       | T_If . '(' Expr ')' Stmt T_Else Stmt
+   57 WhileStmt: T_While . '(' Expr ')' Stmt
 
-    '('  desplazar e ir al estado 79
+    '('  desplazar e ir al estado 85
 
 
 State 61
 
-   33 Expr: T_New . T_Identifier
+   58 ForStmt: T_For . '(' OneExpr ';' Expr ';' OneExpr ')' Stmt
 
-    T_Identifier  desplazar e ir al estado 80
+    '('  desplazar e ir al estado 86
 
 
 State 62
 
-   32 Expr: T_ReadLine . '(' ')'
+   55 IfStmt: T_If . '(' Expr ')' Stmt
+   56       | T_If . '(' Expr ')' Stmt T_Else Stmt
 
-    '('  desplazar e ir al estado 81
+    '('  desplazar e ir al estado 87
 
 
 State 63
+
+   59 ReturnStmt: T_Return . OneExpr ';'
+
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
+
+    $default  reduce usando la regla 38 (OneExpr)
+
+    Expr     ir al estado 72
+    OneExpr  ir al estado 88
+
+
+State 64
+
+   36 Expr: T_New . T_Identifier
+
+    T_Identifier  desplazar e ir al estado 89
+
+
+State 65
+
+   35 Expr: T_ReadLine . '(' ')'
+
+    '('  desplazar e ir al estado 90
+
+
+State 66
 
    26 StmtBlock: '{' '}' .
 
     $default  reduce usando la regla 26 (StmtBlock)
 
 
-State 64
+State 67
 
    22 VarDeclList: VarDecl .
 
     $default  reduce usando la regla 22 (VarDeclList)
 
 
-State 65
+State 68
 
    21 VarDeclList: VarDeclList . VarDecl
    23 StmtBlock: '{' VarDeclList . StmtList '}'
@@ -861,313 +907,514 @@ State 65
     T_Int       desplazar e ir al estado 3
     T_Double    desplazar e ir al estado 4
     T_String    desplazar e ir al estado 5
-    T_If        desplazar e ir al estado 60
-    T_New       desplazar e ir al estado 61
-    T_ReadLine  desplazar e ir al estado 62
+    T_While     desplazar e ir al estado 60
+    T_For       desplazar e ir al estado 61
+    T_If        desplazar e ir al estado 62
+    T_Return    desplazar e ir al estado 63
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
     '{'         desplazar e ir al estado 53
-    '}'         desplazar e ir al estado 82
+    '}'         desplazar e ir al estado 91
 
-    $default  reduce usando la regla 35 (OneExpr)
+    $default  reduce usando la regla 38 (OneExpr)
 
-    VarDecl    ir al estado 83
-    Var        ir al estado 12
-    Type       ir al estado 31
-    StmtBlock  ir al estado 66
-    StmtList   ir al estado 84
-    Stmt       ir al estado 68
-    Expr       ir al estado 69
-    OneExpr    ir al estado 70
-    IfStmt     ir al estado 71
+    VarDecl     ir al estado 92
+    Var         ir al estado 12
+    Type        ir al estado 31
+    StmtBlock   ir al estado 69
+    StmtList    ir al estado 93
+    Stmt        ir al estado 71
+    Expr        ir al estado 72
+    OneExpr     ir al estado 73
+    IfStmt      ir al estado 74
+    WhileStmt   ir al estado 75
+    ForStmt     ir al estado 76
+    ReturnStmt  ir al estado 77
 
 
-State 66
+State 69
 
    30 Stmt: StmtBlock .
 
     $default  reduce usando la regla 30 (Stmt)
 
 
-State 67
+State 70
 
    25 StmtBlock: '{' StmtList . '}'
    27 StmtList: StmtList . Stmt
 
-    T_If        desplazar e ir al estado 60
-    T_New       desplazar e ir al estado 61
-    T_ReadLine  desplazar e ir al estado 62
+    T_While     desplazar e ir al estado 60
+    T_For       desplazar e ir al estado 61
+    T_If        desplazar e ir al estado 62
+    T_Return    desplazar e ir al estado 63
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
     '{'         desplazar e ir al estado 53
-    '}'         desplazar e ir al estado 85
+    '}'         desplazar e ir al estado 94
 
-    $default  reduce usando la regla 35 (OneExpr)
+    $default  reduce usando la regla 38 (OneExpr)
 
-    StmtBlock  ir al estado 66
-    Stmt       ir al estado 86
-    Expr       ir al estado 69
-    OneExpr    ir al estado 70
-    IfStmt     ir al estado 71
+    StmtBlock   ir al estado 69
+    Stmt        ir al estado 95
+    Expr        ir al estado 72
+    OneExpr     ir al estado 73
+    IfStmt      ir al estado 74
+    WhileStmt   ir al estado 75
+    ForStmt     ir al estado 76
+    ReturnStmt  ir al estado 77
 
 
-State 68
+State 71
 
    28 StmtList: Stmt .
 
     $default  reduce usando la regla 28 (StmtList)
 
 
-State 69
+State 72
 
-   34 OneExpr: Expr .
+   37 OneExpr: Expr .
 
-    $default  reduce usando la regla 34 (OneExpr)
+    $default  reduce usando la regla 37 (OneExpr)
 
 
-State 70
+State 73
 
    29 Stmt: OneExpr . ';'
 
-    ';'  desplazar e ir al estado 87
+    ';'  desplazar e ir al estado 96
 
 
-State 71
+State 74
 
    31 Stmt: IfStmt .
 
     $default  reduce usando la regla 31 (Stmt)
 
 
-State 72
-
-   39 IdentifierList: IdentifierList ',' T_Identifier .
-
-    $default  reduce usando la regla 39 (IdentifierList)
-
-
-State 73
-
-   36 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList '}' .
-
-    $default  reduce usando la regla 36 (ClassDecl)
-
-
-State 74
-
-   43 Field: VarDecl .
-
-    $default  reduce usando la regla 43 (Field)
-
-
 State 75
 
-   44 Field: FnDecl .
+   32 Stmt: WhileStmt .
 
-    $default  reduce usando la regla 44 (Field)
+    $default  reduce usando la regla 32 (Stmt)
 
 
 State 76
 
-   45 FieldList: FieldList Field .
+   33 Stmt: ForStmt .
 
-    $default  reduce usando la regla 45 (FieldList)
+    $default  reduce usando la regla 33 (Stmt)
 
 
 State 77
 
-   15 VarList: VarList . ',' Var
-   48 Prototype: T_Void T_Identifier '(' VarList . ')' ';'
+   34 Stmt: ReturnStmt .
 
-    ','  desplazar e ir al estado 42
-    ')'  desplazar e ir al estado 88
+    $default  reduce usando la regla 34 (Stmt)
 
 
 State 78
 
-   15 VarList: VarList . ',' Var
-   47 Prototype: Type T_Identifier '(' VarList . ')' ';'
+   42 IdentifierList: IdentifierList ',' T_Identifier .
 
-    ','  desplazar e ir al estado 42
-    ')'  desplazar e ir al estado 89
+    $default  reduce usando la regla 42 (IdentifierList)
 
 
 State 79
 
-   52 IfStmt: T_If '(' . Expr ')' Stmt
-   53       | T_If '(' . Expr ')' Stmt T_Else Stmt
+   39 ClassDecl: T_Class T_Identifier Extends Implements '{' FieldList '}' .
 
-    T_New       desplazar e ir al estado 61
-    T_ReadLine  desplazar e ir al estado 62
-
-    Expr  ir al estado 90
+    $default  reduce usando la regla 39 (ClassDecl)
 
 
 State 80
 
-   33 Expr: T_New T_Identifier .
+   46 Field: VarDecl .
 
-    $default  reduce usando la regla 33 (Expr)
+    $default  reduce usando la regla 46 (Field)
 
 
 State 81
 
-   32 Expr: T_ReadLine '(' . ')'
+   47 Field: FnDecl .
 
-    ')'  desplazar e ir al estado 91
+    $default  reduce usando la regla 47 (Field)
 
 
 State 82
+
+   48 FieldList: FieldList Field .
+
+    $default  reduce usando la regla 48 (FieldList)
+
+
+State 83
+
+   15 VarList: VarList . ',' Var
+   51 Prototype: T_Void T_Identifier '(' VarList . ')' ';'
+
+    ','  desplazar e ir al estado 42
+    ')'  desplazar e ir al estado 97
+
+
+State 84
+
+   15 VarList: VarList . ',' Var
+   50 Prototype: Type T_Identifier '(' VarList . ')' ';'
+
+    ','  desplazar e ir al estado 42
+    ')'  desplazar e ir al estado 98
+
+
+State 85
+
+   57 WhileStmt: T_While '(' . Expr ')' Stmt
+
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
+
+    Expr  ir al estado 99
+
+
+State 86
+
+   58 ForStmt: T_For '(' . OneExpr ';' Expr ';' OneExpr ')' Stmt
+
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
+
+    $default  reduce usando la regla 38 (OneExpr)
+
+    Expr     ir al estado 72
+    OneExpr  ir al estado 100
+
+
+State 87
+
+   55 IfStmt: T_If '(' . Expr ')' Stmt
+   56       | T_If '(' . Expr ')' Stmt T_Else Stmt
+
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
+
+    Expr  ir al estado 101
+
+
+State 88
+
+   59 ReturnStmt: T_Return OneExpr . ';'
+
+    ';'  desplazar e ir al estado 102
+
+
+State 89
+
+   36 Expr: T_New T_Identifier .
+
+    $default  reduce usando la regla 36 (Expr)
+
+
+State 90
+
+   35 Expr: T_ReadLine '(' . ')'
+
+    ')'  desplazar e ir al estado 103
+
+
+State 91
 
    24 StmtBlock: '{' VarDeclList '}' .
 
     $default  reduce usando la regla 24 (StmtBlock)
 
 
-State 83
+State 92
 
    21 VarDeclList: VarDeclList VarDecl .
 
     $default  reduce usando la regla 21 (VarDeclList)
 
 
-State 84
+State 93
 
    23 StmtBlock: '{' VarDeclList StmtList . '}'
    27 StmtList: StmtList . Stmt
 
-    T_If        desplazar e ir al estado 60
-    T_New       desplazar e ir al estado 61
-    T_ReadLine  desplazar e ir al estado 62
+    T_While     desplazar e ir al estado 60
+    T_For       desplazar e ir al estado 61
+    T_If        desplazar e ir al estado 62
+    T_Return    desplazar e ir al estado 63
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
     '{'         desplazar e ir al estado 53
-    '}'         desplazar e ir al estado 92
+    '}'         desplazar e ir al estado 104
 
-    $default  reduce usando la regla 35 (OneExpr)
+    $default  reduce usando la regla 38 (OneExpr)
 
-    StmtBlock  ir al estado 66
-    Stmt       ir al estado 86
-    Expr       ir al estado 69
-    OneExpr    ir al estado 70
-    IfStmt     ir al estado 71
+    StmtBlock   ir al estado 69
+    Stmt        ir al estado 95
+    Expr        ir al estado 72
+    OneExpr     ir al estado 73
+    IfStmt      ir al estado 74
+    WhileStmt   ir al estado 75
+    ForStmt     ir al estado 76
+    ReturnStmt  ir al estado 77
 
 
-State 85
+State 94
 
    25 StmtBlock: '{' StmtList '}' .
 
     $default  reduce usando la regla 25 (StmtBlock)
 
 
-State 86
+State 95
 
    27 StmtList: StmtList Stmt .
 
     $default  reduce usando la regla 27 (StmtList)
 
 
-State 87
+State 96
 
    29 Stmt: OneExpr ';' .
 
     $default  reduce usando la regla 29 (Stmt)
 
 
-State 88
+State 97
 
-   48 Prototype: T_Void T_Identifier '(' VarList ')' . ';'
+   51 Prototype: T_Void T_Identifier '(' VarList ')' . ';'
 
-    ';'  desplazar e ir al estado 93
-
-
-State 89
-
-   47 Prototype: Type T_Identifier '(' VarList ')' . ';'
-
-    ';'  desplazar e ir al estado 94
+    ';'  desplazar e ir al estado 105
 
 
-State 90
+State 98
 
-   52 IfStmt: T_If '(' Expr . ')' Stmt
-   53       | T_If '(' Expr . ')' Stmt T_Else Stmt
+   50 Prototype: Type T_Identifier '(' VarList ')' . ';'
 
-    ')'  desplazar e ir al estado 95
-
-
-State 91
-
-   32 Expr: T_ReadLine '(' ')' .
-
-    $default  reduce usando la regla 32 (Expr)
+    ';'  desplazar e ir al estado 106
 
 
-State 92
+State 99
+
+   57 WhileStmt: T_While '(' Expr . ')' Stmt
+
+    ')'  desplazar e ir al estado 107
+
+
+State 100
+
+   58 ForStmt: T_For '(' OneExpr . ';' Expr ';' OneExpr ')' Stmt
+
+    ';'  desplazar e ir al estado 108
+
+
+State 101
+
+   55 IfStmt: T_If '(' Expr . ')' Stmt
+   56       | T_If '(' Expr . ')' Stmt T_Else Stmt
+
+    ')'  desplazar e ir al estado 109
+
+
+State 102
+
+   59 ReturnStmt: T_Return OneExpr ';' .
+
+    $default  reduce usando la regla 59 (ReturnStmt)
+
+
+State 103
+
+   35 Expr: T_ReadLine '(' ')' .
+
+    $default  reduce usando la regla 35 (Expr)
+
+
+State 104
 
    23 StmtBlock: '{' VarDeclList StmtList '}' .
 
     $default  reduce usando la regla 23 (StmtBlock)
 
 
-State 93
+State 105
 
-   48 Prototype: T_Void T_Identifier '(' VarList ')' ';' .
+   51 Prototype: T_Void T_Identifier '(' VarList ')' ';' .
 
-    $default  reduce usando la regla 48 (Prototype)
-
-
-State 94
-
-   47 Prototype: Type T_Identifier '(' VarList ')' ';' .
-
-    $default  reduce usando la regla 47 (Prototype)
+    $default  reduce usando la regla 51 (Prototype)
 
 
-State 95
+State 106
 
-   52 IfStmt: T_If '(' Expr ')' . Stmt
-   53       | T_If '(' Expr ')' . Stmt T_Else Stmt
+   50 Prototype: Type T_Identifier '(' VarList ')' ';' .
 
-    T_If        desplazar e ir al estado 60
-    T_New       desplazar e ir al estado 61
-    T_ReadLine  desplazar e ir al estado 62
+    $default  reduce usando la regla 50 (Prototype)
+
+
+State 107
+
+   57 WhileStmt: T_While '(' Expr ')' . Stmt
+
+    T_While     desplazar e ir al estado 60
+    T_For       desplazar e ir al estado 61
+    T_If        desplazar e ir al estado 62
+    T_Return    desplazar e ir al estado 63
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
     '{'         desplazar e ir al estado 53
 
-    $default  reduce usando la regla 35 (OneExpr)
+    $default  reduce usando la regla 38 (OneExpr)
 
-    StmtBlock  ir al estado 66
-    Stmt       ir al estado 96
-    Expr       ir al estado 69
-    OneExpr    ir al estado 70
-    IfStmt     ir al estado 71
-
-
-State 96
-
-   52 IfStmt: T_If '(' Expr ')' Stmt .
-   53       | T_If '(' Expr ')' Stmt . T_Else Stmt
-
-    T_Else  desplazar e ir al estado 97
-
-    T_Else    [reduce usando la regla 52 (IfStmt)]
-    $default  reduce usando la regla 52 (IfStmt)
+    StmtBlock   ir al estado 69
+    Stmt        ir al estado 110
+    Expr        ir al estado 72
+    OneExpr     ir al estado 73
+    IfStmt      ir al estado 74
+    WhileStmt   ir al estado 75
+    ForStmt     ir al estado 76
+    ReturnStmt  ir al estado 77
 
 
-State 97
+State 108
 
-   53 IfStmt: T_If '(' Expr ')' Stmt T_Else . Stmt
+   58 ForStmt: T_For '(' OneExpr ';' . Expr ';' OneExpr ')' Stmt
 
-    T_If        desplazar e ir al estado 60
-    T_New       desplazar e ir al estado 61
-    T_ReadLine  desplazar e ir al estado 62
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
+
+    Expr  ir al estado 111
+
+
+State 109
+
+   55 IfStmt: T_If '(' Expr ')' . Stmt
+   56       | T_If '(' Expr ')' . Stmt T_Else Stmt
+
+    T_While     desplazar e ir al estado 60
+    T_For       desplazar e ir al estado 61
+    T_If        desplazar e ir al estado 62
+    T_Return    desplazar e ir al estado 63
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
     '{'         desplazar e ir al estado 53
 
-    $default  reduce usando la regla 35 (OneExpr)
+    $default  reduce usando la regla 38 (OneExpr)
 
-    StmtBlock  ir al estado 66
-    Stmt       ir al estado 98
-    Expr       ir al estado 69
-    OneExpr    ir al estado 70
-    IfStmt     ir al estado 71
+    StmtBlock   ir al estado 69
+    Stmt        ir al estado 112
+    Expr        ir al estado 72
+    OneExpr     ir al estado 73
+    IfStmt      ir al estado 74
+    WhileStmt   ir al estado 75
+    ForStmt     ir al estado 76
+    ReturnStmt  ir al estado 77
 
 
-State 98
+State 110
 
-   53 IfStmt: T_If '(' Expr ')' Stmt T_Else Stmt .
+   57 WhileStmt: T_While '(' Expr ')' Stmt .
 
-    $default  reduce usando la regla 53 (IfStmt)
+    $default  reduce usando la regla 57 (WhileStmt)
+
+
+State 111
+
+   58 ForStmt: T_For '(' OneExpr ';' Expr . ';' OneExpr ')' Stmt
+
+    ';'  desplazar e ir al estado 113
+
+
+State 112
+
+   55 IfStmt: T_If '(' Expr ')' Stmt .
+   56       | T_If '(' Expr ')' Stmt . T_Else Stmt
+
+    T_Else  desplazar e ir al estado 114
+
+    T_Else    [reduce usando la regla 55 (IfStmt)]
+    $default  reduce usando la regla 55 (IfStmt)
+
+
+State 113
+
+   58 ForStmt: T_For '(' OneExpr ';' Expr ';' . OneExpr ')' Stmt
+
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
+
+    $default  reduce usando la regla 38 (OneExpr)
+
+    Expr     ir al estado 72
+    OneExpr  ir al estado 115
+
+
+State 114
+
+   56 IfStmt: T_If '(' Expr ')' Stmt T_Else . Stmt
+
+    T_While     desplazar e ir al estado 60
+    T_For       desplazar e ir al estado 61
+    T_If        desplazar e ir al estado 62
+    T_Return    desplazar e ir al estado 63
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
+    '{'         desplazar e ir al estado 53
+
+    $default  reduce usando la regla 38 (OneExpr)
+
+    StmtBlock   ir al estado 69
+    Stmt        ir al estado 116
+    Expr        ir al estado 72
+    OneExpr     ir al estado 73
+    IfStmt      ir al estado 74
+    WhileStmt   ir al estado 75
+    ForStmt     ir al estado 76
+    ReturnStmt  ir al estado 77
+
+
+State 115
+
+   58 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr . ')' Stmt
+
+    ')'  desplazar e ir al estado 117
+
+
+State 116
+
+   56 IfStmt: T_If '(' Expr ')' Stmt T_Else Stmt .
+
+    $default  reduce usando la regla 56 (IfStmt)
+
+
+State 117
+
+   58 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr ')' . Stmt
+
+    T_While     desplazar e ir al estado 60
+    T_For       desplazar e ir al estado 61
+    T_If        desplazar e ir al estado 62
+    T_Return    desplazar e ir al estado 63
+    T_New       desplazar e ir al estado 64
+    T_ReadLine  desplazar e ir al estado 65
+    '{'         desplazar e ir al estado 53
+
+    $default  reduce usando la regla 38 (OneExpr)
+
+    StmtBlock   ir al estado 69
+    Stmt        ir al estado 118
+    Expr        ir al estado 72
+    OneExpr     ir al estado 73
+    IfStmt      ir al estado 74
+    WhileStmt   ir al estado 75
+    ForStmt     ir al estado 76
+    ReturnStmt  ir al estado 77
+
+
+State 118
+
+   58 ForStmt: T_For '(' OneExpr ';' Expr ';' OneExpr ')' Stmt .
+
+    $default  reduce usando la regla 58 (ForStmt)

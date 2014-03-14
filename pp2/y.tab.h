@@ -148,6 +148,9 @@ typedef union YYSTYPE
     Stmt *stmt;
     Expr *expr;
     IfStmt *ifStmt;
+    WhileStmt *whileStmt;
+    ForStmt *forStmt;
+    ReturnStmt *returnStmt;
     int integerConstant;
     bool boolConstant;
     char *stringConstant;
@@ -156,7 +159,7 @@ typedef union YYSTYPE
 
 
 /* Line 2053 of yacc.c  */
-#line 160 "y.tab.h"
+#line 163 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

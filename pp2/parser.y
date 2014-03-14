@@ -102,6 +102,9 @@ ArrayType: ast_type.h
     Stmt *stmt;
     Expr *expr;
     IfStmt *ifStmt;
+    WhileStmt *whileStmt;
+    ForStmt *forStmt;
+    ReturnStmt *returnStmt;
     int integerConstant;
     bool boolConstant;
     char *stringConstant;
@@ -169,6 +172,9 @@ ArrayType: ast_type.h
 %type <expr>          Expr
 %type <expr>          OneExpr
 %type <ifStmt>        IfStmt
+%type <whileStmt>     WhileStmt
+%type <forStmt>       ForStmt
+%type <returnStmt>    ReturnStmt
 
 // =============================================================
 // =============================================================
@@ -296,6 +302,9 @@ StmtList        : StmtList Stmt           { ($$ = $1)->Append($2); }
 Stmt            : OneExpr ';'             { ($$ = $1); }
                 | StmtBlock               { ($$ = $1); }
                 | IfStmt                  { ($$ = $1); }
+                | WhileStmt               { ($$ = $1); }
+                | ForStmt                 { ($$ = $1); }
+                | ReturnStmt              { ($$ = $1); }
                 ;
 
 
@@ -403,7 +412,32 @@ IfStmt          : T_If '(' Expr ')' Stmt {
                         }
                 | T_If '(' Expr ')' Stmt T_Else Stmt {
                             $$ = new IfStmt($3, $5, $7);
-                }
+                        }
+                ;
+
+// =============================================================
+// WhileStmt(Expr *test, Stmt *body) : LoopStmt(test, body) {}
+// -------------------------------------------------------------
+WhileStmt       : T_While '(' Expr ')' Stmt {
+                          $$ = new WhileStmt($3, $5);
+                    }
+                ;
+
+// =============================================================
+// ForStmt(Expr *init, Expr *test, Expr *step, Stmt *body);
+// -------------------------------------------------------------
+ForStmt         : T_For '(' OneExpr ';' Expr ';' OneExpr ')' Stmt {
+                          $$ = new ForStmt($3, $5, $7, $9);
+                    }
+                ;
+
+
+// =============================================================
+// ReturnStmt(yyltype loc, Expr *expr);
+// -------------------------------------------------------------
+ReturnStmt      : T_Return OneExpr ';' {
+                          $$ = new ReturnStmt(@1, $2);
+                    }
                 ;
 
 %%
