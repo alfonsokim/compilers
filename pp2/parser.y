@@ -93,11 +93,15 @@ ArrayType: ast_type.h
     Type  *type;
     FnDecl *fnDecl;
     Decl *field;
+    Decl *prototype;
     List<Decl*> *fieldList;
     ClassDecl *classDecl;
     NamedType *namedType;
+    List<Decl*> *prototypeList;
+    InterfaceDecl *interfaceDecl;
     Stmt *stmt;
     Expr *expr;
+    IfStmt *ifStmt;
     int integerConstant;
     bool boolConstant;
     char *stringConstant;
@@ -149,6 +153,9 @@ ArrayType: ast_type.h
 %type <implementList> Implements
 %type <field>         Field
 %type <fieldList>     FieldList
+%type <prototype>     Prototype
+%type <prototypeList> PrototypeList
+%type <interfaceDecl> InterfaceDecl
 // ArrayType no es necesario declararlo como tipo
 
 
@@ -161,8 +168,7 @@ ArrayType: ast_type.h
 %type <fnDecl>        FnDecl
 %type <expr>          Expr
 %type <expr>          OneExpr
-
-
+%type <ifStmt>        IfStmt
 
 // =============================================================
 // =============================================================
@@ -203,6 +209,7 @@ DeclList        :    DeclList Decl        { ($$=$1)->Append($2); }
 Decl            :    VarDecl              { $$ = $1; }
                 |    FnDecl               { $$ = $1; }
                 |    ClassDecl            { $$ = $1; }
+                |    InterfaceDecl        { $$ = $1; }
                 ;
 
 // =============================================================
@@ -288,6 +295,7 @@ StmtList        : StmtList Stmt           { ($$ = $1)->Append($2); }
 // -------------------------------------------------------------
 Stmt            : OneExpr ';'             { ($$ = $1); }
                 | StmtBlock               { ($$ = $1); }
+                | IfStmt                  { ($$ = $1); }
                 ;
 
 
@@ -319,7 +327,7 @@ ClassDecl       : T_Class T_Identifier Extends Implements '{' FieldList '}' {
 
 // =============================================================
 // -------------------------------------------------------------
-Extends         :    T_Extends T_Identifier     {
+Extends         : T_Extends T_Identifier     {
                                       Identifier *id = new Identifier(@2, $2);
                                       $$ = new NamedType(id);
                                     }
@@ -328,10 +336,10 @@ Extends         :    T_Extends T_Identifier     {
 
 // =============================================================
 // -------------------------------------------------------------
-IdentifierList  :    IdentifierList ',' T_Identifier     {
+IdentifierList  : IdentifierList ',' T_Identifier     {
                                       ($$=$1)->Append(new Identifier(@3, $3));
                                     }
-                |    T_Identifier   { 
+                | T_Identifier   { 
                                       ($$ = new List<Identifier*>)->Append(new Identifier(@1, $1));
                                     }
                 ;
@@ -339,7 +347,7 @@ IdentifierList  :    IdentifierList ',' T_Identifier     {
 
 // =============================================================
 // -------------------------------------------------------------
-Implements      :    T_Implements IdentifierList     {
+Implements      : T_Implements IdentifierList     {
                                       $$ = new List<NamedType*>;
                                       for (int i = 0; i < $2->NumElements(); i++ )
                                         $$->Append(new NamedType($2->Nth(i)));
@@ -349,8 +357,8 @@ Implements      :    T_Implements IdentifierList     {
 
 // =============================================================
 // -------------------------------------------------------------
-Field           :    VarDecl        { $$ = $1; }
-                |    FnDecl         { $$ = $1; }
+Field           : VarDecl          { $$ = $1; }
+                | FnDecl           { $$ = $1; }
                 ;
 
 // =============================================================
@@ -359,6 +367,44 @@ FieldList       : FieldList Field   { ($$ = $1)->Append($2); }
                 |                   { $$ = new List<Decl*>; }
                 ;
         
+// =============================================================
+// FnDecl::FnDecl(Identifier *n, Type *r, List<VarDecl*> *d) : Decl(n) {
+// -------------------------------------------------------------
+Prototype       : Type T_Identifier '(' VarList ')' ';' {
+                              Identifier *id = new Identifier(@2, $2);
+                              $$ = new FnDecl(id, $1, $4);
+                        }
+                | T_Void T_Identifier '(' VarList ')' ';' {
+                              Identifier *id = new Identifier(@2, $2);
+                              $$ = new FnDecl(id, new Type(*Type::voidType), $4);
+                        }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+PrototypeList   : PrototypeList Prototype { ($$=$1)->Append($2); }
+                | Prototype               { ($$ = new List<Decl*>)->Append($1); }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+InterfaceDecl   : T_Interface T_Identifier '{' PrototypeList '}' {
+                              Identifier *id = new Identifier(@2, $2);
+                              $$  = new InterfaceDecl(id, $4);
+                        }
+                ;
+          ;
+
+// =============================================================
+// IfStmt(Expr *test, Stmt *thenBody, Stmt *elseBody);
+// -------------------------------------------------------------
+IfStmt          : T_If '(' Expr ')' Stmt {
+                            $$ = new IfStmt($3, $5, NULL);
+                        }
+                | T_If '(' Expr ')' Stmt T_Else Stmt {
+                            $$ = new IfStmt($3, $5, $7);
+                }
+                ;
 
 %%
 

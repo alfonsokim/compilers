@@ -1,4 +1,4 @@
-class Batman{
+class Meee{
     
     int joe;
 
@@ -8,4 +8,13 @@ class Batman{
     void Robin(string bam) {
         ReadLine();
     }
+}
+
+class Batman extends Hero implements DarkKnite, Bat {
+
+    bool enabled;
+    int count;
+    string name;
+    double table;
+    
 }
