@@ -85,11 +85,17 @@ ArrayType: ast_type.h
     List<VarDecl*> *varList;
     List<VarDecl*> *varDeclList;
     List<Stmt*> *stmtList;
+    List<Identifier*> *identifierList;
+    List<NamedType*> *implementList;
     StmtBlock *stmtBlock;
     VarDecl *varDecl;
     VarDecl *var;
     Type  *type;
     FnDecl *fnDecl;
+    Decl *field;
+    List<Decl*> *fieldList;
+    ClassDecl *classDecl;
+    NamedType *namedType;
     Stmt *stmt;
     Expr *expr;
     int integerConstant;
@@ -137,6 +143,12 @@ ArrayType: ast_type.h
 %type <stmtBlock>     StmtBlock
 %type <decl>          Decl
 %type <stmt>          Stmt
+%type <classDecl>     ClassDecl
+%type <namedType>     Extends
+%type <identifierList> IdentifierList
+%type <implementList> Implements
+%type <field>         Field
+%type <fieldList>     FieldList
 // ArrayType no es necesario declararlo como tipo
 
 
@@ -190,6 +202,7 @@ DeclList        :    DeclList Decl        { ($$=$1)->Append($2); }
 // -------------------------------------------------------------
 Decl            :    VarDecl              { $$ = $1; }
                 |    FnDecl               { $$ = $1; }
+                |    ClassDecl            { $$ = $1; }
                 ;
 
 // =============================================================
@@ -293,6 +306,59 @@ Expr            : T_ReadLine '(' ')'      { ($$ = new ReadLineExpr(@1)); }
 OneExpr         : Expr                    { $$ = $1; }
                 |                         { $$ = new EmptyExpr(); }
                 ;
+
+// =============================================================
+// ClassDecl(Identifier *name, NamedType *extends, 
+//            List<NamedType*> *implements, List<Decl*> *members);
+// -------------------------------------------------------------
+ClassDecl       : T_Class T_Identifier Extends Implements '{' FieldList '}' {  
+                                        Identifier *id = new Identifier(@2, $2);
+                                        $$ = new ClassDecl(id, $3, $4, $6);
+                                      }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+Extends         :    T_Extends T_Identifier     {
+                                      Identifier *id = new Identifier(@2, $2);
+                                      $$ = new NamedType(id);
+                                    }
+                |                        { $$ = NULL; }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+IdentifierList  :    IdentifierList ',' T_Identifier     {
+                                      ($$=$1)->Append(new Identifier(@3, $3));
+                                    }
+                |    T_Identifier   { 
+                                      ($$ = new List<Identifier*>)->Append(new Identifier(@1, $1));
+                                    }
+                ;
+
+
+// =============================================================
+// -------------------------------------------------------------
+Implements      :    T_Implements IdentifierList     {
+                                      $$ = new List<NamedType*>;
+                                      for (int i = 0; i < $2->NumElements(); i++ )
+                                        $$->Append(new NamedType($2->Nth(i)));
+                                    }
+                |                        { $$ = new List<NamedType*>; }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+Field           :    VarDecl        { $$ = $1; }
+                |    FnDecl         { $$ = $1; }
+                ;
+
+// =============================================================
+// -------------------------------------------------------------
+FieldList       : FieldList Field   { ($$ = $1)->Append($2); }
+                |                   { $$ = new List<Decl*>; }
+                ;
+        
 
 %%
 
