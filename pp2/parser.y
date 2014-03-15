@@ -263,6 +263,8 @@ Type            : T_Int                 { $$ = new Type(*Type::intType); }
                 | T_Bool                { $$ = new Type(*Type::boolType); }
                 | T_String              { $$ = new Type(*Type::stringType); }
                 | Type T_Dims           { $$ = new ArrayType(@1, $1); }
+                | T_Identifier          { Identifier *id = new Identifier(@1, $1);
+                                          $$ = new NamedType(id); }
                 ;
 
 // =============================================================
@@ -341,8 +343,8 @@ Expr            : LValue                  { ($$ = $1); }
                                     $$ = new AssignExpr($1, op, $3);
                               }
                 | T_ReadLine '(' ')'      { ($$ = new ReadLineExpr(@1)); }
-                | T_New T_Identifier      { ($$ = new NewExpr(@1, 
-                                                      new NamedType(new Identifier(@2, $2))
+                | T_New '(' T_Identifier ')' { ($$ = new NewExpr(@1, 
+                                                    new NamedType(new Identifier(@3, $3))
                                             )); 
                               }
                 | T_This                  { $$ = new This(@1); }
@@ -400,6 +402,9 @@ Expr            : LValue                  { ($$ = $1); }
                 | '!' Expr             { Operator *op = new Operator(@1, "!");
                                             $$ = new LogicalExpr(op, $2);
                                           }
+                | T_NewArray '(' Expr ',' Type ')' {
+                                      $$ = new NewArrayExpr(@1, $3, $5);
+                                    }
                 ;
 
 // =============================================================
@@ -583,7 +588,7 @@ Call      : T_Identifier '(' Actuals ')' {
 // =============================================================
 // Actuals ::= Expr+, | ε
 // -------------------------------------------------------------
-Actuals   : ExprList             { $$ = $1; }
+Actuals   : CommaExprList        { $$ = $1; }
           |                      { $$ = new List<Expr*>; }
           ;
 
