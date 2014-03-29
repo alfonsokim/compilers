@@ -1,0 +1,8 @@
+class Ratita extends Nono {}
+
+class Perrito implments Perrote {
+    void NoCreo(X x) {}
+}
+
+class Piesote(Joe ja, int c) {}
+

@@ -397,8 +397,6 @@ void FieldAccess::Check() {
         t = base->GetType();
     }
 
-    if (dynamic_cast<VarDecl*>(d) == NULL)
-        ReportError::IdentifierNotDeclared(field, LookingForVariable);
 }
 
 Call::Call(yyltype loc, Expr *b, Identifier *f, List<Expr*> *a) : Expr(loc)  {
@@ -459,11 +457,6 @@ void Call::Check() {
     if (base == NULL) {
         ClassDecl *c = GetClassDecl(scope);
         if (c == NULL) {
-            if ((d = GetFieldDecl(field, scope)) == NULL) {
-                CheckActuals(d);
-                ReportError::IdentifierNotDeclared(field, LookingForFunction);
-                return;
-            }
         } else {
             t = c->GetType();
             if ((d = GetFieldDecl(field, t)) == NULL) {
