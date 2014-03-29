@@ -172,8 +172,6 @@ void ArithmeticExpr::Check() {
         if (rtype->IsEquivalentTo(Type::intType) ||
             rtype->IsEquivalentTo(Type::doubleType))
             return;
-        else
-            ReportError::IncompatibleOperand(op, rtype);
 
         return;
     }
@@ -187,8 +185,6 @@ void ArithmeticExpr::Check() {
     if (ltype->IsEquivalentTo(Type::doubleType) &&
         rtype->IsEquivalentTo(Type::doubleType))
         return;
-
-    ReportError::IncompatibleOperands(op, ltype, rtype);
 }
 
 Type* RelationalExpr::GetType() {
@@ -217,8 +213,6 @@ void RelationalExpr::Check() {
     if (ltype->IsEquivalentTo(Type::doubleType) &&
         rtype->IsEquivalentTo(Type::doubleType))
         return;
-
-    ReportError::IncompatibleOperands(op, ltype, rtype);
 }
 
 Type* EqualityExpr::GetType() {
@@ -239,9 +233,6 @@ void EqualityExpr::Check() {
     Type *rtype = right->GetType();
     Type *ltype = left->GetType();
 
-    if (!rtype->IsEquivalentTo(ltype) &&
-        !ltype->IsEquivalentTo(rtype))
-        ReportError::IncompatibleOperands(op, ltype, rtype);
 }
 
 Type* LogicalExpr::GetType() {
@@ -274,8 +265,6 @@ void LogicalExpr::Check() {
     if (left == NULL) {
         if (rtype->IsEquivalentTo(Type::boolType))
             return;
-        else
-            ReportError::IncompatibleOperand(op, rtype);
 
         return;
     }
@@ -285,8 +274,6 @@ void LogicalExpr::Check() {
     if (ltype->IsEquivalentTo(Type::boolType) &&
         rtype->IsEquivalentTo(Type::boolType))
         return;
-
-    ReportError::IncompatibleOperands(op, ltype, rtype);
 }
 
 Type* AssignExpr::GetType() {
@@ -306,8 +293,6 @@ void AssignExpr::Check() {
     Type *ltype = left->GetType();
     Type *rtype = right->GetType();
 
-    if (!rtype->IsEquivalentTo(ltype) && !ltype->IsEqualTo(Type::errorType))
-        ReportError::IncompatibleOperands(op, ltype, rtype);
 }
 
 Type* This::GetType() {
@@ -319,8 +304,6 @@ Type* This::GetType() {
 }
 
 void This::Check() {
-    if (GetClassDecl(scope) == NULL)
-        ReportError::ThisOutsideClassScope(this);
 }
 
 ArrayAccess::ArrayAccess(yyltype loc, Expr *b, Expr *s) : LValue(loc) {
@@ -348,11 +331,6 @@ void ArrayAccess::Check() {
     subscript->Check();
 
     ArrayType *t = dynamic_cast<ArrayType*>(base->GetType());
-    if (t == NULL)
-        ReportError::BracketsOnNonArray(base);
-
-    if (!subscript->GetType()->IsEqualTo(Type::intType))
-        ReportError::SubscriptNotInteger(subscript);
 }
 
 FieldAccess::FieldAccess(Expr *b, Identifier *f)
@@ -414,21 +392,9 @@ void FieldAccess::Check() {
             }
         } else {
             t = c->GetType();
-            if ((d = GetFieldDecl(field, t)) == NULL) {
-                ReportError::FieldNotFoundInBase(field, t);
-                return;
-            }
         }
     } else {
         t = base->GetType();
-        if ((d = GetFieldDecl(field, t)) == NULL) {
-            ReportError::FieldNotFoundInBase(field, t);
-            return;
-        }
-        else if (GetClassDecl(scope) == NULL) {
-            ReportError::InaccessibleField(field, t);
-            return;
-        }
     }
 
     if (dynamic_cast<VarDecl*>(d) == NULL)
@@ -510,11 +476,6 @@ void Call::Check() {
         t = base->GetType();
         if ((d = GetFieldDecl(field, t)) == NULL) {
             CheckActuals(d);
-
-            if (dynamic_cast<ArrayType*>(t) == NULL ||
-                strcmp("length", field->Name()) != 0)
-                ReportError::FieldNotFoundInBase(field, t);
-
             return;
         }
     }
@@ -534,16 +495,10 @@ void Call::CheckActuals(Decl *d) {
 
     int numExpected = formals->NumElements();
     int numGiven = actuals->NumElements();
-    if (numExpected != numGiven) {
-        ReportError::NumArgsMismatch(field, numExpected, numGiven);
-        return;
-    }
 
     for (int i = 0, n = actuals->NumElements(); i < n; ++i) {
         Type *given = actuals->Nth(i)->GetType();
         Type *expected = formals->Nth(i)->GetType();
-        if (!given->IsEquivalentTo(expected))
-            ReportError::ArgMismatch(actuals->Nth(i), i+1, given, expected);
     }
 }
 
@@ -588,9 +543,6 @@ void NewArrayExpr::BuildScope(Scope *parent) {
 
 void NewArrayExpr::Check() {
     size->Check();
-
-    if (!size->GetType()->IsEqualTo(Type::intType))
-        ReportError::NewArraySizeNotInteger(size);
 
     if (elemType->IsPrimitive() && !elemType->IsEquivalentTo(Type::voidType))
         return;

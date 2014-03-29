@@ -105,11 +105,6 @@ void ConditionalStmt::BuildScope(Scope *parent) {
 }
 
 void ConditionalStmt::Check() {
-    test->Check();
-    body->Check();
-
-    if (!test->GetType()->IsEquivalentTo(Type::boolType))
-        ReportError::TestNotBoolean(test);
 }
 
 void LoopStmt::BuildScope(Scope *parent) {
@@ -143,26 +138,9 @@ void IfStmt::BuildScope(Scope *parent) {
 }
 
 void IfStmt::Check() {
-    test->Check();
-    body->Check();
-
-    if (!test->GetType()->IsEquivalentTo(Type::boolType))
-        ReportError::TestNotBoolean(test);
-
-    if (elseBody != NULL)
-        elseBody->Check();
 }
 
 void BreakStmt::Check() {
-    Scope *s = scope;
-    while (s != NULL) {
-        if (s->GetLoopStmt() != NULL)
-            return;
-
-        s = s->GetParent();
-    }
-
-    ReportError::BreakOutsideLoop(this);
 }
 
 ReturnStmt::ReturnStmt(yyltype loc, Expr *e) : Stmt(loc) {
@@ -177,28 +155,6 @@ void ReturnStmt::BuildScope(Scope *parent) {
 }
 
 void ReturnStmt::Check() {
-    expr->Check();
-
-    FnDecl *d = NULL;
-    Scope *s = scope;
-    while (s != NULL) {
-        if ((d = s->GetFnDecl()) != NULL)
-            break;
-
-        s = s->GetParent();
-    }
-
-    if (d == NULL) {
-        ReportError::Formatted(location,
-                               "return is only allowed inside a function");
-        return;
-    }
-
-    Type *expected = d->GetReturnType();
-    Type *given = expr->GetType();
-
-    if (!given->IsEquivalentTo(expected))
-        ReportError::ReturnMismatch(this, given, expected);
 }
 
 PrintStmt::PrintStmt(List<Expr*> *a) {
@@ -216,11 +172,6 @@ void PrintStmt::BuildScope(Scope *parent) {
 void PrintStmt::Check() {
     for (int i = 0, n = args->NumElements(); i < n; ++i) {
         Type *given = args->Nth(i)->GetType();
-
-        if (!(given->IsEquivalentTo(Type::intType) ||
-              given->IsEquivalentTo(Type::boolType) ||
-              given->IsEquivalentTo(Type::stringType)))
-            ReportError::PrintArgMismatch(args->Nth(i), i+1, given);
     }
 
     for (int i = 0, n = args->NumElements(); i < n; ++i)
