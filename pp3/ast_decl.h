@@ -15,6 +15,8 @@
 
 #include "ast.h"
 #include "list.h"
+#include "ast_stmt.h"
+#include "ast_type.h"
 
 class Type;
 class NamedType;
@@ -47,6 +49,8 @@ class VarDecl : public Decl
     
   public:
     VarDecl(Identifier *name, Type *type);
+    bool IsEquivalentTo(Decl *other);
+    Type* getType() { return type; };
     void Check();
 };
 
@@ -60,6 +64,20 @@ class ClassDecl : public Decl
   public:
     ClassDecl(Identifier *name, NamedType *extends, 
               List<NamedType*> *implements, List<Decl*> *members);
+    void BuildScope(Scope *parent);
+    void Check();
+    NamedType* GetType() { return new NamedType(id); }
+    NamedType* GetExtends() { return extends; }
+    List<NamedType*>* GetImplements() { return implements; }
+
+  private:
+    void CheckExtends();
+    void CheckImplements();
+    void CheckExtendedMembers(NamedType *extType);
+    void CheckImplementedMembers(NamedType *impType);
+    void CheckAgainstScope(Scope *other);
+    void CheckImplementsInterfaces();
+
 };
 
 class InterfaceDecl : public Decl 
@@ -69,6 +87,10 @@ class InterfaceDecl : public Decl
     
   public:
     InterfaceDecl(Identifier *name, List<Decl*> *members);
+    void BuildScope(Scope *parent);
+    void Check();
+    Type* GetType() { return new NamedType(id); }
+    List<Decl*>* GetMembers() { return members; }
 };
 
 class FnDecl : public Decl 
