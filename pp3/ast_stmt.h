@@ -15,20 +15,64 @@
 
 #include "list.h"
 #include "ast.h"
+#include "hashtable.h"
+#include "ast_type.h"
+using namespace std;
 
 class Decl;
 class VarDecl;
 class Expr;
-  
+class Type;
+class ClassDecl;
+class LoopStmt;
+class FnDecl;
+
+
+class Scope {
+
+  private:
+    Scope *parent;
+
+  public:
+    Hashtable<Decl*> *table;
+    ClassDecl *classDecl;
+    LoopStmt *loopStmt;
+    FnDecl *fnDecl;
+
+  public:
+    Scope() : table(new Hashtable<Decl*>), classDecl(NULL), loopStmt(NULL),
+             fnDecl(NULL) {}
+
+    void SetParent(Scope *p) { parent = p; }
+    Scope* GetParent() { return parent; }
+
+    void SetClassDecl(ClassDecl *d) { classDecl = d; }
+    ClassDecl* GetClassDecl() { return classDecl; }
+
+    void SetLoopStmt(LoopStmt *s) { loopStmt = s; }
+    LoopStmt* GetLoopStmt() { return loopStmt; }
+
+    void SetFnDecl(FnDecl *d) { fnDecl = d; }
+    FnDecl* GetFnDecl() { return fnDecl; }
+
+    int AddDecl(Decl *decl);
+    friend ostream& operator<<(ostream& out, Scope *s);
+};
+
+
 class Program : public Node
 {
   protected:
      List<Decl*> *decls;
      
   public:
-     Program(List<Decl*> *declList);
-     void Check();
+    static Scope *gScope;
+
+    Program(List<Decl*> *declList);
+    void BuildScope();
+    void Check();
 };
+
 
 class Stmt : public Node
 {

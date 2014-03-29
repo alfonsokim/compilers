@@ -14,6 +14,7 @@
 
 #include "ast.h"
 #include "list.h"
+#include "errors.h"
 #include <iostream>
 
 
@@ -32,6 +33,9 @@ class Type : public Node
     virtual void PrintToStream(std::ostream& out) { out << typeName; }
     friend std::ostream& operator<<(std::ostream& out, Type *t) { t->PrintToStream(out); return out; }
     virtual bool IsEquivalentTo(Type *other) { return this == other; }
+    virtual void ReportNotDeclaredIdentifier(reasonT reason) { return; }
+    virtual const char* Name() { return typeName; }
+    virtual bool IsPrimitive() { return true; }
 };
 
 class NamedType : public Type 

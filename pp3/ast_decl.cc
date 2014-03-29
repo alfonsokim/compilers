@@ -5,17 +5,58 @@
 #include "ast_decl.h"
 #include "ast_type.h"
 #include "ast_stmt.h"
+#include "errors.h"
         
          
-Decl::Decl(Identifier *n) : Node(*n->GetLocation()) {
+Decl::Decl(Identifier *n) : Node(*n->GetLocation()), scope(new Scope) {
     Assert(n != NULL);
     (id=n)->SetParent(this); 
 }
 
+bool Decl::IsEquivalentTo(Decl *other) {
+    return true;
+}
+
+Scope* Decl::GetScope() { return scope; }
+
+// Construccion del arbol de scope
+void Decl::BuildScope(Scope* parent) {
+    scope->SetParent(parent);
+}
+
+void Decl::Check() {
+
+}
+
+const char* Decl::Name() {
+    return id->Name();
+}
 
 VarDecl::VarDecl(Identifier *n, Type *t) : Decl(n) {
     Assert(n != NULL && t != NULL);
     (type=t)->SetParent(this);
+}
+
+void VarDecl::Check(){
+    if (type->IsPrimitive()){
+        return;
+    }
+
+    Scope *s = scope;
+    while (s != NULL) {
+        Decl *d;
+        if ((d = s->table->Lookup(type->Name())) != NULL) {
+            if (dynamic_cast<ClassDecl*>(d) == NULL &&
+                dynamic_cast<InterfaceDecl*>(d) == NULL) {
+                type->ReportNotDeclaredIdentifier(LookingForType);
+            }
+            
+            return;
+        }
+        s = s->GetParent();
+    }
+
+    type->ReportNotDeclaredIdentifier(LookingForType);
 }
   
 

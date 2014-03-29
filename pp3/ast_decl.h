@@ -20,15 +20,24 @@ class Type;
 class NamedType;
 class Identifier;
 class Stmt;
+class Scope;
 
 class Decl : public Node 
 {
   protected:
     Identifier *id;
+    Scope *scope;
   
   public:
     Decl(Identifier *name);
+    const char* Name();
+    Scope* GetScope();
     friend std::ostream& operator<<(std::ostream& out, Decl *d) { return out << d->id; }
+
+    //Para que funcione el downcast
+    virtual bool IsEquivalentTo(Decl *other);
+    virtual void BuildScope(Scope *parent);
+    virtual void Check();
 };
 
 class VarDecl : public Decl 
@@ -38,6 +47,7 @@ class VarDecl : public Decl
     
   public:
     VarDecl(Identifier *name, Type *type);
+    void Check();
 };
 
 class ClassDecl : public Decl 

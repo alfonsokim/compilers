@@ -8,7 +8,6 @@
 #include <sstream>
 #include <stdarg.h>
 #include <stdio.h>
-using namespace std;
 
 #include "scanner.h" // for GetLineNumbered
 #include "ast_type.h"
@@ -188,6 +187,6 @@ void ReportError::BreakOutsideLoop(BreakStmt *bStmt) {
  * then call ReportError::Formatted yourself with a more descriptive 
  * message.
  */
-void yyerror(char *msg) {
+void yyerror(const char *msg) {
     ReportError::Formatted(&yylloc, "%s", msg);
 }

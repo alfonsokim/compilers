@@ -1,0 +1,6 @@
+void joe() {
+   int a;
+   int b;
+   float a;
+   float b;
+}

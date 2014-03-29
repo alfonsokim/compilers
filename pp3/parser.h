@@ -34,5 +34,6 @@
 
 int yyparse();              // Defined in the generated y.tab.c file
 void InitParser();          // Defined in parser.y
+void yyerror(const char *msg); // standard error-handling routine
 
 #endif

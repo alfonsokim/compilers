@@ -6,7 +6,24 @@
 #include "ast_type.h"
 #include "ast_decl.h"
 #include "ast_expr.h"
+#include "errors.h"
+#include "ast_type.h"
 
+// ============================================================================
+
+int Scope::AddDecl(Decl *d) {
+    Decl *lookup = table->Lookup(d->Name());
+
+    if (lookup != NULL) {
+            ReportError::DeclConflict(d, lookup);
+            return 1;
+    }
+
+    table->Enter(d->Name(), d);
+    return 0;
+}
+
+Scope *Program::gScope = new Scope();
 
 Program::Program(List<Decl*> *d) {
     Assert(d != NULL);
@@ -21,6 +38,19 @@ void Program::Check() {
      *      checking itself, which makes for a great use of inheritance
      *      and polymorphism in the node classes.
      */
+
+    BuildScope();
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
+        decls->Nth(i)->Check();
+    }
+}
+
+void Program::BuildScope() {
+    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+        gScope->AddDecl(decls->Nth(i));
+
+    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+        decls->Nth(i)->BuildScope(gScope);
 }
 
 StmtBlock::StmtBlock(List<VarDecl*> *d, List<Stmt*> *s) {
