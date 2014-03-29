@@ -240,4 +240,53 @@ void FnDecl::SetFunctionBody(Stmt *b) {
 }
 
 
+bool FnDecl::IsEquivalentTo(Decl *other) {
+    FnDecl *fnDecl = dynamic_cast<FnDecl*>(other);
 
+    if (fnDecl == NULL) {
+        return false;
+    }
+
+    if (!returnType->IsEquivalentTo(fnDecl->returnType)) {
+        return false;
+    }
+
+    if (formals->NumElements() != fnDecl->formals->NumElements()) {
+        return false;
+    }
+
+    for (int i = 0, n = formals->NumElements(); i < n; ++i) {
+        if (!formals->Nth(i)->IsEquivalentTo(fnDecl->formals->Nth(i))) {
+            return false; 
+        }
+    }
+
+    return true;
+}
+
+void FnDecl::BuildScope(Scope *parent) {
+    scope->SetParent(parent);
+    scope->SetFnDecl(this);
+
+    for (int i = 0, n = formals->NumElements(); i < n; ++i){
+        scope->AddDecl(formals->Nth(i));
+    }
+
+    for (int i = 0, n = formals->NumElements(); i < n; ++i){
+        formals->Nth(i)->BuildScope(scope);
+    }
+
+    if (body){
+        body->BuildScope(scope);
+    }
+}
+
+void FnDecl::Check() {
+    for (int i = 0, n = formals->NumElements(); i < n; ++i){
+        formals->Nth(i)->Check();
+    }
+
+    if (body){
+        body->Check();
+    }
+}

@@ -103,6 +103,13 @@ class FnDecl : public Decl
   public:
     FnDecl(Identifier *name, Type *returnType, List<VarDecl*> *formals);
     void SetFunctionBody(Stmt *b);
+    bool IsEquivalentTo(Decl *other);
+
+    Type* GetReturnType() { return returnType; }
+    List<VarDecl*>* GetFormals() { return formals; }
+
+    void BuildScope(Scope *parent);
+    void Check();
 };
 
 #endif
