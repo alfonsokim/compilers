@@ -1,4 +1,5 @@
-/* File: ast.h
+/**
+ * File: ast.h
  * ----------- 
  * This file defines the abstract base class Node and the concrete 
  * Identifier and Error node subclasses that are used through the tree as 
@@ -32,9 +33,9 @@
 #include <stdlib.h>   // for NULL
 #include "location.h"
 #include <iostream>
+using namespace std;
 
-class Node 
-{
+class Node  {
   protected:
     yyltype *location;
     Node *parent;
@@ -42,24 +43,24 @@ class Node
   public:
     Node(yyltype loc);
     Node();
-    
+    virtual ~Node() {}
+
     yyltype *GetLocation()   { return location; }
     void SetParent(Node *p)  { parent = p; }
     Node *GetParent()        { return parent; }
 };
-   
 
 class Identifier : public Node 
 {
   protected:
     char *name;
-    
+
   public:
     Identifier(yyltype loc, const char *name);
+    friend ostream& operator<<(ostream& out, Identifier *id) { return out << id->name; }
+    bool operator==(const Identifier &rhs);
     const char* Name() { return name; }
-    friend std::ostream& operator<<(std::ostream& out, Identifier *id) { return out << id->name; }
 };
-
 
 // This node class is designed to represent a portion of the tree that 
 // encountered syntax errors during parsing. The partial completed tree
@@ -71,7 +72,5 @@ class Error : public Node
   public:
     Error() : Node() {}
 };
-
-
 
 #endif

@@ -5,8 +5,8 @@
  * specialized for declarations of variables, functions, classes,
  * and interfaces.
  *
- * pp3: You will need to extend the Decl classes to implement 
- * semantic processing including detection of declaration conflicts 
+ * pp3: You will need to extend the Decl classes to implement
+ * semantic processing including detection of declaration conflicts
  * and managing scoping issues.
  */
 
@@ -19,42 +19,48 @@
 #include "ast_type.h"
 
 class Type;
-class NamedType;
 class Identifier;
 class Stmt;
-class Scope;
+class InterfaceDecl;
 
-class Decl : public Node 
+class Decl : public Node
 {
   protected:
     Identifier *id;
+
     Scope *scope;
-  
+
   public:
     Decl(Identifier *name);
-    const char* Name();
-    Scope* GetScope();
-    friend std::ostream& operator<<(std::ostream& out, Decl *d) { return out << d->id; }
+    friend ostream& operator<<(ostream& out, Decl *d) { return out << d->id; }
 
-    //Para que funcione el downcast
     virtual bool IsEquivalentTo(Decl *other);
+
+    const char* Name() { return id->Name(); }
+    Scope* GetScope() { return scope; }
+
     virtual void BuildScope(Scope *parent);
-    virtual void Check();
+    virtual void Check() = 0;
 };
 
-class VarDecl : public Decl 
+class VarDecl : public Decl
 {
   protected:
     Type *type;
-    
+
   public:
     VarDecl(Identifier *name, Type *type);
+
     bool IsEquivalentTo(Decl *other);
-    Type* getType() { return type; };
+
+    Type* GetType() { return type; }
     void Check();
+
+  private:
+    void CheckType();
 };
 
-class ClassDecl : public Decl 
+class ClassDecl : public Decl
 {
   protected:
     List<Decl*> *members;
@@ -62,10 +68,12 @@ class ClassDecl : public Decl
     List<NamedType*> *implements;
 
   public:
-    ClassDecl(Identifier *name, NamedType *extends, 
+    ClassDecl(Identifier *name, NamedType *extends,
               List<NamedType*> *implements, List<Decl*> *members);
+
     void BuildScope(Scope *parent);
     void Check();
+
     NamedType* GetType() { return new NamedType(id); }
     NamedType* GetExtends() { return extends; }
     List<NamedType*>* GetImplements() { return implements; }
@@ -73,36 +81,39 @@ class ClassDecl : public Decl
   private:
     void CheckExtends();
     void CheckImplements();
+
     void CheckExtendedMembers(NamedType *extType);
     void CheckImplementedMembers(NamedType *impType);
     void CheckAgainstScope(Scope *other);
     void CheckImplementsInterfaces();
-
 };
 
-class InterfaceDecl : public Decl 
+class InterfaceDecl : public Decl
 {
   protected:
     List<Decl*> *members;
-    
+
   public:
     InterfaceDecl(Identifier *name, List<Decl*> *members);
+
     void BuildScope(Scope *parent);
     void Check();
+
     Type* GetType() { return new NamedType(id); }
     List<Decl*>* GetMembers() { return members; }
 };
 
-class FnDecl : public Decl 
+class FnDecl : public Decl
 {
   protected:
     List<VarDecl*> *formals;
     Type *returnType;
     Stmt *body;
-    
+
   public:
     FnDecl(Identifier *name, Type *returnType, List<VarDecl*> *formals);
     void SetFunctionBody(Stmt *b);
+
     bool IsEquivalentTo(Decl *other);
 
     Type* GetReturnType() { return returnType; }

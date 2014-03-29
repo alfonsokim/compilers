@@ -9,8 +9,6 @@
 #include "errors.h"
 #include "ast_type.h"
 
-// ============================================================================
-
 int Scope::AddDecl(Decl *d) {
     Decl *lookup = table->Lookup(d->Name());
 
@@ -21,6 +19,15 @@ int Scope::AddDecl(Decl *d) {
 
     table->Enter(d->Name(), d);
     return 0;
+}
+
+ostream& operator<<(ostream& out, Scope *s) {
+    out << "========== Scope ==========" << std::endl;
+    Iterator<Decl*> iter = s->table->GetIterator();
+    Decl *d;
+    while ((d = iter.GetNextValue()) != NULL)
+        out << d << std::endl;
+    return out;
 }
 
 Scope *Program::gScope = new Scope();
@@ -40,9 +47,9 @@ void Program::Check() {
      */
 
     BuildScope();
-    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
+
+    for (int i = 0, n = decls->NumElements(); i < n; ++i)
         decls->Nth(i)->Check();
-    }
 }
 
 void Program::BuildScope() {
@@ -53,13 +60,9 @@ void Program::BuildScope() {
         decls->Nth(i)->BuildScope(gScope);
 }
 
-// ====================================================================
-
 void Stmt::BuildScope(Scope *parent) {
     scope->SetParent(parent);
 }
-
-// ====================================================================
 
 StmtBlock::StmtBlock(List<VarDecl*> *d, List<Stmt*> *s) {
     Assert(d != NULL && s != NULL);
@@ -88,11 +91,9 @@ void StmtBlock::Check() {
         stmts->Nth(i)->Check();
 }
 
-// ====================================================================
-
-ConditionalStmt::ConditionalStmt(Expr *t, Stmt *b) { 
+ConditionalStmt::ConditionalStmt(Expr *t, Stmt *b) {
     Assert(t != NULL && b != NULL);
-    (test=t)->SetParent(this); 
+    (test=t)->SetParent(this);
     (body=b)->SetParent(this);
 }
 
@@ -111,8 +112,6 @@ void ConditionalStmt::Check() {
         ReportError::TestNotBoolean(test);
 }
 
-// ====================================================================
-
 void LoopStmt::BuildScope(Scope *parent) {
     scope->SetParent(parent);
     scope->SetLoopStmt(this);
@@ -121,17 +120,13 @@ void LoopStmt::BuildScope(Scope *parent) {
     body->BuildScope(scope);
 }
 
-// ====================================================================
-
-ForStmt::ForStmt(Expr *i, Expr *t, Expr *s, Stmt *b): LoopStmt(t, b) { 
+ForStmt::ForStmt(Expr *i, Expr *t, Expr *s, Stmt *b): LoopStmt(t, b) {
     Assert(i != NULL && t != NULL && s != NULL && b != NULL);
     (init=i)->SetParent(this);
     (step=s)->SetParent(this);
 }
 
-// ====================================================================
-
-IfStmt::IfStmt(Expr *t, Stmt *tb, Stmt *eb): ConditionalStmt(t, tb) { 
+IfStmt::IfStmt(Expr *t, Stmt *tb, Stmt *eb): ConditionalStmt(t, tb) {
     Assert(t != NULL && tb != NULL); // else can be NULL
     elseBody = eb;
     if (elseBody) elseBody->SetParent(this);
@@ -158,8 +153,6 @@ void IfStmt::Check() {
         elseBody->Check();
 }
 
-// ====================================================================
-
 void BreakStmt::Check() {
     Scope *s = scope;
     while (s != NULL) {
@@ -172,9 +165,7 @@ void BreakStmt::Check() {
     ReportError::BreakOutsideLoop(this);
 }
 
-// ====================================================================
-
-ReturnStmt::ReturnStmt(yyltype loc, Expr *e) : Stmt(loc) { 
+ReturnStmt::ReturnStmt(yyltype loc, Expr *e) : Stmt(loc) {
     Assert(e != NULL);
     (expr=e)->SetParent(this);
 }
@@ -210,9 +201,7 @@ void ReturnStmt::Check() {
         ReportError::ReturnMismatch(this, given, expected);
 }
 
-// ====================================================================
-
-PrintStmt::PrintStmt(List<Expr*> *a) {    
+PrintStmt::PrintStmt(List<Expr*> *a) {
     Assert(a != NULL);
     (args=a)->SetParentAll(this);
 }

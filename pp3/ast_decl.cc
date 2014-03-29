@@ -5,31 +5,21 @@
 #include "ast_decl.h"
 #include "ast_type.h"
 #include "ast_stmt.h"
-#include "errors.h"
-        
-         
+
 Decl::Decl(Identifier *n) : Node(*n->GetLocation()), scope(new Scope) {
     Assert(n != NULL);
-    (id=n)->SetParent(this); 
+    (id=n)->SetParent(this);
 }
 
 bool Decl::IsEquivalentTo(Decl *other) {
+    /* TODO: Once all subclasses support this function it should be made a pure
+     * virtual function.
+     */
     return true;
 }
 
-Scope* Decl::GetScope() { return scope; }
-
-// Construccion del arbol de scope
-void Decl::BuildScope(Scope* parent) {
+void Decl::BuildScope(Scope *parent) {
     scope->SetParent(parent);
-}
-
-void Decl::Check() {
-
-}
-
-const char* Decl::Name() {
-    return id->Name();
 }
 
 VarDecl::VarDecl(Identifier *n, Type *t) : Decl(n) {
@@ -45,20 +35,25 @@ bool VarDecl::IsEquivalentTo(Decl *other) {
     return type->IsEquivalentTo(varDecl->type);
 }
 
-void VarDecl::Check(){
-    if (type->IsPrimitive()){
+void VarDecl::Check() {
+    CheckType();
+}
+
+void VarDecl::CheckType() {
+    if (type->IsPrimitive())
         return;
-    }
 
     Scope *s = scope;
     while (s != NULL) {
         Decl *d;
         if ((d = s->table->Lookup(type->Name())) != NULL) {
+            /* TODO: Do not let VarDecl's to be of an Interface type except
+             * when in that Interfaces scope.
+             */
             if (dynamic_cast<ClassDecl*>(d) == NULL &&
-                dynamic_cast<InterfaceDecl*>(d) == NULL) {
+                dynamic_cast<InterfaceDecl*>(d) == NULL)
                 type->ReportNotDeclaredIdentifier(LookingForType);
-            }
-            
+
             return;
         }
         s = s->GetParent();
@@ -66,11 +61,10 @@ void VarDecl::Check(){
 
     type->ReportNotDeclaredIdentifier(LookingForType);
 }
-  
 
 ClassDecl::ClassDecl(Identifier *n, NamedType *ex, List<NamedType*> *imp, List<Decl*> *m) : Decl(n) {
     // extends can be NULL, impl & mem may be empty lists but cannot be NULL
-    Assert(n != NULL && imp != NULL && m != NULL);     
+    Assert(n != NULL && imp != NULL && m != NULL);
     extends = ex;
     if (extends) extends->SetParent(this);
     (implements=imp)->SetParentAll(this);
@@ -204,8 +198,6 @@ void ClassDecl::CheckImplementsInterfaces() {
     }
 }
 
-// ==================================================================================================
-
 InterfaceDecl::InterfaceDecl(Identifier *n, List<Decl*> *m) : Decl(n) {
     Assert(n != NULL && m != NULL);
     (members=m)->SetParentAll(this);
@@ -226,8 +218,6 @@ void InterfaceDecl::Check() {
         members->Nth(i)->Check();
 }
 
-// ==================================================================================================
-	
 FnDecl::FnDecl(Identifier *n, Type *r, List<VarDecl*> *d) : Decl(n) {
     Assert(n != NULL && r!= NULL && d != NULL);
     (returnType=r)->SetParent(this);
@@ -235,31 +225,25 @@ FnDecl::FnDecl(Identifier *n, Type *r, List<VarDecl*> *d) : Decl(n) {
     body = NULL;
 }
 
-void FnDecl::SetFunctionBody(Stmt *b) { 
+void FnDecl::SetFunctionBody(Stmt *b) {
     (body=b)->SetParent(this);
 }
-
 
 bool FnDecl::IsEquivalentTo(Decl *other) {
     FnDecl *fnDecl = dynamic_cast<FnDecl*>(other);
 
-    if (fnDecl == NULL) {
+    if (fnDecl == NULL)
         return false;
-    }
 
-    if (!returnType->IsEquivalentTo(fnDecl->returnType)) {
+    if (!returnType->IsEquivalentTo(fnDecl->returnType))
         return false;
-    }
 
-    if (formals->NumElements() != fnDecl->formals->NumElements()) {
+    if (formals->NumElements() != fnDecl->formals->NumElements())
         return false;
-    }
 
-    for (int i = 0, n = formals->NumElements(); i < n; ++i) {
-        if (!formals->Nth(i)->IsEquivalentTo(fnDecl->formals->Nth(i))) {
-            return false; 
-        }
-    }
+    for (int i = 0, n = formals->NumElements(); i < n; ++i)
+        if (!formals->Nth(i)->IsEquivalentTo(fnDecl->formals->Nth(i)))
+            return false;
 
     return true;
 }
@@ -268,25 +252,20 @@ void FnDecl::BuildScope(Scope *parent) {
     scope->SetParent(parent);
     scope->SetFnDecl(this);
 
-    for (int i = 0, n = formals->NumElements(); i < n; ++i){
+    for (int i = 0, n = formals->NumElements(); i < n; ++i)
         scope->AddDecl(formals->Nth(i));
-    }
 
-    for (int i = 0, n = formals->NumElements(); i < n; ++i){
+    for (int i = 0, n = formals->NumElements(); i < n; ++i)
         formals->Nth(i)->BuildScope(scope);
-    }
 
-    if (body){
+    if (body)
         body->BuildScope(scope);
-    }
 }
 
 void FnDecl::Check() {
-    for (int i = 0, n = formals->NumElements(); i < n; ++i){
+    for (int i = 0, n = formals->NumElements(); i < n; ++i)
         formals->Nth(i)->Check();
-    }
 
-    if (body){
+    if (body)
         body->Check();
-    }
 }
