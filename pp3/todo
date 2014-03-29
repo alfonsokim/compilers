@@ -1,3 +1,0 @@
-make clean
-make
-./dcc < samples/pp3_bad1.decaf
