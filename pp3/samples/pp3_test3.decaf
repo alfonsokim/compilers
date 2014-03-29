@@ -1,6 +1,8 @@
+Galletas con Leche
+
 class Ratita extends Nono {}
 
-class Perrito implments Perrote {
+class Perrito implements Perrote {
     void NoCreo(X x) {}
 }
 
