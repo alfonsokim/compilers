@@ -181,6 +181,7 @@ class Call : public Expr
     
   public:
     Call(yyltype loc, Expr *base, Identifier *field, List<Expr*> *args);
+    void Check();
 };
 
 class NewExpr : public Expr

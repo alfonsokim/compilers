@@ -1,0 +1,14 @@
+class Joe {
+    
+    int yeah(bool b) {
+        siexisto();
+        noexisto();
+        return 10; 
+    }
+
+    void siexisto(){
+        int x;
+        x = 10;
+    }
+
+}

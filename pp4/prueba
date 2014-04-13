@@ -1,0 +1,1 @@
+make && ./dcc -d scope < samples/undeclared.decaf

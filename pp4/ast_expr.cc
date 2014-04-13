@@ -69,6 +69,27 @@ Call::Call(yyltype loc, Expr *b, Identifier *f, List<Expr*> *a) : Expr(loc)  {
     (field=f)->SetParent(this);
     (actuals=a)->SetParentAll(this);
 }
+
+void Call::Check(){
+    /*
+    if (base != NULL)
+        base->Check();
+
+    Decl *d;
+    Type *t;
+
+    if (base == NULL) {
+        ClassDecl *c = GetClassDecl(scope);
+        if (c == NULL) {
+            if ((d = GetFieldDecl(field, scope)) == NULL) {
+                CheckActuals(d);
+                ReportError::IdentifierNotDeclared(field, LookingForFunction);
+                return;
+            }
+        }
+    }
+    */
+}
  
 
 NewExpr::NewExpr(yyltype loc, NamedType *c) : Expr(loc) { 

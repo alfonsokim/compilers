@@ -1,0 +1,18 @@
+int Batman(int a, bool a) {
+  return a + 2;
+}
+
+int Batman(int a, bool a) {
+  return a + 2;
+}
+
+class Joe {
+  void metodo(int jaja) {
+      string x = jaja;
+  }
+}
+
+void main() {
+  Joe j;
+}
+
