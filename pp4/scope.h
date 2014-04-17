@@ -10,19 +10,40 @@
 #include "hashtable.h"
 
 class Decl;
-class Identifier;
-class ClassDecl; 
+class VarDecl;
+class Expr;
+class Type;
+class ClassDecl;
+class LoopStmt;
+class FnDecl;
 
 class Scope { 
+
+private:
+    Scope* parent;
+
   protected:
     Hashtable<Decl*> *table;
+    ClassDecl *classDecl;
+    LoopStmt *loopStmt;
+    FnDecl *fnDecl;
 
   public:
-    Scope();
+    Scope() : table(new Hashtable<Decl*>), 
+              classDecl(NULL), 
+              loopStmt(NULL), 
+              fnDecl(NULL) {}
 
-    Decl *Lookup(Identifier *id);
-    bool Declare(Decl *dec);
-    void CopyFromScope(Scope *other, ClassDecl *cd);
+    Hashtable<Decl*>* GetTable() { return table; }    
+    Decl* Lookup(Identifier*);
+    bool Declare(Decl*);
+    void CopyFromScope(Scope*, ClassDecl*);
+
+    void SetParent(Scope* p) { parent = p; }
+    Scope* GetParent() { return parent; }
+
+
+
 };
 
 

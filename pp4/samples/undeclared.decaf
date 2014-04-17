@@ -1,4 +1,28 @@
+class SuperCow {
+    
+    void moo(int count){
+
+    }
+
+}
+
+class Cow extends SuperCow {
+    void moo(int count){
+
+    }
+}
+
 class Joe {
+
+    bool a(){
+        return true;
+    }
+
+    bool b(){
+        //Donkey d;
+        //d = New(Donkey);
+        return false;
+    }
     
     int yeah(bool b) {
         siexisto();

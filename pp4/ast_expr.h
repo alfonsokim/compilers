@@ -16,6 +16,7 @@
 
 class NamedType; // for new
 class Type; // for NewArray
+class Scope;
 
 
 class Expr : public Stmt 
@@ -23,6 +24,9 @@ class Expr : public Stmt
   public:
     Expr(yyltype loc) : Stmt(loc) {}
     Expr() : Stmt() {}
+    ClassDecl* GetClassDecl();
+    Decl* GetFieldDecl(Identifier *);
+    void BuildScope(Scope *);
 };
 
 /* This node type is used for those places where an expression is optional.
@@ -181,6 +185,8 @@ class Call : public Expr
     
   public:
     Call(yyltype loc, Expr *base, Identifier *field, List<Expr*> *args);
+    Type* GetType();
+    void BuildScope(Scope *parent);
     void Check();
 };
 

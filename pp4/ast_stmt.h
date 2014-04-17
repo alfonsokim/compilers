@@ -29,9 +29,17 @@ class Program : public Node
 
 class Stmt : public Node
 {
+
+  protected:
+    Scope *scope;
+
   public:
      Stmt() : Node() {}
      Stmt(yyltype loc) : Node(loc) {}
+
+     virtual void BuildScope(Scope *parent);
+     virtual void Check() = 0;
+     
 };
 
 class StmtBlock : public Stmt 

@@ -28,9 +28,6 @@ Type::Type(const char *n) {
     Assert(n);
     typeName = strdup(n);
 }
-
-
-
 	
 NamedType::NamedType(Identifier *i) : Type(*i->GetLocation()) {
     Assert(i != NULL);
@@ -38,17 +35,22 @@ NamedType::NamedType(Identifier *i) : Type(*i->GetLocation()) {
 } 
 
 void NamedType::Check() {
+    //printf("en NamedType::Check\n");
     if (!GetDeclForType()) {
+        //printf("en NamedType::Check -- error!\n");
         isError = true;
         ReportError::IdentifierNotDeclared(id, LookingForType);
     }
 }
+
 Decl *NamedType::GetDeclForType() {
+    //printf("en NamedType::GetDeclForType [%s] cached:%s, isError:%s\n", id->GetName(), cachedDecl, isError);
     if (!cachedDecl && !isError) {
         Decl *declForName = FindDecl(id);
         if (declForName && (declForName->IsClassDecl() || declForName->IsInterfaceDecl())) 
             cachedDecl = declForName;
     }
+    //printf("NamedType::GetDeclForType decl encontrado: %s\n", (cachedDecl ? cachedDecl->GetName(): "Nones"));
     return cachedDecl;
 }
 

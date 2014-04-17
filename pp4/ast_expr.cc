@@ -70,25 +70,74 @@ Call::Call(yyltype loc, Expr *b, Identifier *f, List<Expr*> *a) : Expr(loc)  {
     (actuals=a)->SetParentAll(this);
 }
 
-void Call::Check(){
+Type* Call::GetType() {
     /*
-    if (base != NULL)
-        base->Check();
-
     Decl *d;
-    Type *t;
 
     if (base == NULL) {
         ClassDecl *c = GetClassDecl(scope);
         if (c == NULL) {
+            if ((d = GetFieldDecl(field, scope)) == NULL)
+                return Type::errorType;
+        } else {
+            if ((d = GetFieldDecl(field, c->GetType())) == NULL)
+                return Type::errorType;
+        }
+    } else {
+        Type *t = base->GetType();
+        if ((d = GetFieldDecl(field, t)) == NULL) {
+
+            if (dynamic_cast<ArrayType*>(t) != NULL &&
+                strcmp("length", field->Name()) == 0)
+                return Type::intType;
+
+            return Type::errorType;
+        }
+    }
+
+    if (dynamic_cast<FnDecl*>(d) == NULL)
+        return Type::errorType;
+
+    return static_cast<FnDecl*>(d)->GetReturnType();
+    */
+    return NULL;
+}
+
+void Call::BuildScope(Scope *parent) {
+    scope->SetParent(parent);
+
+    if (base != NULL) {
+        base->BuildScope(scope);
+    }
+
+    for (int i = 0, n = actuals->NumElements(); i < n; ++i) {
+        actuals->Nth(i)->BuildScope(scope);
+    }
+}
+
+void Call::Check(){
+
+    if (base == NULL) {
+        printf("base es null\n");
+        printf("field [%s]\n", field->GetName());
+        
+        ClassDecl *c = GetClassDecl();
+        if (c == NULL) {
+            printf("class en scope null\n");
+            /*
             if ((d = GetFieldDecl(field, scope)) == NULL) {
                 CheckActuals(d);
                 ReportError::IdentifierNotDeclared(field, LookingForFunction);
                 return;
             }
+            */
+        } else { // No esta dentro de una clase
+            printf("class en scope [%s]\n", c->GetName());
+            Decl* d = GetFieldDecl(field);
         }
+    } else { // base != NULL
+        base->Check();
     }
-    */
 }
  
 
@@ -104,4 +153,32 @@ NewArrayExpr::NewArrayExpr(yyltype loc, Expr *sz, Type *et) : Expr(loc) {
     (elemType=et)->SetParent(this);
 }
 
-       
+ClassDecl* Expr::GetClassDecl() {
+    Node *n = this;
+    while (n != NULL) {
+        if (dynamic_cast<ClassDecl*>(n))
+            return static_cast<ClassDecl*>(n);
+        n = n->GetParent();
+    }
+    return NULL;
+}   
+
+
+void Expr::BuildScope(Scope* scope){
+
+}
+
+
+Decl* Expr::GetFieldDecl(Identifier *field) {
+    Node* n = this;
+    while (n != NULL) {
+        printf("n[%s]\n", n ? "not null" : " null");
+        printf("n.scope[%s]\n", n->GetScope() ? "not null" : " null");
+        printf("n.scope.table[%s]\n", n->GetScope()->GetTable() ? "not null" : " null");
+        Decl *d = n->GetScope()->GetTable()->Lookup(field->GetName());
+        if (d != NULL)
+            return d;
+        n = n->GetParent();
+    }
+    return NULL;
+}

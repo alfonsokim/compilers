@@ -37,15 +37,18 @@ bool Scope::Declare(Decl *decl)
 {
   Decl *prev = table->Lookup(decl->GetName());
   PrintDebug("scope", "Line %d declaring %s (prev? %p)\n", decl->GetLocation()->first_line, decl->GetName(), prev);
-  if (prev && decl->ConflictsWithPrevious(prev)) // throw away second, keep first
+  if (prev && decl->ConflictsWithPrevious(prev)) { // throw away second, keep first
       return false;
+  }
+  printf("en Scope::Declare, agregando elemento a la tabla %s\n", decl->GetName());
   table->Enter(decl->GetName(), decl);
   return true;
 }
 
 void Scope::CopyFromScope(Scope *other, ClassDecl *addTo)
 {
-    Iterator<Decl*> iter = other->table->GetIterator();
+    printf("Copiando de Scope [%s] a [%s]\n"other, addTo);
+    Iterator<Decl*> iter = other->GetTable()->GetIterator();
     Decl *decl;
     while ((decl = iter.GetNextValue()) != NULL) {
         table->Enter(decl->GetName(), decl);

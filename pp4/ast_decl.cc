@@ -60,20 +60,24 @@ void ClassDecl::Check() {
 // parent may be the better way now.
 Scope *ClassDecl::PrepareScope()
 {
+    printf("En ClassDecl::PrepareScope\n");
     if (nodeScope) return nodeScope;
     nodeScope = new Scope();  
     if (extends) {
+        printf("En ClassDecl::PrepareScope, extends\n");
         ClassDecl *ext = dynamic_cast<ClassDecl*>(parent->FindDecl(extends->GetId())); 
         if (ext) nodeScope->CopyFromScope(ext->PrepareScope(), this);
     }
     convImp = new List<InterfaceDecl*>;
+    printf("En ClassDecl::PrepareScope, implements\n");
     for (int i = 0; i < implements->NumElements(); i++) {
         NamedType *in = implements->Nth(i);
         InterfaceDecl *id = dynamic_cast<InterfaceDecl*>(in->FindDecl(in->GetId()));
         if (id) {
-		nodeScope->CopyFromScope(id->PrepareScope(), NULL);
+            printf("En ClassDecl::PrepareScope, id\n");
+            nodeScope->CopyFromScope(id->PrepareScope(), NULL);
             convImp->Append(id);
-	  }
+	    }
     }
     members->DeclareAll(nodeScope);
     return nodeScope;
@@ -128,6 +132,7 @@ bool FnDecl::ConflictsWithPrevious(Decl *prev) {
         }
         return false;
     }
+    //printf("FnDecl::ConflictsWithPrevious\n");
     ReportError::DeclConflict(this, prev);
     return true;
 }

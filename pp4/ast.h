@@ -46,6 +46,7 @@ class Node
     yyltype *GetLocation()   { return location; }
     void SetParent(Node *p)  { parent = p; }
     Node *GetParent()        { return parent; }
+    Scope *GetScope()        { return nodeScope; }
     virtual void Check() {} // not abstract, since some nodes have nothing to do
     
     typedef enum { kShallow, kDeep } lookup;

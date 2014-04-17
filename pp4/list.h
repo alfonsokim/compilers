@@ -74,16 +74,24 @@ template<class Element> class List {
        // messages, but since C++ only instantiates the template if you use
        // you can still have Lists of ints, chars*, as long as you 
        // don't try to SetParentAll on that list.
-    void SetParentAll(Node *p)
-        { for (int i = 0; i < NumElements(); i++)
-             Nth(i)->SetParent(p); }
-    void DeclareAll(Scope *s)
-        { for (int i = 0; i < NumElements(); i++)
-             s->Declare(Nth(i)); }
+    void SetParentAll(Node *p) { 
+        for (int i = 0; i < NumElements(); i++) {
+            Nth(i)->SetParent(p); 
+        }
+    }
 
-   void CheckAll()
-        { for (int i = 0; i < NumElements(); i++)
-             Nth(i)->Check(); }
+    void DeclareAll(Scope *s) { 
+        for (int i = 0; i < NumElements(); i++) {
+            //printf("en DeclareAll %s\n", Nth(i)->GetName());
+            s->Declare(Nth(i)); 
+        }
+    }
+
+   void CheckAll() { 
+        for (int i = 0; i < NumElements(); i++) {
+            Nth(i)->Check();
+        }            
+    }
 
 };
 
