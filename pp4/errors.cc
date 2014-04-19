@@ -62,38 +62,44 @@ void ReportError::InvalidDirective(int linenum) {
 
 void ReportError::LongIdentifier(yyltype *loc, const char *ident) {
     stringstream s;
-    s << "Identifier too long: \"" << ident << "\"" << '\0';
+    //s << "Identifier too long: \"" << ident << "\"" << '\0';
+    s << "Identifier too long: \"" << ident << "\"" << endl;
     OutputError(loc, s.str());
 }
 
 void ReportError::UntermString(yyltype *loc, const char *str) {
     stringstream s;
-    s << "Unterminated string constant: " << str << '\0';
+    //s << "Unterminated string constant: " << str << '\0';
+    s << "Unterminated string constant: " << str << endl;
     OutputError(loc, s.str());
 }
 
 void ReportError::UnrecogChar(yyltype *loc, char ch) {
     stringstream s;
-    s << "Unrecognized char: '" << ch << "'" << '\0';
+    //s << "Unrecognized char: '" << ch << "'" << '\0';
+    s << "Unrecognized char: '" << ch << "'" << endl;
     OutputError(loc, s.str());
 }
 
 void ReportError::DeclConflict(Decl *decl, Decl *prevDecl) {
     stringstream s;
     s << "Declaration of '" << decl << "' here conflicts with declaration on line " 
-      << prevDecl->GetLocation()->first_line << '\0';
+      //<< prevDecl->GetLocation()->first_line << '\0';
+      << prevDecl->GetLocation()->first_line << endl;
     OutputError(decl->GetLocation(), s.str());
 }
   
 void ReportError::OverrideMismatch(Decl *fnDecl) {
     stringstream s;
-    s << "Method '" << fnDecl << "' must match inherited type signature" << '\0';
+    //s << "Method '" << fnDecl << "' must match inherited type signature" << '\0';
+    s << "Method '" << fnDecl << "' must match inherited type signature" << endl;
     OutputError(fnDecl->GetLocation(), s.str());
 }
 
 void ReportError::InterfaceNotImplemented(Decl *cd, Type *interfaceType) {
     stringstream s;
-    s << "Class '" << cd << "' does not implement entire interface '" << interfaceType << "'" << '\0';
+    //s << "Class '" << cd << "' does not implement entire interface '" << interfaceType << "'" << '\0';
+    s << "Class '" << cd << "' does not implement entire interface '" << interfaceType << "'" << endl;
     OutputError(interfaceType->GetLocation(), s.str());
 }
 
@@ -101,19 +107,22 @@ void ReportError::IdentifierNotDeclared(Identifier *ident, reasonT whyNeeded) {
     stringstream s;
     static const char *names[] =  {"type", "class", "interface", "variable", "function"};
     Assert(whyNeeded >= 0 && whyNeeded <= sizeof(names)/sizeof(names[0]));
-    s << "No declaration found for "<< names[whyNeeded] << " '" << ident << "'" << '\0';
+    //s << "No declaration found for "<< names[whyNeeded] << " '" << ident << "'" << '\0';
+    s << "No declaration found for "<< names[whyNeeded] << " '" << ident << "'" << endl;
     OutputError(ident->GetLocation(), s.str());
 }
 
 void ReportError::IncompatibleOperands(Operator *op, Type *lhs, Type *rhs) {
     stringstream s;
-    s << "Incompatible operands: " << lhs << " " << op << " " << rhs << '\0';
+    //s << "Incompatible operands: " << lhs << " " << op << " " << rhs << '\0';
+    s << "Incompatible operands: " << lhs << " " << op << " " << rhs << endl;
     OutputError(op->GetLocation(), s.str());
 }
      
 void ReportError::IncompatibleOperand(Operator *op, Type *rhs) {
     stringstream s;
-    s << "Incompatible operand: " << op << " " << rhs << '\0';
+    //s << "Incompatible operand: " << op << " " << rhs << '\0';
+    s << "Incompatible operand: " << op << " " << rhs << endl;
     OutputError(op->GetLocation(), s.str());
 }
 
@@ -136,38 +145,45 @@ void ReportError::NewArraySizeNotInteger(Expr *sizeExpr) {
 void ReportError::NumArgsMismatch(Identifier *fnIdent, int numExpected, int numGiven) {
     stringstream s;
     s << "Function '"<< fnIdent << "' expects " << numExpected << " argument" << (numExpected==1?"":"s") 
-      << " but " << numGiven << " given" << '\0';
+      //<< " but " << numGiven << " given" << '\0';
+      << " but " << numGiven << " given" << endl;
     OutputError(fnIdent->GetLocation(), s.str());
 }
 
 void ReportError::ArgMismatch(Expr *arg, int argIndex, Type *given, Type *expected) {
   stringstream s;
-  s << "Incompatible argument " << argIndex << ": " << given << " given, " << expected << " expected" << '\0';
+  //s << "Incompatible argument " << argIndex << ": " << given << " given, " << expected << " expected" << '\0';
+  s << "Incompatible argument " << argIndex << ": " 
+    << given << " given, " << expected << " expected" << endl;
   OutputError(arg->GetLocation(), s.str());
 }
 
 void ReportError::ReturnMismatch(ReturnStmt *rStmt, Type *given, Type *expected) {
     stringstream s;
-    s << "Incompatible return: " << given << " given, " << expected << " expected" << '\0';
+    //s << "Incompatible return: " << given << " given, " << expected << " expected" << '\0';
+    s << "Incompatible return: " << given << " given, " << expected << " expected" << endl;
     OutputError(rStmt->GetLocation(), s.str());
 }
 
 void ReportError::FieldNotFoundInBase(Identifier *field, Type *base) {
     stringstream s;
-    s << base << " has no such field '" << field <<"'" <<'\0';
+    //s << base << " has no such field '" << field <<"'" <<'\0';
+    s << base << " has no such field '" << field <<"'" << endl;
     OutputError(field->GetLocation(), s.str());
 }
      
 void ReportError::InaccessibleField(Identifier *field, Type *base) {
     stringstream s;
-    s  << base << " field '" << field << "' only accessible within class scope" << '\0';
+    //s  << base << " field '" << field << "' only accessible within class scope" << '\0';
+    s  << base << " field '" << field << "' only accessible within class scope" << endl;
     OutputError(field->GetLocation(), s.str());
 }
 
 void ReportError::PrintArgMismatch(Expr *arg, int argIndex, Type *given) {
     stringstream s;
     s << "Incompatible argument " << argIndex << ": " << given
-        << " given, int/bool/string expected" << '\0';
+        //<< " given, int/bool/string expected" << '\0';
+        << " given, int/bool/string expected" << endl;
     OutputError(arg->GetLocation(), s.str());
 }
 
