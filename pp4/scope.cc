@@ -21,7 +21,7 @@ Scope::Scope()
  * Looks for an identifier in this scope only. Returns NULL if
  * not found.
  */
-Decl *Scope::Lookup(Identifier *id)       
+Decl* Scope::Lookup(Identifier* id)       
 {
     return table->Lookup(id->GetName());
 }
@@ -45,7 +45,7 @@ bool Scope::Declare(Decl *decl)
 
 void Scope::CopyFromScope(Scope *other, ClassDecl *addTo)
 {
-    Iterator<Decl*> iter = other->table->GetIterator();
+    Iterator<Decl*> iter = other->GetTable()->GetIterator();
     Decl *decl;
     while ((decl = iter.GetNextValue()) != NULL) {
         table->Enter(decl->GetName(), decl);

@@ -1,8 +1,7 @@
-void main() {
-  int x;
-  double y;
+int a;
 
-  x = 5 % 3;
-  y = x - 3.5;
-  y = 3.0;
+void main() {
+  int b;
+  int a;
+  double b;
 }

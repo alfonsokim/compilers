@@ -25,7 +25,9 @@ Node::Node() {
 Decl *Node::FindDecl(Identifier *idToFind, lookup l) {
     Decl *mine;
     if (!nodeScope) PrepareScope();
-    if (nodeScope && (mine = nodeScope->Lookup(idToFind)))
+    mine = nodeScope->GetTable()->Lookup(idToFind->GetName());
+    //if (nodeScope && (mine = nodeScope->Lookup(idToFind)))
+    if (nodeScope && mine)
         return mine;
     if (l == kDeep && parent)
         return parent->FindDecl(idToFind, l);

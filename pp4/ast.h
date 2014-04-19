@@ -27,6 +27,7 @@
 #include <stdlib.h>   // for NULL
 #include "location.h"
 #include <iostream>
+ 
 class Scope;
 class Decl;
 class Identifier;
