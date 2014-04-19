@@ -21,14 +21,15 @@ using namespace std;
 class Type : public Node
 {
   protected:
-    char *typeName;
+    const char *typeName;
 
   public :
     static Type *intType, *doubleType, *boolType, *voidType,
                 *nullType, *stringType, *errorType;
 
-    Type(yyltype loc) : Node(loc) {}
-    Type() : Node() {}
+    //Type(yyltype loc, const char *str) : Node(loc) {}
+    Type(yyltype loc, const char *str);
+    //Type() : Node() {}
     Type(const char *str);
 
     virtual void PrintToStream(ostream& out) { out << typeName; }

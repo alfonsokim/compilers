@@ -29,6 +29,8 @@ void Decl::BuildScope(Scope *parent) {
 
 VarDecl::VarDecl(Identifier *n, Type *t) : Decl(n) {
     Assert(n != NULL && t != NULL);
+    //printf("Constructor VarDecl con type %snull\n", t ? "not " : "");
+    //printf("Constructor VarDecl con type [%s] --- %snull\n", t->Name(), t ? "not " : "");
     (type=t)->SetParent(this);
 }
 
@@ -42,25 +44,41 @@ bool VarDecl::IsEquivalentTo(Decl *other) {
 
 void VarDecl::Check() {
     CheckType();
+    //printf("Saliendo de VarDecl::Check\n");
 }
 
 void VarDecl::CheckType() {
+
+    //printf("En VarDecl::CheckType\n");
+
     if (type->IsPrimitive())
         return;
 
+    //printf("En VarDecl::CheckType. No es primitiva\n");
+
     Scope *s = scope;
     while (s != NULL) {
+
+        //printf("En VarDecl::CheckType. scope no es null\n");
+
         Decl *d;
+        //printf("En VarDecl::CheckType. s->GetTable() %snull\n", (s->GetTable() ? "not " : ""));
+        //printf("En VarDecl::CheckType. type->Name() %snull\n", (type->Name() ? "not " : ""));
+        //printf("En VarDecl::CheckType. type->IsPrimitive() %s\n", (type->IsPrimitive() ? "is" : "nel"));
+        //printf("En VarDecl::CheckType. type->Name() %snull\n", (type->Name() ? "not " : ""));
         if ((d = s->GetTable()->Lookup(type->Name())) != NULL) {
+            //printf("En VarDecl::CheckType. Tengo el Decl\n");
             /* TODO: Do not let VarDecl's to be of an Interface type except
              * when in that Interfaces scope.
              */
             if (dynamic_cast<ClassDecl*>(d) == NULL &&
-                dynamic_cast<InterfaceDecl*>(d) == NULL)
+                dynamic_cast<InterfaceDecl*>(d) == NULL) {
                 type->ReportNotDeclaredIdentifier(LookingForType);
+            }
 
             return;
         }
+        //printf("En VarDecl::CheckType. s %snull\n", (s ? "not " : ""));
         s = s->GetParent();
     }
 

@@ -1,0 +1,24 @@
+class Cow {
+/*
+    void moo(int times){
+
+    }
+*/
+}
+
+class Joe {
+/*
+    void merol(int me) {
+
+    }
+
+    int jaja(bool yea) {
+        return 10;
+    }
+*/
+    void main(){
+        Cow c;
+        c = New(Cow);
+    }
+    
+}

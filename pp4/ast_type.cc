@@ -28,6 +28,11 @@ Type::Type(const char *n) {
     typeName = strdup(n);
 }
 
+Type::Type(yyltype loc, const char *str) : Node(loc) {
+    Assert(str);
+    typeName = strdup(str);
+}
+
 bool Type::IsEquivalentTo(Type *other) {
     if (IsEqualTo(Type::errorType))
         return true;
@@ -38,7 +43,8 @@ bool Type::IsEquivalentTo(Type *other) {
     return IsEqualTo(other);
 }
 
-NamedType::NamedType(Identifier *i) : Type(*i->GetLocation()) {
+NamedType::NamedType(Identifier *i) : Type(*i->GetLocation(), i->GetName()) {
+    //printf("constructor de NamedType [%s]\n", i->GetName());
     Assert(i != NULL);
     (id=i)->SetParent(this);
 }
@@ -85,15 +91,17 @@ bool NamedType::IsEquivalentTo(Type *other) {
     return false;
 }
 
-ArrayType::ArrayType(yyltype loc, Type *et) : Type(loc) {
+ArrayType::ArrayType(yyltype loc, Type *et) : Type(loc, et->Name()) {
     Assert(et != NULL);
     (elemType=et)->SetParent(this);
 }
 
+/*
 ArrayType::ArrayType(Type *et) : Type() {
     Assert(et != NULL);
     (elemType=et)->SetParent(this);
 }
+*/
 
 void ArrayType::ReportNotDeclaredIdentifier(reasonT reason) {
     elemType->ReportNotDeclaredIdentifier(reason);

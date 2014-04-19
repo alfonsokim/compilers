@@ -577,7 +577,8 @@ NewArrayExpr::NewArrayExpr(yyltype loc, Expr *sz, Type *et) : Expr(loc) {
 }
 
 Type* NewArrayExpr::GetType() {
-    return new ArrayType(elemType);
+    //return new ArrayType(elemType);
+    return elemType;
 }
 
 void NewArrayExpr::BuildScope(Scope *parent) {

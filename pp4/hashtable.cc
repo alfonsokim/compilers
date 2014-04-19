@@ -49,6 +49,13 @@ template <class Value> void Hashtable<Value>::Remove(const char *key, Value val)
  */
 template <class Value> Value Hashtable<Value>::Lookup(const char *key) 
 {
+
+/*
+  if (NULL == key){
+    return NULL;
+  }
+*/
+  
   Value found = NULL;
   
   if (mmap.count(key) > 0) {
