@@ -57,7 +57,7 @@ void Program::Check() {
 
 void Program::BuildScope() {
     for (int i = 0, n = decls->NumElements(); i < n; ++i)
-        gScope->AddDecl(decls->Nth(i));
+        gScope->Declare(decls->Nth(i));
 
     for (int i = 0, n = decls->NumElements(); i < n; ++i)
         decls->Nth(i)->BuildScope(gScope);
@@ -77,7 +77,7 @@ void StmtBlock::BuildScope(Scope *parent) {
     scope->SetParent(parent);
 
     for (int i = 0, n = decls->NumElements(); i < n; ++i)
-        scope->AddDecl(decls->Nth(i));
+        scope->Declare(decls->Nth(i));
 
     for (int i = 0, n = decls->NumElements(); i < n; ++i)
         decls->Nth(i)->BuildScope(scope);

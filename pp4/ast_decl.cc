@@ -81,7 +81,7 @@ void ClassDecl::BuildScope(Scope *parent) {
     scope->SetClassDecl(this);
 
     for (int i = 0, n = members->NumElements(); i < n; ++i)
-        scope->AddDecl(members->Nth(i));
+        scope->Declare(members->Nth(i));
 
     for (int i = 0, n = members->NumElements(); i < n; ++i)
         members->Nth(i)->BuildScope(scope);
@@ -148,7 +148,7 @@ void ClassDecl::CheckAgainstScope(Scope *other) {
     Iterator<Decl*> iter = scope->GetTable()->GetIterator();
     Decl *d;
     while ((d = iter.GetNextValue()) != NULL) {
-        Decl *lookup = other->GetTable()->Lookup(d->Name());
+        Decl *lookup = other->GetTable()->Lookup(d->GetName());
 
         if (lookup == NULL)
             continue;
@@ -181,7 +181,7 @@ void ClassDecl::CheckImplementsInterfaces() {
             ClassDecl *classDecl = this;
             Decl *classLookup;
             while (classDecl != NULL) {
-                classLookup = classDecl->GetScope()->GetTable()->Lookup(d->Name());
+                classLookup = classDecl->GetScope()->GetTable()->Lookup(d->GetName());
 
                 if (classLookup != NULL)
                     break;
@@ -212,7 +212,7 @@ void InterfaceDecl::BuildScope(Scope *parent) {
     scope->SetParent(parent);
 
     for (int i = 0, n = members->NumElements(); i < n; ++i)
-        scope->AddDecl(members->Nth(i));
+        scope->Declare(members->Nth(i));
 
     for (int i = 0, n = members->NumElements(); i < n; ++i)
         members->Nth(i)->BuildScope(scope);
@@ -271,7 +271,7 @@ void FnDecl::BuildScope(Scope *parent) {
     scope->SetFnDecl(this);
 
     for (int i = 0, n = formals->NumElements(); i < n; ++i)
-        scope->AddDecl(formals->Nth(i));
+        scope->Declare(formals->Nth(i));
 
     for (int i = 0, n = formals->NumElements(); i < n; ++i)
         formals->Nth(i)->BuildScope(scope);
@@ -286,4 +286,19 @@ void FnDecl::Check() {
 
     if (body)
         body->Check();
+}
+
+bool FnDecl::IsMethodDecl() { 
+    return dynamic_cast<ClassDecl*>(parent) != NULL || 
+           dynamic_cast<InterfaceDecl*>(parent) != NULL; 
+}
+
+bool FnDecl::MatchesPrototype(FnDecl *other) {
+    if (!returnType->IsEquivalentTo(other->returnType)) return false;
+    if (formals->NumElements() != other->formals->NumElements())
+        return false;
+    for (int i = 0; i < formals->NumElements(); i++)
+        if (!formals->Nth(i)->GetDeclaredType()->IsEquivalentTo(other->formals->Nth(i)->GetDeclaredType()))
+            return false;
+    return true;
 }

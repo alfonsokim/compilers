@@ -47,7 +47,7 @@ class Scope {
 
     int AddDecl(Decl *decl);
 
-    //Decl* Lookup(Identifier* );
+    //Decl* Lookup(Identifier*);
     bool Declare(Decl *dec);
     void CopyFromScope(Scope *other, ClassDecl *cd);
 

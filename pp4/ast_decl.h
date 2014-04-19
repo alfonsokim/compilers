@@ -33,11 +33,17 @@ class Decl : public Node
   public:
     Decl(Identifier *name);
     friend ostream& operator<<(ostream& out, Decl *d) { return out << d->id; }
+    Identifier *GetId() { return id; }
+    const char *GetName() { return id->GetName(); }
     virtual bool ConflictsWithPrevious(Decl *prev);
 
+    virtual bool IsVarDecl() { return false; } // jdz: could use typeid/dynamic_cast for these
+    virtual bool IsClassDecl() { return false; }
+    virtual bool IsInterfaceDecl() { return false; }
+    virtual bool IsFnDecl() { return false; } 
+    virtual bool IsMethodDecl() { return false; }
     virtual bool IsEquivalentTo(Decl *other);
 
-    const char* GetName() { return id->GetName(); }
     Scope* GetScope() { return scope; }
 
     virtual void BuildScope(Scope *parent);
@@ -51,6 +57,7 @@ class VarDecl : public Decl
 
   public:
     VarDecl(Identifier *name, Type *type);
+    Type *GetDeclaredType() { return type; }
 
     bool IsEquivalentTo(Decl *other);
 
@@ -120,6 +127,9 @@ class FnDecl : public Decl
 
     Type* GetReturnType() { return returnType; }
     List<VarDecl*>* GetFormals() { return formals; }
+
+    bool IsMethodDecl();
+    bool MatchesPrototype(FnDecl *other);
 
     void BuildScope(Scope *parent);
     void Check();
