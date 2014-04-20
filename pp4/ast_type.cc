@@ -35,11 +35,13 @@ Type::Type(yyltype loc, const char *str) : Node(loc) {
 }
 
 bool Type::IsEquivalentTo(Type *other) {
-    if (IsEqualTo(Type::errorType))
+    if (IsEqualTo(Type::errorType)) {
         return true;
-
-    if (IsEqualTo(Type::nullType) && dynamic_cast<NamedType*>(other))
+    }
+        
+    if (IsEqualTo(Type::nullType) && dynamic_cast<NamedType*>(other)) {
         return true;
+    }
 
     return IsEqualTo(other);
 }
@@ -128,8 +130,9 @@ void ArrayType::ReportNotDeclaredIdentifier(reasonT reason) {
 bool ArrayType::IsEqualTo(Type *other) {
     ArrayType *arrayOther = dynamic_cast<ArrayType*>(other);
 
-    if (arrayOther == NULL)
+    if (arrayOther == NULL) {
         return false;
+    }
 
     return elemType->IsEqualTo(arrayOther->elemType);
 }
@@ -137,8 +140,9 @@ bool ArrayType::IsEqualTo(Type *other) {
 bool ArrayType::IsEquivalentTo(Type *other) {
     ArrayType *arrayOther = dynamic_cast<ArrayType*>(other);
 
-    if (arrayOther == NULL)
+    if (arrayOther == NULL) {
         return false;
+    }
 
     return elemType->IsEquivalentTo(arrayOther->elemType);
 }

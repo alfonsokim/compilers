@@ -1,0 +1,7 @@
+
+class Arreglo {
+    void main(){
+        int[] m;
+        m = NewArray(10, int);
+    }
+}

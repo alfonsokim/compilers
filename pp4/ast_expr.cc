@@ -306,8 +306,19 @@ void AssignExpr::Check() {
     Type *ltype = left->GetType();
     Type *rtype = right->GetType();
 
-    if (!rtype->IsEquivalentTo(ltype) && !ltype->IsEqualTo(Type::errorType))
+    // En caso de que sea asignacion de arreglos
+    // TODO: No estoy seguro de que sea un OR, creo que solo aplica
+    // el lado izquierdo
+    if(dynamic_cast<ArrayType*>(ltype) || dynamic_cast<ArrayType*>(rtype)){
+        if(! strcmp(ltype->Name(), rtype->Name())) {
+            return;
+        }
+    }
+
+    if (!rtype->IsEquivalentTo(ltype) && !ltype->IsEqualTo(Type::errorType)) {
+        // printf("Error de tipos en asignacion l[%s] r[%s]\n", ltype->Name(), rtype->Name());
         ReportError::IncompatibleOperands(op, ltype, rtype);
+    }
 }
 
 Type* This::GetType() {
@@ -556,8 +567,9 @@ Type* NewExpr::GetType() {
     Decl *d = Program::gScope->GetTable()->Lookup(cType->Name());
     ClassDecl *c = dynamic_cast<ClassDecl*>(d);
 
-    if (c == NULL)
+    if (c == NULL) {
         return Type::errorType;
+    }
 
     return c->GetType();
 }
@@ -566,8 +578,9 @@ void NewExpr::Check() {
     Decl *d = Program::gScope->GetTable()->Lookup(cType->Name());
     ClassDecl *c = dynamic_cast<ClassDecl*>(d);
 
-    if (c == NULL)
+    if (c == NULL) {
         ReportError::IdentifierNotDeclared(cType->GetId(), LookingForClass);
+    }
 }
 
 NewArrayExpr::NewArrayExpr(yyltype loc, Expr *sz, Type *et) : Expr(loc) {
@@ -590,15 +603,18 @@ void NewArrayExpr::BuildScope(Scope *parent) {
 void NewArrayExpr::Check() {
     size->Check();
 
-    if (!size->GetType()->IsEqualTo(Type::intType))
+    if (!size->GetType()->IsEqualTo(Type::intType)) {
         ReportError::NewArraySizeNotInteger(size);
+    }
 
-    if (elemType->IsPrimitive() && !elemType->IsEquivalentTo(Type::voidType))
+    if (elemType->IsPrimitive() && !elemType->IsEquivalentTo(Type::voidType)) {
         return;
+    }
 
     Decl *d = Program::gScope->GetTable()->Lookup(elemType->Name());
-    if (dynamic_cast<ClassDecl*>(d) == NULL)
+    if (dynamic_cast<ClassDecl*>(d) == NULL) {
         elemType->ReportNotDeclaredIdentifier(LookingForType);
+    }
 }
 
 Type* ReadIntegerExpr::GetType() {
