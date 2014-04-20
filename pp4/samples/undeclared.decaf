@@ -19,14 +19,16 @@ class Joe {
     }
 
     bool b(){
-        Donkey d;
-        d = New(Donkey);
+        //Donkey d;
+        //d = New(Donkey);
+        Cow c;
+        c = New(Cow);
         return false;
     }
     
     int yeah(bool b) {
         siexisto();
-        noexisto();
+        //noexisto();
         return 10; 
     }
 

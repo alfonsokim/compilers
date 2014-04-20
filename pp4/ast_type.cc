@@ -4,6 +4,7 @@
  */
 
 #include <string.h>
+ #include <cstring>
 #include "ast_type.h"
 #include "ast_decl.h"
 
@@ -56,36 +57,53 @@ void NamedType::ReportNotDeclaredIdentifier(reasonT reason) {
 bool NamedType::IsEqualTo(Type *other) {
     NamedType *namedOther = dynamic_cast<NamedType*>(other);
 
-    if (namedOther == NULL)
+    if (namedOther == NULL) {
         return false;
+    }
 
     //return *id == *(namedOther->id);
-    return GetId() == namedOther->GetId();
+    /*
+    printf("en NamedType::IsEqualTo this[%s] other[%s] == [%s] strcmp [%s]\n", 
+        GetId()->GetName(), namedOther->GetId()->GetName(),
+        GetId()->GetName() == namedOther->GetId()->GetName() ? "si" : "no",
+        std::strcmp(GetId()->GetName(), namedOther->GetId()->GetName()) ? "si" : "no");
+    */
+    //return GetId() == namedOther->GetId();
+    return !(std::strcmp(GetId()->GetName(), namedOther->GetId()->GetName()));
 }
 
 bool NamedType::IsEquivalentTo(Type *other) {
-    if (IsEqualTo(other))
+
+    if (IsEqualTo(other)) {
         return true;
+    }
 
     NamedType *nType = this;
     Decl *lookup;
+
     while ((lookup = Program::gScope->GetTable()->Lookup(nType->Name())) != NULL) {
         ClassDecl *c = dynamic_cast<ClassDecl*>(lookup);
-        if (c == NULL)
+
+        if (c == NULL) {
             return false;
+        }
 
         List<NamedType*> *imps = c->GetImplements();
         for (int i = 0, n = imps->NumElements(); i < n; ++i) {
-            if (imps->Nth(i)->IsEqualTo(other))
+            if (imps->Nth(i)->IsEqualTo(other)) {
                 return true;
+            }
         }
 
         nType = c->GetExtends();
-        if (nType == NULL)
-            break;
 
-        if (nType->IsEqualTo(other))
+        if (nType == NULL) {
+            break;
+        }
+
+        if (nType->IsEqualTo(other)) {
             return true;
+        }
     }
 
     return false;

@@ -49,25 +49,15 @@ void VarDecl::Check() {
 
 void VarDecl::CheckType() {
 
-    //printf("En VarDecl::CheckType\n");
-
-    if (type->IsPrimitive())
+    if (type->IsPrimitive()) {
         return;
-
-    //printf("En VarDecl::CheckType. No es primitiva\n");
+    }
 
     Scope *s = scope;
     while (s != NULL) {
 
-        //printf("En VarDecl::CheckType. scope no es null\n");
-
         Decl *d;
-        //printf("En VarDecl::CheckType. s->GetTable() %snull\n", (s->GetTable() ? "not " : ""));
-        //printf("En VarDecl::CheckType. type->Name() %snull\n", (type->Name() ? "not " : ""));
-        //printf("En VarDecl::CheckType. type->IsPrimitive() %s\n", (type->IsPrimitive() ? "is" : "nel"));
-        //printf("En VarDecl::CheckType. type->Name() %snull\n", (type->Name() ? "not " : ""));
         if ((d = s->GetTable()->Lookup(type->Name())) != NULL) {
-            //printf("En VarDecl::CheckType. Tengo el Decl\n");
             /* TODO: Do not let VarDecl's to be of an Interface type except
              * when in that Interfaces scope.
              */
@@ -78,7 +68,6 @@ void VarDecl::CheckType() {
 
             return;
         }
-        //printf("En VarDecl::CheckType. s %snull\n", (s ? "not " : ""));
         s = s->GetParent();
     }
 
