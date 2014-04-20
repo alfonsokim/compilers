@@ -184,24 +184,34 @@ void ReturnStmt::Check() {
 
     FnDecl *d = NULL;
     Scope *s = scope;
-    while (s != NULL) {
-        if ((d = s->GetFnDecl()) != NULL)
-            break;
 
+    while (s != NULL) {
+        if ((d = s->GetFnDecl()) != NULL) {
+            break;
+        }
         s = s->GetParent();
     }
 
     if (d == NULL) {
-        ReportError::Formatted(location,
-                               "return is only allowed inside a function");
+        ReportError::Formatted(location, "return is only allowed inside a function");
         return;
     }
 
     Type *expected = d->GetReturnType();
     Type *given = expr->GetType();
 
-    if (!given->IsEquivalentTo(expected))
+    if (!given->IsEquivalentTo(expected)) {
+        //printf("En error de return g[%s] e[%s]\n", given->Name(), expected->Name());
+
+        if(dynamic_cast<ArrayType*>(expected) || dynamic_cast<ArrayType*>(given)){
+            // printf("Alguno de los 2 es arreglo\n");
+            if(! strcmp(expected->Name(), given->Name()) ) {
+                return;
+            }
+        }
+
         ReportError::ReturnMismatch(this, given, expected);
+    }
 }
 
 PrintStmt::PrintStmt(List<Expr*> *a) {
