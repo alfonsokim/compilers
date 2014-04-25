@@ -164,8 +164,9 @@ void ClassDecl::CheckAgainstScope(Scope *other) {
             ReportError::DeclConflict(d, lookup);
 
         if (dynamic_cast<FnDecl*>(lookup) != NULL &&
-            !d->IsEquivalentTo(lookup))
+            !d->IsEquivalentTo(lookup)) {
             ReportError::OverrideMismatch(d);
+        }
     }
 }
 
@@ -242,7 +243,7 @@ void FnDecl::SetFunctionBody(Stmt *b) {
 }
 
 bool FnDecl::ConflictsWithPrevious(Decl *prev) {
-    // special case error for method override
+    /*
     if (IsMethodDecl() && prev->IsMethodDecl() && parent != prev->GetParent()) {
         if (!MatchesPrototype(dynamic_cast<FnDecl*>(prev))) {
             ReportError::OverrideMismatch(this);
@@ -252,23 +253,25 @@ bool FnDecl::ConflictsWithPrevious(Decl *prev) {
     }
     ReportError::DeclConflict(this, prev);
     return true;
+    */
 }
 
 bool FnDecl::IsEquivalentTo(Decl *other) {
     FnDecl *fnDecl = dynamic_cast<FnDecl*>(other);
 
-    if (fnDecl == NULL)
-        return false;
+    if (fnDecl == NULL) { return false; }
 
-    if (!returnType->IsEquivalentTo(fnDecl->returnType))
-        return false;
+    if (!returnType->IsEquivalentTo(fnDecl->returnType)) { return false; }
 
-    if (formals->NumElements() != fnDecl->formals->NumElements())
+    if (formals->NumElements() != fnDecl->formals->NumElements()) {
         return false;
+    }
 
-    for (int i = 0, n = formals->NumElements(); i < n; ++i)
-        if (!formals->Nth(i)->IsEquivalentTo(fnDecl->formals->Nth(i)))
+    for (int i = 0, n = formals->NumElements(); i < n; ++i) {
+        if (!formals->Nth(i)->IsEquivalentTo(fnDecl->formals->Nth(i))) {
             return false;
+        }
+    }
 
     return true;
 }
