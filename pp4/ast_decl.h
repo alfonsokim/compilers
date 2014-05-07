@@ -42,7 +42,7 @@ class Decl : public Node
     virtual bool IsInterfaceDecl() { return false; }
     virtual bool IsFnDecl() { return false; } 
     virtual bool IsMethodDecl() { return false; }
-    virtual bool IsEquivalentTo(Decl *other);
+    virtual bool IsEquivalent(Decl *other);
 
     Scope* GetScope() { return scope; }
 
@@ -59,7 +59,7 @@ class VarDecl : public Decl
     VarDecl(Identifier *name, Type *type);
     Type *GetDeclaredType() { return type; }
 
-    bool IsEquivalentTo(Decl *other);
+    bool IsEquivalent(Decl *other);
 
     Type* GetType() { return type; }
     void Check();
@@ -122,7 +122,7 @@ class FnDecl : public Decl
     FnDecl(Identifier *name, Type *returnType, List<VarDecl*> *formals);
     void SetFunctionBody(Stmt *b);
 
-    bool IsEquivalentTo(Decl *other);
+    bool IsEquivalent(Decl *other);
     bool ConflictsWithPrevious(Decl *prev);
 
     Type* GetReturnType() { return returnType; }

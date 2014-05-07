@@ -140,8 +140,8 @@ Type* ArithmeticExpr::GetType() {
     Type *rtype = right->GetType();
 
     if (left == NULL) {
-        if (rtype->IsEquivalentTo(Type::intType) ||
-            rtype->IsEquivalentTo(Type::doubleType))
+        if (rtype->IsEquivalent(Type::intType) ||
+            rtype->IsEquivalent(Type::doubleType))
             return rtype;
         else
             return Type::errorType;
@@ -149,12 +149,12 @@ Type* ArithmeticExpr::GetType() {
 
     Type *ltype = left->GetType();
 
-    if (ltype->IsEquivalentTo(Type::intType) &&
-        rtype->IsEquivalentTo(Type::intType))
+    if (ltype->IsEquivalent(Type::intType) &&
+        rtype->IsEquivalent(Type::intType))
         return ltype;
 
-    if (ltype->IsEquivalentTo(Type::doubleType) &&
-        rtype->IsEquivalentTo(Type::doubleType))
+    if (ltype->IsEquivalent(Type::doubleType) &&
+        rtype->IsEquivalent(Type::doubleType))
         return ltype;
 
     return Type::errorType;
@@ -169,8 +169,8 @@ void ArithmeticExpr::Check() {
     Type *rtype = right->GetType();
 
     if (left == NULL) {
-        if (rtype->IsEquivalentTo(Type::intType) ||
-            rtype->IsEquivalentTo(Type::doubleType))
+        if (rtype->IsEquivalent(Type::intType) ||
+            rtype->IsEquivalent(Type::doubleType))
             return;
         else
             ReportError::IncompatibleOperand(op, rtype);
@@ -180,12 +180,12 @@ void ArithmeticExpr::Check() {
 
     Type *ltype = left->GetType();
 
-    if (ltype->IsEquivalentTo(Type::intType) &&
-        rtype->IsEquivalentTo(Type::intType))
+    if (ltype->IsEquivalent(Type::intType) &&
+        rtype->IsEquivalent(Type::intType))
         return;
 
-    if (ltype->IsEquivalentTo(Type::doubleType) &&
-        rtype->IsEquivalentTo(Type::doubleType))
+    if (ltype->IsEquivalent(Type::doubleType) &&
+        rtype->IsEquivalent(Type::doubleType))
         return;
 
     ReportError::IncompatibleOperands(op, ltype, rtype);
@@ -195,12 +195,12 @@ Type* RelationalExpr::GetType() {
     Type *rtype = right->GetType();
     Type *ltype = left->GetType();
 
-    if (ltype->IsEquivalentTo(Type::intType) &&
-        rtype->IsEquivalentTo(Type::intType))
+    if (ltype->IsEquivalent(Type::intType) &&
+        rtype->IsEquivalent(Type::intType))
         return Type::errorType;
 
-    if (ltype->IsEquivalentTo(Type::doubleType) &&
-        rtype->IsEquivalentTo(Type::doubleType))
+    if (ltype->IsEquivalent(Type::doubleType) &&
+        rtype->IsEquivalent(Type::doubleType))
         return Type::errorType;
 
     return Type::boolType;
@@ -210,12 +210,12 @@ void RelationalExpr::Check() {
     Type *rtype = right->GetType();
     Type *ltype = left->GetType();
 
-    if (ltype->IsEquivalentTo(Type::intType) &&
-        rtype->IsEquivalentTo(Type::intType))
+    if (ltype->IsEquivalent(Type::intType) &&
+        rtype->IsEquivalent(Type::intType))
         return;
 
-    if (ltype->IsEquivalentTo(Type::doubleType) &&
-        rtype->IsEquivalentTo(Type::doubleType))
+    if (ltype->IsEquivalent(Type::doubleType) &&
+        rtype->IsEquivalent(Type::doubleType))
         return;
 
     ReportError::IncompatibleOperands(op, ltype, rtype);
@@ -225,8 +225,8 @@ Type* EqualityExpr::GetType() {
     Type *rtype = right->GetType();
     Type *ltype = left->GetType();
 
-    if (!rtype->IsEquivalentTo(ltype) &&
-        !ltype->IsEquivalentTo(rtype))
+    if (!rtype->IsEquivalent(ltype) &&
+        !ltype->IsEquivalent(rtype))
         return Type::errorType;
 
    return Type::boolType;
@@ -239,8 +239,8 @@ void EqualityExpr::Check() {
     Type *rtype = right->GetType();
     Type *ltype = left->GetType();
 
-    if (!rtype->IsEquivalentTo(ltype) &&
-        !ltype->IsEquivalentTo(rtype))
+    if (!rtype->IsEquivalent(ltype) &&
+        !ltype->IsEquivalent(rtype))
         ReportError::IncompatibleOperands(op, ltype, rtype);
 }
 
@@ -248,7 +248,7 @@ Type* LogicalExpr::GetType() {
     Type *rtype = right->GetType();
 
     if (left == NULL) {
-        if (rtype->IsEquivalentTo(Type::boolType))
+        if (rtype->IsEquivalent(Type::boolType))
             return Type::boolType;
         else
             return Type::errorType;
@@ -256,8 +256,8 @@ Type* LogicalExpr::GetType() {
 
     Type *ltype = left->GetType();
 
-    if (ltype->IsEquivalentTo(Type::boolType) &&
-        rtype->IsEquivalentTo(Type::boolType))
+    if (ltype->IsEquivalent(Type::boolType) &&
+        rtype->IsEquivalent(Type::boolType))
         return Type::boolType;
 
     return Type::errorType;
@@ -272,7 +272,7 @@ void LogicalExpr::Check() {
     Type *rtype = right->GetType();
 
     if (left == NULL) {
-        if (rtype->IsEquivalentTo(Type::boolType))
+        if (rtype->IsEquivalent(Type::boolType))
             return;
         else
             ReportError::IncompatibleOperand(op, rtype);
@@ -282,8 +282,8 @@ void LogicalExpr::Check() {
 
     Type *ltype = left->GetType();
 
-    if (ltype->IsEquivalentTo(Type::boolType) &&
-        rtype->IsEquivalentTo(Type::boolType))
+    if (ltype->IsEquivalent(Type::boolType) &&
+        rtype->IsEquivalent(Type::boolType))
         return;
 
     ReportError::IncompatibleOperands(op, ltype, rtype);
@@ -293,7 +293,7 @@ Type* AssignExpr::GetType() {
     Type *ltype = left->GetType();
     Type *rtype = right->GetType();
 
-    if (!rtype->IsEquivalentTo(ltype))
+    if (!rtype->IsEquivalent(ltype))
         return Type::errorType;
 
     return ltype;
@@ -315,7 +315,7 @@ void AssignExpr::Check() {
         }
     }
 
-    if (!rtype->IsEquivalentTo(ltype) && !ltype->IsEqualTo(Type::errorType)) {
+    if (!rtype->IsEquivalent(ltype) && !ltype->IsEqualTo(Type::errorType)) {
         // printf("Error de tipos en asignacion l[%s] r[%s]\n", ltype->Name(), rtype->Name());
         ReportError::IncompatibleOperands(op, ltype, rtype);
     }
@@ -553,7 +553,7 @@ void Call::CheckActuals(Decl *d) {
     for (int i = 0, n = actuals->NumElements(); i < n; ++i) {
         Type *given = actuals->Nth(i)->GetType();
         Type *expected = formals->Nth(i)->GetType();
-        if (!given->IsEquivalentTo(expected))
+        if (!given->IsEquivalent(expected))
             ReportError::ArgMismatch(actuals->Nth(i), i+1, given, expected);
     }
 }
@@ -607,7 +607,7 @@ void NewArrayExpr::Check() {
         ReportError::NewArraySizeNotInteger(size);
     }
 
-    if (elemType->IsPrimitive() && !elemType->IsEquivalentTo(Type::voidType)) {
+    if (elemType->IsPrimitive() && !elemType->IsEquivalent(Type::voidType)) {
         return;
     }
 

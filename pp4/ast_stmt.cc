@@ -111,7 +111,7 @@ void ConditionalStmt::Check() {
     test->Check();
     body->Check();
 
-    if (!test->GetType()->IsEquivalentTo(Type::boolType))
+    if (!test->GetType()->IsEquivalent(Type::boolType))
         ReportError::TestNotBoolean(test);
 }
 
@@ -149,7 +149,7 @@ void IfStmt::Check() {
     test->Check();
     body->Check();
 
-    if (!test->GetType()->IsEquivalentTo(Type::boolType))
+    if (!test->GetType()->IsEquivalent(Type::boolType))
         ReportError::TestNotBoolean(test);
 
     if (elseBody != NULL)
@@ -200,7 +200,7 @@ void ReturnStmt::Check() {
     Type *expected = d->GetReturnType();
     Type *given = expr->GetType();
 
-    if (!given->IsEquivalentTo(expected)) {
+    if (!given->IsEquivalent(expected)) {
         //printf("En error de return g[%s] e[%s]\n", given->Name(), expected->Name());
 
         if(dynamic_cast<ArrayType*>(expected) || dynamic_cast<ArrayType*>(given)){
@@ -230,9 +230,9 @@ void PrintStmt::Check() {
     for (int i = 0, n = args->NumElements(); i < n; ++i) {
         Type *given = args->Nth(i)->GetType();
 
-        if (!(given->IsEquivalentTo(Type::intType) ||
-              given->IsEquivalentTo(Type::boolType) ||
-              given->IsEquivalentTo(Type::stringType)))
+        if (!(given->IsEquivalent(Type::intType) ||
+              given->IsEquivalent(Type::boolType) ||
+              given->IsEquivalent(Type::stringType)))
             ReportError::PrintArgMismatch(args->Nth(i), i+1, given);
     }
 

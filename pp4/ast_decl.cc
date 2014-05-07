@@ -16,7 +16,7 @@ bool Decl::ConflictsWithPrevious(Decl *prev) {
      return true;
 }
 
-bool Decl::IsEquivalentTo(Decl *other) {
+bool Decl::IsEquivalent(Decl *other) {
     /* TODO: Once all subclasses support this function it should be made a pure
      * virtual function.
      */
@@ -34,12 +34,12 @@ VarDecl::VarDecl(Identifier *n, Type *t) : Decl(n) {
     (type=t)->SetParent(this);
 }
 
-bool VarDecl::IsEquivalentTo(Decl *other) {
+bool VarDecl::IsEquivalent(Decl *other) {
     VarDecl *varDecl = dynamic_cast<VarDecl*>(other);
     if (varDecl == NULL)
         return false;
 
-    return type->IsEquivalentTo(varDecl->type);
+    return type->IsEquivalent(varDecl->type);
 }
 
 void VarDecl::Check() {
@@ -58,9 +58,6 @@ void VarDecl::CheckType() {
 
         Decl *d;
         if ((d = s->GetTable()->Lookup(type->Name())) != NULL) {
-            /* TODO: Do not let VarDecl's to be of an Interface type except
-             * when in that Interfaces scope.
-             */
             if (dynamic_cast<ClassDecl*>(d) == NULL &&
                 dynamic_cast<InterfaceDecl*>(d) == NULL) {
                 type->ReportNotDeclaredIdentifier(LookingForType);
@@ -164,7 +161,7 @@ void ClassDecl::CheckAgainstScope(Scope *other) {
             ReportError::DeclConflict(d, lookup);
 
         if (dynamic_cast<FnDecl*>(lookup) != NULL &&
-            !d->IsEquivalentTo(lookup)) {
+            !d->IsEquivalent(lookup)) {
             ReportError::OverrideMismatch(d);
         }
     }
@@ -256,19 +253,19 @@ bool FnDecl::ConflictsWithPrevious(Decl *prev) {
     */
 }
 
-bool FnDecl::IsEquivalentTo(Decl *other) {
+bool FnDecl::IsEquivalent(Decl *other) {
     FnDecl *fnDecl = dynamic_cast<FnDecl*>(other);
 
     if (fnDecl == NULL) { return false; }
 
-    if (!returnType->IsEquivalentTo(fnDecl->returnType)) { return false; }
+    if (!returnType->IsEquivalent(fnDecl->returnType)) { return false; }
 
     if (formals->NumElements() != fnDecl->formals->NumElements()) {
         return false;
     }
 
     for (int i = 0, n = formals->NumElements(); i < n; ++i) {
-        if (!formals->Nth(i)->IsEquivalentTo(fnDecl->formals->Nth(i))) {
+        if (!formals->Nth(i)->IsEquivalent(fnDecl->formals->Nth(i))) {
             return false;
         }
     }
@@ -304,11 +301,11 @@ bool FnDecl::IsMethodDecl() {
 }
 
 bool FnDecl::MatchesPrototype(FnDecl *other) {
-    if (!returnType->IsEquivalentTo(other->returnType)) return false;
+    if (!returnType->IsEquivalent(other->returnType)) return false;
     if (formals->NumElements() != other->formals->NumElements())
         return false;
     for (int i = 0; i < formals->NumElements(); i++)
-        if (!formals->Nth(i)->GetDeclaredType()->IsEquivalentTo(other->formals->Nth(i)->GetDeclaredType()))
+        if (!formals->Nth(i)->GetDeclaredType()->IsEquivalent(other->formals->Nth(i)->GetDeclaredType()))
             return false;
     return true;
 }

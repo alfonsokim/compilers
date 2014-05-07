@@ -34,7 +34,7 @@ Type::Type(yyltype loc, const char *str) : Node(loc) {
     typeName = strdup(str);
 }
 
-bool Type::IsEquivalentTo(Type *other) {
+bool Type::IsEquivalent(Type *other) {
     if (IsEqualTo(Type::errorType)) {
         return true;
     }
@@ -74,7 +74,7 @@ bool NamedType::IsEqualTo(Type *other) {
     return !(std::strcmp(GetId()->GetName(), namedOther->GetId()->GetName()));
 }
 
-bool NamedType::IsEquivalentTo(Type *other) {
+bool NamedType::IsEquivalent(Type *other) {
 
     if (IsEqualTo(other)) {
         return true;
@@ -137,12 +137,12 @@ bool ArrayType::IsEqualTo(Type *other) {
     return elemType->IsEqualTo(arrayOther->elemType);
 }
 
-bool ArrayType::IsEquivalentTo(Type *other) {
+bool ArrayType::IsEquivalent(Type *other) {
     ArrayType *arrayOther = dynamic_cast<ArrayType*>(other);
 
     if (arrayOther == NULL) {
         return false;
     }
 
-    return elemType->IsEquivalentTo(arrayOther->elemType);
+    return elemType->IsEquivalent(arrayOther->elemType);
 }
