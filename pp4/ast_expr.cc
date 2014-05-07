@@ -393,11 +393,13 @@ Type* FieldAccess::GetType() {
         d = GetFieldDecl(field, t);
     }
 
-    if (d == NULL)
+    if (d == NULL) {
         return Type::errorType;
+    }
 
-    if (dynamic_cast<VarDecl*>(d) == NULL)
+    if (dynamic_cast<VarDecl*>(d) == NULL) {
         return Type::errorType;
+    }
 
     return static_cast<VarDecl*>(d)->GetType();
 }
@@ -405,8 +407,9 @@ Type* FieldAccess::GetType() {
 void FieldAccess::BuildScope(Scope *parent) {
     scope->SetParent(parent);
 
-    if (base != NULL)
+    if (base != NULL) {
         base->BuildScope(scope);
+    }
 }
 
 void FieldAccess::Check() {
@@ -478,8 +481,9 @@ Type* Call::GetType() {
         }
     }
 
-    if (dynamic_cast<FnDecl*>(d) == NULL)
+    if (dynamic_cast<FnDecl*>(d) == NULL) {
         return Type::errorType;
+    }
 
     return static_cast<FnDecl*>(d)->GetReturnType();
 }

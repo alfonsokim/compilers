@@ -22,8 +22,9 @@ int ReportError::numErrors = 0;
 void ReportError::UnderlineErrorInLine(const char *line, yyltype *pos) {
     if (!line) return;
     cerr << line << endl;
-    for (int i = 1; i <= pos->last_column; i++)
+    for (int i = 1; i <= pos->last_column; i++) {
         cerr << (i >= pos->first_column ? '^' : ' ');
+    }
     cerr << endl;
 }
 

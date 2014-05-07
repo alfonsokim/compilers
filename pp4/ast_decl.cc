@@ -201,7 +201,7 @@ void ClassDecl::CheckImplementsInterfaces() {
             }
 
             if (classLookup == NULL) {
-                ReportError::InterfaceNotImplemented(this, nth);
+                //ReportError::InterfaceNotImplemented(this, nth);
                 return;
             }
         }
@@ -301,11 +301,18 @@ bool FnDecl::IsMethodDecl() {
 }
 
 bool FnDecl::MatchesPrototype(FnDecl *other) {
-    if (!returnType->IsEquivalent(other->returnType)) return false;
-    if (formals->NumElements() != other->formals->NumElements())
+    if (!returnType->IsEquivalent(other->returnType)) {
         return false;
-    for (int i = 0; i < formals->NumElements(); i++)
-        if (!formals->Nth(i)->GetDeclaredType()->IsEquivalent(other->formals->Nth(i)->GetDeclaredType()))
+    }
+    
+    if (formals->NumElements() != other->formals->NumElements()) {
+        return false;
+    }
+
+    for (int i = 0; i < formals->NumElements(); i++) {
+        if (!formals->Nth(i)->GetDeclaredType()->IsEquivalent(other->formals->Nth(i)->GetDeclaredType())) {
             return false;
+        }
+    }
     return true;
 }
