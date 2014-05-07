@@ -21,11 +21,11 @@ Scope::Scope()
  * Looks for an identifier in this scope only. Returns NULL if
  * not found.
  */
- /*
-Decl* Scope::Lookup(Identifier* id) {
+
+Decl* Scope::TableLookup(Identifier* id) {
     return table->Lookup(id->GetName());
 }
-*/
+
 
 /* Method: Declare
  * ---------------

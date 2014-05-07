@@ -16,6 +16,7 @@ class Type;
 class ClassDecl;
 class LoopStmt;
 class FnDecl;
+class Identifier;
 
 class Scope { 
 
@@ -47,8 +48,8 @@ class Scope {
 
     int AddDecl(Decl *decl);
 
-    //Decl* Lookup(Identifier*);
-    bool Declare(Decl *dec);
+    Decl* TableLookup(Identifier *);
+    bool Declare(Decl *);
     void CopyFromScope(Scope *other, ClassDecl *cd);
 
 };
