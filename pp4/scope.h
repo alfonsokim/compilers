@@ -48,9 +48,9 @@ class Scope {
 
     int AddDecl(Decl *decl);
 
-    Decl* TableLookup(Identifier *);
+    Decl* TableLookup(const char *);
     bool Declare(Decl *);
-    void CopyFromScope(Scope *other, ClassDecl *cd);
+    void CopyFromScope(Scope *, ClassDecl *);
 
 };
 

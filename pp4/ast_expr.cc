@@ -23,7 +23,7 @@ Decl* Expr::GetFieldDecl(Identifier *f, Type *b) {
     NamedType *t = dynamic_cast<NamedType*>(b);
 
     while (t != NULL) {
-        Decl *d = Program::gScope->GetTable()->Lookup(t->Name());
+        Decl *d = Program::gScope->TableLookup(t->Name());
         ClassDecl *c = dynamic_cast<ClassDecl*>(d);
         InterfaceDecl *i = dynamic_cast<InterfaceDecl*>(d);
 
@@ -49,7 +49,7 @@ Decl* Expr::GetFieldDecl(Identifier *f, Type *b) {
 Decl* Expr::GetFieldDecl(Identifier *f, Scope *s) {
     while (s != NULL) {
         Decl *lookup;
-        if ((lookup = s->GetTable()->Lookup(f->GetName())) != NULL)
+        if ((lookup = s->TableLookup(f->GetName())) != NULL)
             return lookup;
 
         s = s->GetParent();
@@ -568,7 +568,7 @@ NewExpr::NewExpr(yyltype loc, NamedType *c) : Expr(loc) {
 }
 
 Type* NewExpr::GetType() {
-    Decl *d = Program::gScope->GetTable()->Lookup(cType->Name());
+    Decl *d = Program::gScope->TableLookup(cType->Name());
     ClassDecl *c = dynamic_cast<ClassDecl*>(d);
 
     if (c == NULL) {
@@ -579,7 +579,7 @@ Type* NewExpr::GetType() {
 }
 
 void NewExpr::Check() {
-    Decl *d = Program::gScope->GetTable()->Lookup(cType->Name());
+    Decl *d = Program::gScope->TableLookup(cType->Name());
     ClassDecl *c = dynamic_cast<ClassDecl*>(d);
 
     if (c == NULL) {
@@ -615,7 +615,7 @@ void NewArrayExpr::Check() {
         return;
     }
 
-    Decl *d = Program::gScope->GetTable()->Lookup(elemType->Name());
+    Decl *d = Program::gScope->TableLookup(elemType->Name());
     if (dynamic_cast<ClassDecl*>(d) == NULL) {
         elemType->ReportNotDeclaredIdentifier(LookingForType);
     }

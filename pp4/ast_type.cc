@@ -83,7 +83,7 @@ bool NamedType::IsEquivalent(Type *other) {
     NamedType *nType = this;
     Decl *lookup;
 
-    while ((lookup = Program::gScope->GetTable()->Lookup(nType->Name())) != NULL) {
+    while ((lookup = Program::gScope->TableLookup(nType->Name())) != NULL) {
         ClassDecl *c = dynamic_cast<ClassDecl*>(lookup);
 
         if (c == NULL) {

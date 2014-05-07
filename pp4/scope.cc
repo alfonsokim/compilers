@@ -22,8 +22,8 @@ Scope::Scope()
  * not found.
  */
 
-Decl* Scope::TableLookup(Identifier* id) {
-    return table->Lookup(id->GetName());
+Decl* Scope::TableLookup(const char* name) {
+    return table->Lookup(name);
 }
 
 

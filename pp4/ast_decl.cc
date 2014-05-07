@@ -57,7 +57,7 @@ void VarDecl::CheckType() {
     while (s != NULL) {
 
         Decl *d;
-        if ((d = s->GetTable()->Lookup(type->Name())) != NULL) {
+        if ((d = s->TableLookup(type->Name())) != NULL) {
             if (dynamic_cast<ClassDecl*>(d) == NULL &&
                 dynamic_cast<InterfaceDecl*>(d) == NULL) {
                 type->ReportNotDeclaredIdentifier(LookingForType);
@@ -109,7 +109,7 @@ void ClassDecl::CheckExtends() {
     if (extends == NULL)
         return;
 
-    Decl *lookup = scope->GetParent()->GetTable()->Lookup(extends->Name());
+    Decl *lookup = scope->GetParent()->TableLookup(extends->Name());
     if (dynamic_cast<ClassDecl*>(lookup) == NULL)
         extends->ReportNotDeclaredIdentifier(LookingForClass);
 }
@@ -119,31 +119,39 @@ void ClassDecl::CheckImplements() {
 
     for (int i = 0, n = implements->NumElements(); i < n; ++i) {
         NamedType *nth = implements->Nth(i);
-        Decl *lookup = s->GetTable()->Lookup(implements->Nth(i)->Name());
+        Decl *lookup = s->TableLookup(implements->Nth(i)->Name());
 
-        if (dynamic_cast<InterfaceDecl*>(lookup) == NULL)
+        if (dynamic_cast<InterfaceDecl*>(lookup) == NULL) {
             nth->ReportNotDeclaredIdentifier(LookingForInterface);
+        }
     }
 }
 
 void ClassDecl::CheckExtendedMembers(NamedType *extType) {
-    if (extType == NULL)
-        return;
 
-    Decl *lookup = scope->GetParent()->GetTable()->Lookup(extType->Name());
-    ClassDecl *extDecl = dynamic_cast<ClassDecl*>(lookup);
-    if (extDecl == NULL)
+    if (extType == NULL) {
         return;
+    }
+
+    Decl *lookup = scope->GetParent()->TableLookup(extType->Name());
+    ClassDecl *extDecl = dynamic_cast<ClassDecl*>(lookup);
+    
+    if (extDecl == NULL) {
+        return;
+    }
 
     CheckExtendedMembers(extDecl->extends);
     CheckAgainstScope(extDecl->scope);
 }
 
 void ClassDecl::CheckImplementedMembers(NamedType *impType) {
-    Decl *lookup = scope->GetParent()->GetTable()->Lookup(impType->Name());
+
+    Decl *lookup = scope->GetParent()->TableLookup(impType->Name());
     InterfaceDecl *intDecl = dynamic_cast<InterfaceDecl*>(lookup);
-    if (intDecl == NULL)
+    
+    if (intDecl == NULL) {
         return;
+    }
 
     CheckAgainstScope(intDecl->GetScope());
 }
@@ -151,14 +159,17 @@ void ClassDecl::CheckImplementedMembers(NamedType *impType) {
 void ClassDecl::CheckAgainstScope(Scope *other) {
     Iterator<Decl*> iter = scope->GetTable()->GetIterator();
     Decl *d;
+
     while ((d = iter.GetNextValue()) != NULL) {
-        Decl *lookup = other->GetTable()->Lookup(d->GetName());
+        Decl *lookup = other->TableLookup(d->GetName());
 
-        if (lookup == NULL)
+        if (lookup == NULL) {
             continue;
+        }
 
-        if (dynamic_cast<VarDecl*>(lookup) != NULL)
+        if (dynamic_cast<VarDecl*>(lookup) != NULL) {
             ReportError::DeclConflict(d, lookup);
+        }
 
         if (dynamic_cast<FnDecl*>(lookup) != NULL &&
             !d->IsEquivalent(lookup)) {
@@ -172,11 +183,12 @@ void ClassDecl::CheckImplementsInterfaces() {
 
     for (int i = 0, n = implements->NumElements(); i < n; ++i) {
         NamedType *nth = implements->Nth(i);
-        Decl *lookup = s->GetTable()->Lookup(implements->Nth(i)->Name());
+        Decl *lookup = s->TableLookup(implements->Nth(i)->Name());
         InterfaceDecl *intDecl = dynamic_cast<InterfaceDecl*>(lookup);
 
-        if (intDecl == NULL)
+        if (intDecl == NULL) {
             continue;
+        }
 
         List<Decl*> *intMembers = intDecl->GetMembers();
 
@@ -186,16 +198,17 @@ void ClassDecl::CheckImplementsInterfaces() {
             ClassDecl *classDecl = this;
             Decl *classLookup;
             while (classDecl != NULL) {
-                classLookup = classDecl->GetScope()->GetTable()->Lookup(d->GetName());
+                classLookup = classDecl->GetScope()->TableLookup(d->GetName());
 
-                if (classLookup != NULL)
+                if (classLookup != NULL) {
                     break;
+                }
 
                 if (classDecl->GetExtends() == NULL) {
                     classDecl = NULL;
                 } else {
                     const char *extName = classDecl->GetExtends()->Name();
-                    Decl *ext = Program::gScope->GetTable()->Lookup(extName);
+                    Decl *ext = Program::gScope->TableLookup(extName);
                     classDecl = dynamic_cast<ClassDecl*>(ext);
                 }
             }
@@ -216,16 +229,20 @@ InterfaceDecl::InterfaceDecl(Identifier *n, List<Decl*> *m) : Decl(n) {
 void InterfaceDecl::BuildScope(Scope *parent) {
     scope->SetParent(parent);
 
-    for (int i = 0, n = members->NumElements(); i < n; ++i)
+    for (int i = 0, n = members->NumElements(); i < n; ++i) {
         scope->Declare(members->Nth(i));
+    }
 
-    for (int i = 0, n = members->NumElements(); i < n; ++i)
+    for (int i = 0, n = members->NumElements(); i < n; ++i) {
         members->Nth(i)->BuildScope(scope);
+    }
 }
 
 void InterfaceDecl::Check() {
-    for (int i = 0, n = members->NumElements(); i < n; ++i)
+
+    for (int i = 0, n = members->NumElements(); i < n; ++i) {
         members->Nth(i)->Check();
+    }
 }
 
 FnDecl::FnDecl(Identifier *n, Type *r, List<VarDecl*> *d) : Decl(n) {
@@ -249,8 +266,8 @@ bool FnDecl::ConflictsWithPrevious(Decl *prev) {
         return false;
     }
     ReportError::DeclConflict(this, prev);
-    return true;
     */
+    return true;
 }
 
 bool FnDecl::IsEquivalent(Decl *other) {
@@ -277,22 +294,28 @@ void FnDecl::BuildScope(Scope *parent) {
     scope->SetParent(parent);
     scope->SetFnDecl(this);
 
-    for (int i = 0, n = formals->NumElements(); i < n; ++i)
+    for (int i = 0, n = formals->NumElements(); i < n; ++i) {
         scope->Declare(formals->Nth(i));
+    }
 
-    for (int i = 0, n = formals->NumElements(); i < n; ++i)
+    for (int i = 0, n = formals->NumElements(); i < n; ++i) {
         formals->Nth(i)->BuildScope(scope);
+    }
 
-    if (body)
+    if (body) {
         body->BuildScope(scope);
+    }
 }
 
 void FnDecl::Check() {
-    for (int i = 0, n = formals->NumElements(); i < n; ++i)
-        formals->Nth(i)->Check();
 
-    if (body)
+    for (int i = 0, n = formals->NumElements(); i < n; ++i) {
+        formals->Nth(i)->Check();
+    }
+
+    if (body) {
         body->Check();
+    }
 }
 
 bool FnDecl::IsMethodDecl() { 
@@ -301,6 +324,7 @@ bool FnDecl::IsMethodDecl() {
 }
 
 bool FnDecl::MatchesPrototype(FnDecl *other) {
+    
     if (!returnType->IsEquivalent(other->returnType)) {
         return false;
     }
