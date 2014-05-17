@@ -7,10 +7,13 @@
 #include "ast_decl.h"
 #include "ast_expr.h"
 
+Scope *Program::globalScope = new Scope();
 
 Program::Program(List<Decl*> *d) {
     Assert(d != NULL);
     (decls=d)->SetParentAll(this);
+    generator = new CodeGenerator();
+    scope = globalScope;
 }
 
 void Program::Check() {
@@ -18,7 +21,17 @@ void Program::Check() {
      * you want to avoid the clutter.  We won't test pp5 against 
      * semantically-invalid programs.
      */
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
+        globalScope->AddDecl(decls->Nth(i));
+    }
+        
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
+        decls->Nth(i)->BuildScope();
+    }
+        
 }
+
+
 void Program::Emit() {
     /* pp5: here is where the code generation is kicked off.
      *      The general idea is perform a tree traversal of the
@@ -27,7 +40,12 @@ void Program::Emit() {
      *      which makes for a great use of inheritance and
      *      polymorphism in the node classes.
      */
+
+    generator->DoFinalCodeGen();
 }
+
+// ===================================================================
+// -------------------------------------------------------------------
 
 StmtBlock::StmtBlock(List<VarDecl*> *d, List<Stmt*> *s) {
     Assert(d != NULL && s != NULL);
@@ -35,11 +53,21 @@ StmtBlock::StmtBlock(List<VarDecl*> *d, List<Stmt*> *s) {
     (stmts=s)->SetParentAll(this);
 }
 
+void StmtBlock::BuildScope(){ /* Implementar */ }
+
+// ===================================================================
+// -------------------------------------------------------------------
+
 ConditionalStmt::ConditionalStmt(Expr *t, Stmt *b) { 
     Assert(t != NULL && b != NULL);
     (test=t)->SetParent(this); 
     (body=b)->SetParent(this);
 }
+
+void ConditionalStmt::BuildScope(){ /* Implementar */ }
+
+// ===================================================================
+// -------------------------------------------------------------------
 
 ForStmt::ForStmt(Expr *i, Expr *t, Expr *s, Stmt *b): LoopStmt(t, b) { 
     Assert(i != NULL && t != NULL && s != NULL && b != NULL);
@@ -47,21 +75,37 @@ ForStmt::ForStmt(Expr *i, Expr *t, Expr *s, Stmt *b): LoopStmt(t, b) {
     (step=s)->SetParent(this);
 }
 
+void ForStmt::BuildScope(){ /* Implementar */ }
+
+// ===================================================================
+// -------------------------------------------------------------------
+
 IfStmt::IfStmt(Expr *t, Stmt *tb, Stmt *eb): ConditionalStmt(t, tb) { 
     Assert(t != NULL && tb != NULL); // else can be NULL
     elseBody = eb;
     if (elseBody) elseBody->SetParent(this);
 }
 
+void IfStmt::BuildScope(){ /* Implementar */ }
+
+// ===================================================================
+// -------------------------------------------------------------------
 
 ReturnStmt::ReturnStmt(yyltype loc, Expr *e) : Stmt(loc) { 
     Assert(e != NULL);
     (expr=e)->SetParent(this);
 }
+
+void ReturnStmt::BuildScope(){ /* Implementar */ }
+
+// ===================================================================
+// -------------------------------------------------------------------
   
 PrintStmt::PrintStmt(List<Expr*> *a) {    
     Assert(a != NULL);
     (args=a)->SetParentAll(this);
 }
+
+void PrintStmt::BuildScope(){ /* Implementar */ }
 
 

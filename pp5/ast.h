@@ -33,11 +33,14 @@
 #include "location.h"
 #include <iostream>
 
+class Scope;
+
 class Node 
 {
   protected:
     yyltype *location;
     Node *parent;
+    Scope *scope;
 
   public:
     Node(yyltype loc);
@@ -46,6 +49,7 @@ class Node
     yyltype *GetLocation()   { return location; }
     void SetParent(Node *p)  { parent = p; }
     Node *GetParent()        { return parent; }
+    Scope *GetScope()        { return scope; }
 };
    
 
@@ -57,6 +61,10 @@ class Identifier : public Node
   public:
     Identifier(yyltype loc, const char *name);
     friend std::ostream& operator<<(std::ostream& out, Identifier *id) { return out << id->name; }
+
+    const char* GetName() { return name; }
+
+    
 };
 
 

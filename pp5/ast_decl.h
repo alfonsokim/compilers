@@ -20,6 +20,9 @@ class NamedType;
 class Identifier;
 class Stmt;
 
+// ===================================================================
+// -------------------------------------------------------------------
+
 class Decl : public Node 
 {
   protected:
@@ -28,7 +31,15 @@ class Decl : public Node
   public:
     Decl(Identifier *name);
     friend std::ostream& operator<<(std::ostream& out, Decl *d) { return out << d->id; }
+
+    const char* GetName() { return id->GetName(); }
+
+    virtual void BuildScope() = 0;
+
 };
+
+// ===================================================================
+// -------------------------------------------------------------------
 
 class VarDecl : public Decl 
 {
@@ -37,7 +48,13 @@ class VarDecl : public Decl
     
   public:
     VarDecl(Identifier *name, Type *type);
+
+    void BuildScope() { } // Implementar en cc si es necesario
+
 };
+
+// ===================================================================
+// -------------------------------------------------------------------
 
 class ClassDecl : public Decl 
 {
@@ -49,7 +66,12 @@ class ClassDecl : public Decl
   public:
     ClassDecl(Identifier *name, NamedType *extends, 
               List<NamedType*> *implements, List<Decl*> *members);
+
+    void BuildScope() { } // Implementar en cc si es necesario
 };
+
+// ===================================================================
+// -------------------------------------------------------------------
 
 class InterfaceDecl : public Decl 
 {
@@ -58,7 +80,12 @@ class InterfaceDecl : public Decl
     
   public:
     InterfaceDecl(Identifier *name, List<Decl*> *members);
+
+    void BuildScope() { } // Implementar en cc si es necesario
 };
+
+// ===================================================================
+// -------------------------------------------------------------------
 
 class FnDecl : public Decl 
 {
@@ -70,6 +97,7 @@ class FnDecl : public Decl
   public:
     FnDecl(Identifier *name, Type *returnType, List<VarDecl*> *formals);
     void SetFunctionBody(Stmt *b);
+    void BuildScope();
 };
 
 #endif
