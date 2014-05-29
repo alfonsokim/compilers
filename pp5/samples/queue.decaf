@@ -26,12 +26,12 @@ class Queue {
   QueueItem head;
   
   void Init() {
-    this.head = New(QueueItem);
+    this.head = new QueueItem;
     this.head.Init(0, this.head, this.head);
   }
   void EnQueue(int i) {
     QueueItem temp;
-    temp = New(QueueItem);
+    temp = new QueueItem;
     temp.Init(i, this.head.GetNext(), this.head);
   }
   int DeQueue() {
@@ -53,7 +53,7 @@ class Queue {
 void main() {
   Queue q;
   int i;
-  q = New(Queue);
+  q = new Queue;
   q.Init();
   for (i = 0; i != 10; i = i + 1)
     q.EnQueue(i);

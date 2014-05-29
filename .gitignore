@@ -13,3 +13,5 @@ dpp
 *.out
 *.7z
 samples/tested
+samples_original/
+tmp.*

@@ -1,6 +1,12 @@
 /* File: parser.y
  * --------------
  * Bison input file to generate the parser for the compiler.
+ *
+ * pp5: add parser rules and tree construction from your past projects. 
+ *      You should not need to make any significant changes in the parser itself. 
+ *      After parsing completes, if no errors were found, the parser calls
+ *      program->Emit() to kick off the code generation pass. The
+ *      interesting work happens during the tree traversal.
  */
 
 %{
@@ -9,7 +15,7 @@
 #include "parser.h"
 #include "errors.h"
 
-void yyerror(char *); // standard error-handling routine
+void yyerror(const char *msg); // standard error-handling routine
 
 %}
 
@@ -99,10 +105,11 @@ Program   :    DeclList            {
                                       @1; 
                                       Program *program = new Program($1);
                                       // if no errors, advance to next phase
-                                      if (ReportError::NumErrors() == 0) {
+                                      if (ReportError::NumErrors() == 0) 
                                           program->Check(); 
+                                      // comment out prev line to skip semantic analysis
+                                      if (ReportError::NumErrors() == 0) 
                                           program->Emit();
-                                      }
                                     }
           ;
 
@@ -256,8 +263,8 @@ Expr      :    LValue               { $$ = $1; }
           |    T_ReadInteger '(' ')'   
                                     { $$ = new ReadIntegerExpr(Join(@1,@3)); }
           |    T_ReadLine '(' ')'   { $$ = new ReadLineExpr(Join(@1,@3)); }
-          |    T_New '(' T_Identifier ')'
-                                    { $$ = new NewExpr(Join(@1,@3),new NamedType(new Identifier(@3,$3))); }
+          |    T_New T_Identifier
+                                    { $$ = new NewExpr(Join(@1,@2),new NamedType(new Identifier(@2,$2))); }
           |    T_NewArray '(' Expr ',' Type ')' 
                                     { $$ = new NewArrayExpr(Join(@1,@6),$3, $5); }
           |    T_This               { $$ = new This(@1); }

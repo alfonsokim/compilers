@@ -1,7 +1,6 @@
 ## 
-## Simple makefile for decaf programming projects
+## Simple makefile for CS143 programming projects
 ##
-
 
 .PHONY: clean strip
 
@@ -12,13 +11,12 @@ PRODUCTS = $(COMPILER)
 default: $(PRODUCTS)
 
 # Set up the list of source and object files
-SRCS = ast.cc ast_decl.cc ast_expr.cc ast_stmt.cc ast_type.cc codegen.cc tac.cc mips.cc errors.cc utility.cc main.cc \
-	
+SRCS = ast.cc ast_decl.cc ast_expr.cc ast_stmt.cc ast_type.cc codegen.cc tac.cc mips.cc errors.cc utility.cc main.cc
 
 # OBJS can deal with either .cc or .c files listed in SRCS
 OBJS = y.tab.o lex.yy.o $(patsubst %.cc, %.o, $(filter %.cc,$(SRCS))) $(patsubst %.c, %.o, $(filter %.c, $(SRCS)))
 
-JUNK =  *.o lex.yy.c dpp.yy.c y.tab.c y.tab.h *.core core $(COMPILER).purify purify.log 
+JUNK =  *.o lex.yy.c dpp.yy.c y.tab.c y.tab.h *.core core *~
 
 # Define the tools we are going to use
 CC= g++
@@ -43,7 +41,7 @@ LEXFLAGS = -d
 # The -y flag means imitate yacc's output file naming conventions
 YACCFLAGS = -dvty
 
-# Link with standard c library, math library, and lex library
+# Link with standard C library, math library, and lex library
 LIBS = -lc -lm -ll
 
 # Rules for various parts of the target
@@ -66,9 +64,6 @@ y.tab.h y.tab.c: parser.y
 
 $(COMPILER) :  $(OBJS)
 	$(LD) -o $@ $(OBJS) $(LIBS)
-
-$(COMPILER).purify : $(OBJS)
-	purify -log-file=purify.log -cache-dir=/tmp/$(USER) -leaks-at-exit=no $(LD) -o $@ $(OBJS) $(LIBS)
 
 
 # This target is to build small for testing (no debugging info), removes
