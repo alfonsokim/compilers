@@ -29,13 +29,12 @@ Type::Type(const char *n) {
 }
 
 BuiltIn Type::GetPrint() {
-    if (IsEquivalentTo(Type::intType)) {
+    if (IsEquivalentTo(Type::intType))
         return PrintInt;
-    } else if (IsEquivalentTo(Type::stringType)) {
+    else if (IsEquivalentTo(Type::stringType))
         return PrintString;
-    } else if (IsEquivalentTo(Type::boolType)) {
+    else if (IsEquivalentTo(Type::boolType))
         return PrintBool;
-    }
 
     return NumBuiltIns;
 }
