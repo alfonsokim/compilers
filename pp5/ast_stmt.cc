@@ -13,27 +13,23 @@
 Scope *Program::gScope = new Scope;
 stack<const char*> *Program::gBreakLabels = new stack<const char*>;
 
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
+
 Scope::Scope() : table(new Hashtable<Decl*>) {
     // Empty
 }
 
-/* XXX: Only semantically valid programs will be tested, thus no semantic
+// -------------------------------------------------------------------------------- 
+/* PP5: Only semantically valid programs will be tested, thus no semantic
  * checking is performed here.
  */
 void Scope::AddDecl(Decl *d) {
     table->Enter(d->GetName(), d);
 }
 
-/*
-ostream& operator<<(ostream& out, Scope *s) {
-    out << "========== Scope ==========" << std::endl;
-    Iterator<Decl*> iter = s->table->GetIterator();
-    Decl *d;
-    while ((d = iter.GetNextValue()) != NULL)
-        out << d << std::endl;
-    return out;
-}
-*/
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
 
 Program::Program(List<Decl*> *d) : codeGenerator(new CodeGenerator) {
     Assert(d != NULL);
@@ -41,20 +37,21 @@ Program::Program(List<Decl*> *d) : codeGenerator(new CodeGenerator) {
     scope = gScope;
 }
 
+// -------------------------------------------------------------------------------- 
+
 void Program::Check() {
     /* You can use your pp3 semantic analysis or leave it out if
      * you want to avoid the clutter.  We won't test pp5 against
      * semantically-invalid programs.
      */
-    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         gScope->AddDecl(decls->Nth(i));
+    }
 
-    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         decls->Nth(i)->BuildScope();
+    }
 
-    /* XXX: Only semantically valid programs will be tested, thus no
-     * semantic checking is performed here.
-     */
 }
 
 void Program::Emit() {
@@ -69,30 +66,41 @@ void Program::Emit() {
 
     for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         VarDecl *d = dynamic_cast<VarDecl*>(decls->Nth(i));
-        if (d == NULL)
+        if (d == NULL) {
             continue;
+        }
 
         Location *loc = new Location(gpRelative, offset, d->GetName());
         d->SetMemLoc(loc);
         offset += d->GetMemBytes();
     }
 
-    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         decls->Nth(i)->PreEmit();
+    }
 
-    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         decls->Nth(i)->Emit(codeGenerator);
+    }
 
     codeGenerator->DoFinalCodeGen();
 }
+
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
 
 Stmt::Stmt() : Node() {
     scope = new Scope;
 }
 
+// --------------------------------------------------------------------------------
+
 Stmt::Stmt(yyltype loc) : Node(loc) {
     scope = new Scope;
 }
+
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
 
 StmtBlock::StmtBlock(List<VarDecl*> *d, List<Stmt*> *s) {
     Assert(d != NULL && s != NULL);
@@ -100,43 +108,59 @@ StmtBlock::StmtBlock(List<VarDecl*> *d, List<Stmt*> *s) {
     (stmts=s)->SetParentAll(this);
 }
 
+// --------------------------------------------------------------------------------
+
 void StmtBlock::BuildScope() {
-    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         scope->AddDecl(decls->Nth(i));
+    }
 
-    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         decls->Nth(i)->BuildScope();
+    }
 
-    for (int i = 0, n = stmts->NumElements(); i < n; ++i)
+    for (int i = 0, n = stmts->NumElements(); i < n; ++i) {
         stmts->Nth(i)->BuildScope();
+    }
 }
+
+// --------------------------------------------------------------------------------
 
 Location* StmtBlock::Emit(CodeGenerator *cg) {
     for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         VarDecl *d = dynamic_cast<VarDecl*>(decls->Nth(i));
-        if (d == NULL)
+        if (d == NULL) {
             continue;
+        }
         Location *loc = cg->GenLocalVar(d->GetName(), d->GetMemBytes());
         d->SetMemLoc(loc);
     }
 
-    for (int i = 0, n = stmts->NumElements(); i < n; ++i)
+    for (int i = 0, n = stmts->NumElements(); i < n; ++i) {
         stmts->Nth(i)->Emit(cg);
+    }
 
     return NULL;
 }
 
+// --------------------------------------------------------------------------------
+
 int StmtBlock::GetMemBytes() {
     int memBytes = 0;
 
-    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         memBytes += decls->Nth(i)->GetMemBytes();
+    }
 
-    for (int i = 0, n = stmts->NumElements(); i < n; ++i)
+    for (int i = 0, n = stmts->NumElements(); i < n; ++i) {
         memBytes += stmts->Nth(i)->GetMemBytes();
+    }
 
     return memBytes;
 }
+
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
 
 ConditionalStmt::ConditionalStmt(Expr *t, Stmt *b) {
     Assert(t != NULL && b != NULL);
@@ -144,14 +168,21 @@ ConditionalStmt::ConditionalStmt(Expr *t, Stmt *b) {
     (body=b)->SetParent(this);
 }
 
+// --------------------------------------------------------------------------------
+
 void ConditionalStmt::BuildScope() {
     test->BuildScope();
     body->BuildScope();
 }
 
+// --------------------------------------------------------------------------------
+
 void LoopStmt::BuildScope() {
     ConditionalStmt::BuildScope();
 }
+
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
 
 ForStmt::ForStmt(Expr *i, Expr *t, Expr *s, Stmt *b): LoopStmt(t, b) {
     Assert(i != NULL && t != NULL && s != NULL && b != NULL);
@@ -159,12 +190,17 @@ ForStmt::ForStmt(Expr *i, Expr *t, Expr *s, Stmt *b): LoopStmt(t, b) {
     (step=s)->SetParent(this);
 }
 
+// --------------------------------------------------------------------------------
+
 void ForStmt::BuildScope() {
     LoopStmt::BuildScope();
 
     init->BuildScope();
     step->BuildScope();
 }
+
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
 
 Location* ForStmt::Emit(CodeGenerator *cg) {
     const char* top = cg->NewLabel();
@@ -187,14 +223,21 @@ Location* ForStmt::Emit(CodeGenerator *cg) {
 
 }
 
+// --------------------------------------------------------------------------------
+
 int ForStmt::GetMemBytes() {
     return init->GetMemBytes() + test->GetMemBytes() +
            body->GetMemBytes() + step->GetMemBytes();
 }
 
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
+
 void WhileStmt::BuildScope() {
     LoopStmt::BuildScope();
 }
+
+// --------------------------------------------------------------------------------
 
 Location* WhileStmt::Emit(CodeGenerator *cg) {
     const char* top = cg->NewLabel();
@@ -214,9 +257,14 @@ Location* WhileStmt::Emit(CodeGenerator *cg) {
     return NULL;
 }
 
+// --------------------------------------------------------------------------------
+
 int WhileStmt::GetMemBytes() {
     return test->GetMemBytes() + body->GetMemBytes();
 }
+
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
 
 IfStmt::IfStmt(Expr *t, Stmt *tb, Stmt *eb): ConditionalStmt(t, tb) {
     Assert(t != NULL && tb != NULL); // else can be NULL
@@ -224,11 +272,15 @@ IfStmt::IfStmt(Expr *t, Stmt *tb, Stmt *eb): ConditionalStmt(t, tb) {
     if (elseBody) elseBody->SetParent(this);
 }
 
+// --------------------------------------------------------------------------------
+
 void IfStmt::BuildScope() {
     ConditionalStmt::BuildScope();
 
     if (elseBody) elseBody->BuildScope();
 }
+
+// --------------------------------------------------------------------------------
 
 Location* IfStmt::Emit(CodeGenerator *cg) {
     const char* els = cg->NewLabel();
@@ -245,76 +297,90 @@ Location* IfStmt::Emit(CodeGenerator *cg) {
     return NULL;
 }
 
+// --------------------------------------------------------------------------------
+
 int IfStmt::GetMemBytes() {
     int memBytes = test->GetMemBytes() + body->GetMemBytes();
     if (elseBody) memBytes += elseBody->GetMemBytes();
     return memBytes;
 }
 
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
+
 Location* BreakStmt::Emit(CodeGenerator *cg) {
     cg->GenGoto(Program::gBreakLabels->top());
     return NULL;
 }
 
+// --------------------------------------------------------------------------------
+
 int BreakStmt::GetMemBytes() {
     return 0;
 }
+
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
 
 ReturnStmt::ReturnStmt(yyltype loc, Expr *e) : Stmt(loc) {
     Assert(e != NULL);
     (expr=e)->SetParent(this);
 }
 
+// --------------------------------------------------------------------------------
+
 void ReturnStmt::BuildScope() {
     expr->BuildScope();
 }
 
 Location* ReturnStmt::Emit(CodeGenerator *cg) {
-    if (expr == NULL)
+    if (expr == NULL) {
         cg->GenReturn();
-    else
-        cg->GenReturn(expr->Emit(cg));
+    } else {
+        //cg->GenReturn(expr->Emit(cg));
+    }
 
     return NULL;
 }
 
 int ReturnStmt::GetMemBytes() {
-    if (expr == NULL)
-        return 0;
-    else
-        return expr->GetMemBytes();
+    return 0;
 }
+
+// ********************************************************************************
+// -------------------------------------------------------------------------------- 
 
 PrintStmt::PrintStmt(List<Expr*> *a) {
     Assert(a != NULL);
     (args=a)->SetParentAll(this);
 }
 
+// -------------------------------------------------------------------------------- 
+
 void PrintStmt::BuildScope() {
-    for (int i = 0, n = args->NumElements(); i < n; ++i)
+    for (int i = 0, n = args->NumElements(); i < n; ++i) {
         args->Nth(i)->BuildScope();
+    }
 }
+
+// -------------------------------------------------------------------------------- 
 
 Location* PrintStmt::Emit(CodeGenerator *cg) {
     for (int i = 0, n = args->NumElements(); i < n; ++i) {
         Expr *e = args->Nth(i);
         BuiltIn b = e->GetType()->GetPrint();
-        /* Print can only take ints, bools, or strings as parameters
-         * (remember, doubles need not be supported for PP4). GetPrint()
-         * should only return NumBuiltIns if the type is not an int, bool,
-         * or string. This should never happen.
-         */
-        Assert(b != NumBuiltIns);
-
         cg->GenBuiltInCall(b, e->Emit(cg));
     }
 
     return NULL;
 }
 
+// -------------------------------------------------------------------------------- 
+
 int PrintStmt::GetMemBytes() {
     int memBytes = 0;
-    for (int i = 0, n = args->NumElements(); i < n; ++i)
+    for (int i = 0, n = args->NumElements(); i < n; ++i) { 
         memBytes += args->Nth(i)->GetMemBytes();
+    }
    return memBytes;
 }
