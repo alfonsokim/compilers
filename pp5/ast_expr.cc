@@ -15,15 +15,17 @@
 
 Decl* Expr::GetFieldDecl(Identifier *field, Expr *b) {
 
-    if (b != NULL)
+    if (b != NULL) {
         return GetFieldDecl(field, b->GetType());
+    }
 
     Decl *d = GetFieldDecl(field, static_cast<Node*>(this));
 
     if (d == NULL) {
         ClassDecl *classDecl = GetClassDecl();
-        if (classDecl != NULL)
+        if (classDecl != NULL) {
             d = GetFieldDecl(field, classDecl->GetType());
+        }
     }
 
     return d;
@@ -34,8 +36,9 @@ Decl* Expr::GetFieldDecl(Identifier *field, Expr *b) {
 Decl* Expr::GetFieldDecl(Identifier *field, Node *n) {
     while (n != NULL) {
         Decl *d = n->GetScope()->table->Lookup(field->GetName());
-        if (d != NULL)
+        if (d != NULL) {
             return d;
+        }
         n = n->GetParent();
     }
     return NULL;
@@ -49,13 +52,17 @@ Decl* Expr::GetFieldDecl(Identifier *field, Type *t) {
     while (t != NULL) {
         Decl *tDecl = Program::gScope->table->Lookup(t->GetName());
         Decl *d = tDecl->GetScope()->table->Lookup(field->GetName());
-        if (d != NULL)
+        /*
+        if (d != NULL) {
             return d;
+        }
+        */
 
-        if (dynamic_cast<ClassDecl*>(tDecl))
+        if (dynamic_cast<ClassDecl*>(tDecl)) {
             t = static_cast<ClassDecl*>(tDecl)->GetExtends();
-        else
+        } else {
             break;
+        }
     }
     return NULL;
 }
@@ -63,14 +70,6 @@ Decl* Expr::GetFieldDecl(Identifier *field, Type *t) {
 // -------------------------------------------------------------------------------- 
 
 ClassDecl* Expr::GetClassDecl() {
-    /*
-    Node *n = this;
-    while (n != NULL) {
-        if (dynamic_cast<ClassDecl*>(n))
-            return static_cast<ClassDecl*>(n);
-        n = n->GetParent();
-    }
-    */
     return NULL;
 }
 
@@ -78,7 +77,6 @@ ClassDecl* Expr::GetClassDecl() {
 
 Location* Expr::GetThisLoc() {
     return NULL;
-    //return new Location(fpRelative, CodeGenerator::OffsetToFirstParam, "this");
 }
 
 // ********************************************************************************
@@ -212,8 +210,7 @@ Operator::Operator(yyltype loc, const char *tok) : Node(loc) {
 
 // -------------------------------------------------------------------------------- 
 
-CompoundExpr::CompoundExpr(Expr *l, Operator *o, Expr *r)
-  : Expr(Join(l->GetLocation(), r->GetLocation())) {
+CompoundExpr::CompoundExpr(Expr *l, Operator *o, Expr *r) : Expr(Join(l->GetLocation(), r->GetLocation())) {
     Assert(l != NULL && o != NULL && r != NULL);
     (op=o)->SetParent(this);
     (left=l)->SetParent(this);
@@ -379,7 +376,6 @@ Location* EqualityExpr::Emit(CodeGenerator *cg) {
         return EmitEqual(cg);
     } else if (strcmp("!=", tok) == 0) {
         return NULL;
-        //return EmitNotEqual(cg);
     }
 
     return NULL;
@@ -392,8 +388,6 @@ int EqualityExpr::GetMemBytes() {
 
     if (strcmp("==", tok) == 0) {
         return GetMemBytesEqual();
-    } else if (strcmp("!=", tok) == 0) {
-        return GetMemBytesNotEqual();
     }
 
     return 0;
@@ -421,29 +415,6 @@ int EqualityExpr::GetMemBytesEqual() {
 // -------------------------------------------------------------------------------- 
 
 Location* EqualityExpr::EmitNotEqual(CodeGenerator *cg) {
-/*
-    const char* ret_zro = cg->NewLabel();
-    const char* ret_one = cg->NewLabel();
-    Location *ret = cg->GenTempVar();
-
-    Location *ltmp = left->Emit(cg);
-    Location *rtmp = right->Emit(cg);
-
-    Location *equal;
-    if (left->GetType()->IsEquivalentTo(Type::stringType))
-        equal = cg->GenBuiltInCall(StringEqual, ltmp, rtmp);
-    else
-        equal = cg->GenBinaryOp("==", ltmp, rtmp);
-
-    cg->GenIfZ(equal, ret_one);
-    cg->GenAssign(ret, cg->GenLoadConstant(0));
-    cg->GenGoto(ret_zro);
-    cg->GenLabel(ret_one);
-    cg->GenAssign(ret, cg->GenLoadConstant(1));
-    cg->GenLabel(ret_zro);
-
-    return ret;
-*/
     return NULL;
 }
 
@@ -471,7 +442,6 @@ Location* LogicalExpr::Emit(CodeGenerator *cg) {
         return EmitOr(cg);
     } else if (strcmp("!", tok) == 0) {
         return NULL;
-        //return EmitNot(cg);
     }
 
     return 0;
@@ -486,8 +456,6 @@ int LogicalExpr::GetMemBytes() {
         return GetMemBytesAnd();
     } else if (strcmp("||", tok) == 0) {
         return GetMemBytesOr();
-    } else if (strcmp("!", tok) == 0) {
-        return GetMemBytesNot();
     }
 
     return 0;
@@ -526,22 +494,6 @@ int LogicalExpr::GetMemBytesOr() {
 // -------------------------------------------------------------------------------- 
 
 Location* LogicalExpr::EmitNot(CodeGenerator *cg) {
-/*
-    const char* ret_zro = cg->NewLabel();
-    const char* ret_one = cg->NewLabel();
-    Location *ret = cg->GenTempVar();
-
-    Location *rtmp = right->Emit(cg);
-
-    cg->GenIfZ(rtmp, ret_one);
-    cg->GenAssign(ret, cg->GenLoadConstant(0));
-    cg->GenGoto(ret_zro);
-    cg->GenLabel(ret_one);
-    cg->GenAssign(ret, cg->GenLoadConstant(1));
-    cg->GenLabel(ret_zro);
-
-    return ret;
-*/
     return NULL;
 }
 
@@ -564,10 +516,6 @@ Location* AssignExpr::Emit(CodeGenerator *cg) {
     Location *rtemp = right->Emit(cg);
     LValue *lval = dynamic_cast<LValue*>(left);
 
-    if (lval != NULL) {
-        return lval->EmitStore(cg, rtemp);
-    }
-
     Location *ltemp = left->Emit(cg);
     cg->GenAssign(ltemp, rtemp);
     return ltemp;
@@ -577,26 +525,18 @@ Location* AssignExpr::Emit(CodeGenerator *cg) {
 
 int AssignExpr::GetMemBytes() {
     LValue *lval = dynamic_cast<LValue*>(left);
-    if (lval != NULL)
-        return right->GetMemBytes() + lval->GetMemBytesStore();
-
     return right->GetMemBytes() + left->GetMemBytes();
 }
 
 // -------------------------------------------------------------------------------- 
 
 Type* This::GetType() {
-/*
-    ClassDecl *d = GetClassDecl();
-    Assert(d != NULL);
-    return d->GetType();
-*/
+    return NULL;
 }
 
 // -------------------------------------------------------------------------------- 
 
 Location* This::Emit(CodeGenerator *cg) {
-    //return GetThisLoc();
     return NULL;
 }
 
@@ -634,11 +574,6 @@ int ArrayAccess::GetMemBytes() {
 // -------------------------------------------------------------------------------- 
 
 Location* ArrayAccess::EmitStore(CodeGenerator *cg, Location *val) {
-    /*
-    Location *addr = EmitAddr(cg);
-    cg->GenStore(addr, val);
-    return cg->GenLoad(addr);
-    */
     return NULL;
 }
 
@@ -703,12 +638,8 @@ int ArrayAccess::GetMemBytesRuntimeSubscriptCheck() {
 // ********************************************************************************
 // -------------------------------------------------------------------------------- 
 
-FieldAccess::FieldAccess(Expr *b, Identifier *f)
-  : LValue(b? Join(b->GetLocation(), f->GetLocation()) : *f->GetLocation()) {
+FieldAccess::FieldAccess(Expr *b, Identifier *f) : LValue(b? Join(b->GetLocation(), f->GetLocation()) : *f->GetLocation()) {
     base = b;
-    if (base) {
-        base->SetParent(this);
-    } 
     (field=f)->SetParent(this);
 }
 
@@ -726,7 +657,7 @@ Location* FieldAccess::Emit(CodeGenerator *cg) {
     FieldAccess *baseAccess = dynamic_cast<FieldAccess*>(base);
     VarDecl *fieldDecl = GetDecl();
     Assert(fieldDecl != NULL);
-
+    
     if (baseAccess == NULL) {
         return EmitMemLoc(cg, fieldDecl);
     }
@@ -743,10 +674,6 @@ int FieldAccess::GetMemBytes() {
     FieldAccess *baseAccess = dynamic_cast<FieldAccess*>(base);
     VarDecl *fieldDecl = GetDecl();
     Assert(fieldDecl != NULL);
-
-    if (baseAccess == NULL)
-        return GetMemBytesMemLoc(fieldDecl);
-
     return CodeGenerator::VarSize;
 }
 
@@ -756,10 +683,6 @@ Location* FieldAccess::EmitStore(CodeGenerator *cg, Location *val) {
     FieldAccess *baseAccess = dynamic_cast<FieldAccess*>(base);
     VarDecl *fieldDecl = GetDecl();
     Assert(fieldDecl != NULL);
-
-    if (baseAccess == NULL) {
-        return EmitMemLocStore(cg, val, fieldDecl);
-    }
 
     VarDecl *baseDecl = baseAccess->GetDecl();
     Assert(baseDecl != NULL);
@@ -775,11 +698,6 @@ int FieldAccess::GetMemBytesStore() {
     FieldAccess *baseAccess = dynamic_cast<FieldAccess*>(base);
     VarDecl *fieldDecl = GetDecl();
     Assert(fieldDecl != NULL);
-
-    if (baseAccess == NULL) {
-        return GetMemBytesMemLocStore(fieldDecl);
-    }
-
     return 0;
 }
 
@@ -788,7 +706,6 @@ int FieldAccess::GetMemBytesStore() {
 VarDecl* FieldAccess::GetDecl() {
     Decl *d = GetFieldDecl(field, base);
     return dynamic_cast<VarDecl*>(d);
-
 }
 
 // -------------------------------------------------------------------------------- 
@@ -797,10 +714,6 @@ Location* FieldAccess::EmitMemLoc(CodeGenerator *cg, VarDecl *fieldDecl) {
     Location *loc = fieldDecl->GetMemLoc();
     if (loc != NULL)
         return loc;
-
-    /* If loc == NULL, it is assumed that the base is implicitly or explicitly
-     * the 'this' pointer.
-     */
     Location *This = GetThisLoc();
     return cg->GenLoad(This, fieldDecl->GetMemOffset());
 }
@@ -808,13 +721,6 @@ Location* FieldAccess::EmitMemLoc(CodeGenerator *cg, VarDecl *fieldDecl) {
 // -------------------------------------------------------------------------------- 
 
 int FieldAccess::GetMemBytesMemLoc(VarDecl *fieldDecl) {
-/*
-    Location *loc = fieldDecl->GetMemLoc();
-    if (loc != NULL) {
-        return 0;
-    }
-    return CodeGenerator::VarSize;
-*/
     return 0;
 }
 
@@ -823,11 +729,6 @@ int FieldAccess::GetMemBytesMemLoc(VarDecl *fieldDecl) {
 Location* FieldAccess::EmitMemLocStore(CodeGenerator *cg, Location *val,
                                        VarDecl *fieldDecl) {
     Location *loc = fieldDecl->GetMemLoc();
-    if (loc != NULL) {
-        cg->GenAssign(loc, val);
-        return loc;
-    }
-
     Location *This = GetThisLoc();
     cg->GenStore(This, val, fieldDecl->GetMemOffset());
     return This;
@@ -843,10 +744,6 @@ int FieldAccess::GetMemBytesMemLocStore(VarDecl *fieldDecl) {
 // -------------------------------------------------------------------------------- 
 
 Call::Call(yyltype loc, Expr *b, Identifier *f, List<Expr*> *a) : Expr(loc)  {
-    base = b;
-    if (base) {
-      base->SetParent(this);  
-    } 
     (field=f)->SetParent(this);
     (actuals=a)->SetParentAll(this);
 }
@@ -854,10 +751,6 @@ Call::Call(yyltype loc, Expr *b, Identifier *f, List<Expr*> *a) : Expr(loc)  {
 // -------------------------------------------------------------------------------- 
 
 Type* Call::GetType() {
-    if (IsArrayLengthCall()) {
-        return Type::intType;
-    }
-
     FnDecl *d = GetDecl();
     Assert(d != NULL);
     return d->GetType();
@@ -866,10 +759,6 @@ Type* Call::GetType() {
 // -------------------------------------------------------------------------------- 
 
 Location* Call::Emit(CodeGenerator *cg) {
-    if (IsArrayLengthCall()) {
-        return EmitArrayLength(cg);
-    }
-
     return EmitLabel(cg);
 }
 
@@ -903,13 +792,8 @@ Location* Call::EmitLabel(CodeGenerator *cg) {
 
         cg->GenPopParams(n * CodeGenerator::VarSize);
     } else {
+        
         Location *b;
-        if (base != NULL) {
-            b = base->Emit(cg);
-        } else {
-            b = GetThisLoc();
-        }
-
         cg->GenPushParam(b);
         ret = EmitDynamicDispatch(cg, b);
 
@@ -978,40 +862,13 @@ FnDecl* Call::GetDecl() {
 // -------------------------------------------------------------------------------- 
 
 bool Call::IsArrayLengthCall() {
-/*
-    if (base == NULL) {
-        return false;
-    }
-
-    if (dynamic_cast<ArrayType*>(base->GetType()) == NULL) {
-        return false;
-    }
-
-    if (strcmp("length", field->GetName()) != 0) {
-        return false;
-    }
-*/
     return true;
 }
 
 // -------------------------------------------------------------------------------- 
 
 bool Call::IsMethodCall() {
-    if (base != NULL) {
-        return true;
-    }
-
-    ClassDecl *c = GetClassDecl();
-    if (c == NULL) {
-        return false;
-    }
-
-    FnDecl *f = dynamic_cast<FnDecl*>(GetFieldDecl(field, c->GetType()));
-    if (f == NULL) {
-        return false;
-    }
-
-    return true;
+    return false;
 }
 
 // ********************************************************************************
@@ -1094,19 +951,6 @@ int NewArrayExpr::GetMemBytes() {
 // -------------------------------------------------------------------------------- 
 
 Location* NewArrayExpr::EmitRuntimeSizeCheck(CodeGenerator *cg, Location *siz) {
-/*
-    Location *zro = cg->GenLoadConstant(0);
-
-    Location *lessZro = cg->GenBinaryOp("<", siz, zro);
-    Location *equlZro = cg->GenBinaryOp("==", siz, zro);
-    Location *lessEqulZro = cg->GenBinaryOp("||", lessZro, equlZro);
-
-    const char *passCheck = cg->NewLabel();
-    cg->GenIfZ(lessEqulZro, passCheck);
-    cg->GenBuiltInCall(PrintString, cg->GenLoadConstant(err_arr_bad_size));
-    cg->GenBuiltInCall(Halt);
-    cg->GenLabel(passCheck);
-*/
     return NULL;
 }
 
