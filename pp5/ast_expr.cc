@@ -542,8 +542,8 @@ int ArrayAccess::GetMemBytesRuntimeSubscriptCheck() {
 FieldAccess::FieldAccess(Expr *b, Identifier *f)
   : LValue(b? Join(b->GetLocation(), f->GetLocation()) : *f->GetLocation()) {
     Assert(f != NULL); // b can be be NULL (just means no explicit base)
-    base = b;
-    if (base) base->SetParent(this);
+    //base = b;
+    //if (base) base->SetParent(this);
     (field=f)->SetParent(this);
 }
 
@@ -568,6 +568,9 @@ Location* FieldAccess::Emit(CodeGenerator *cg) {
 }
 
 int FieldAccess::GetMemBytes() {
+    VarDecl *fieldDecl = GetDecl();
+    return GetMemBytesMemLoc(fieldDecl);
+    /*
     FieldAccess *baseAccess = dynamic_cast<FieldAccess*>(base);
     VarDecl *fieldDecl = GetDecl();
     Assert(fieldDecl != NULL);
@@ -576,6 +579,7 @@ int FieldAccess::GetMemBytes() {
         return GetMemBytesMemLoc(fieldDecl);
 
     return CodeGenerator::VarSize;
+    */
 }
 
 Location* FieldAccess::EmitStore(CodeGenerator *cg, Location *val) {
@@ -653,8 +657,8 @@ int FieldAccess::GetMemBytesMemLocStore(VarDecl *fieldDecl) {
 
 Call::Call(yyltype loc, Expr *b, Identifier *f, List<Expr*> *a) : Expr(loc)  {
     Assert(f != NULL && a != NULL); // b can be be NULL (just means no explicit base)
-    base = b;
-    if (base) base->SetParent(this);
+    //base = b;
+    //if (base) base->SetParent(this);
     (field=f)->SetParent(this);
     (actuals=a)->SetParentAll(this);
 }
