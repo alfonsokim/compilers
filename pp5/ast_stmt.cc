@@ -196,23 +196,6 @@ void ForStmt::BuildScope() {
 // --------------------------------------------------------------------------
 
 Location* ForStmt::Emit(CodeGenerator *cg) {
-    /*
-    const char* top = cg->NewLabel();
-    const char* bot = cg->NewLabel();
-
-    Program::gBreakLabels->push(bot);
-
-    init->Emit(cg);
-    cg->GenLabel(top);
-    Location *t = test->Emit(cg);
-    cg->GenIfZ(t, bot);
-    body->Emit(cg);
-    step->Emit(cg);
-    cg->GenGoto(top);
-    cg->GenLabel(bot);
-
-    Program::gBreakLabels->pop();
-    */
     return NULL;
 
 }
@@ -343,7 +326,6 @@ Location* ReturnStmt::Emit(CodeGenerator *cg) {
     } else {
         cg->GenReturn(expr->Emit(cg));
     }
-
     return NULL;
 }
 
@@ -383,7 +365,6 @@ Location* PrintStmt::Emit(CodeGenerator *cg) {
 
         cg->GenBuiltInCall(b, e->Emit(cg));
     }
-
     return NULL;
 }
 
