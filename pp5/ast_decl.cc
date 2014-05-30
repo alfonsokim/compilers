@@ -25,9 +25,12 @@ int VarDecl::GetMemBytes() {
 ClassDecl::ClassDecl(Identifier *n, NamedType *ex, List<NamedType*> *imp, List<Decl*> *m) : Decl(n) {
     // extends can be NULL, impl & mem may be empty lists but cannot be NULL
     Assert(n != NULL && imp != NULL && m != NULL);
-    extends = ex;
-    if (extends) extends->SetParent(this);
-    (implements=imp)->SetParentAll(this);
+    //extends = ex;
+    //if (extends) extends->SetParent(this);
+    //(implements=imp)->SetParentAll(this);
+    extends = NULL;
+    implements = new List<NamedType*>();
+    implements->SetParentAll(this);
     (members=m)->SetParentAll(this);
 
 }

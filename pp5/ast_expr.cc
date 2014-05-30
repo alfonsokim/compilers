@@ -570,11 +570,12 @@ Location* FieldAccess::Emit(CodeGenerator *cg) {
 int FieldAccess::GetMemBytes() {
     FieldAccess *baseAccess = dynamic_cast<FieldAccess*>(base);
     VarDecl *fieldDecl = GetDecl();
+    /*
     Assert(fieldDecl != NULL);
 
     if (baseAccess == NULL)
         return GetMemBytesMemLoc(fieldDecl);
-
+*/
     return CodeGenerator::VarSize;
 }
 
@@ -598,11 +599,12 @@ Location* FieldAccess::EmitStore(CodeGenerator *cg, Location *val) {
 int FieldAccess::GetMemBytesStore() {
     FieldAccess *baseAccess = dynamic_cast<FieldAccess*>(base);
     VarDecl *fieldDecl = GetDecl();
+    /*
     Assert(fieldDecl != NULL);
 
     if (baseAccess == NULL)
         return GetMemBytesMemLocStore(fieldDecl);
-
+    */
     return 0;
 }
 
