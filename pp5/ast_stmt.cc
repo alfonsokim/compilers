@@ -105,14 +105,17 @@ StmtBlock::StmtBlock(List<VarDecl*> *d, List<Stmt*> *s) {
 // --------------------------------------------------------------------------
 
 void StmtBlock::BuildScope() {
-    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         scope->AddDecl(decls->Nth(i));
+    }
 
-    for (int i = 0, n = decls->NumElements(); i < n; ++i)
+    for (int i = 0, n = decls->NumElements(); i < n; ++i) {
         decls->Nth(i)->BuildScope();
+    }
 
-    for (int i = 0, n = stmts->NumElements(); i < n; ++i)
+    for (int i = 0, n = stmts->NumElements(); i < n; ++i) {
         stmts->Nth(i)->BuildScope();
+    }
 }
 
 // --------------------------------------------------------------------------
@@ -193,6 +196,7 @@ void ForStmt::BuildScope() {
 // --------------------------------------------------------------------------
 
 Location* ForStmt::Emit(CodeGenerator *cg) {
+    /*
     const char* top = cg->NewLabel();
     const char* bot = cg->NewLabel();
 
@@ -208,7 +212,7 @@ Location* ForStmt::Emit(CodeGenerator *cg) {
     cg->GenLabel(bot);
 
     Program::gBreakLabels->pop();
-
+    */
     return NULL;
 
 }
