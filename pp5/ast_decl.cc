@@ -7,27 +7,35 @@
 #include "ast_stmt.h"
 #include "codegen.h"
 
+// **************************************************************************
+// --------------------------------------------------------------------------
+
 Decl::Decl(Identifier *n) : Node(*n->GetLocation()) {
     Assert(n != NULL);
     (id=n)->SetParent(this);
     scope = new Scope;
 }
 
+// **************************************************************************
+// --------------------------------------------------------------------------
+
 VarDecl::VarDecl(Identifier *n, Type *t) : Decl(n) {
     Assert(n != NULL && t != NULL);
     (type=t)->SetParent(this);
 }
 
+// --------------------------------------------------------------------------
+
 int VarDecl::GetMemBytes() {
     return CodeGenerator::VarSize;
 }
 
+// **************************************************************************
+// --------------------------------------------------------------------------
+
 ClassDecl::ClassDecl(Identifier *n, NamedType *ex, List<NamedType*> *imp, List<Decl*> *m) : Decl(n) {
     // extends can be NULL, impl & mem may be empty lists but cannot be NULL
     Assert(n != NULL && imp != NULL && m != NULL);
-    //extends = ex;
-    //if (extends) extends->SetParent(this);
-    //(implements=imp)->SetParentAll(this);
     extends = NULL;
     implements = new List<NamedType*>();
     implements->SetParentAll(this);
@@ -35,9 +43,13 @@ ClassDecl::ClassDecl(Identifier *n, NamedType *ex, List<NamedType*> *imp, List<D
 
 }
 
+// --------------------------------------------------------------------------
+
 NamedType* ClassDecl::GetType() {
     return new NamedType(id);
 }
+
+// --------------------------------------------------------------------------
 
 void ClassDecl::BuildScope() {
     for (int i = 0, n = members->NumElements(); i < n; ++i) {
@@ -48,6 +60,8 @@ void ClassDecl::BuildScope() {
         members->Nth(i)->BuildScope();
     }
 }
+
+// --------------------------------------------------------------------------
 
 void ClassDecl::PreEmit() {
     int memOffset = CodeGenerator::OffsetToFirstField;
@@ -84,6 +98,8 @@ void ClassDecl::PreEmit() {
     }
 }
 
+// --------------------------------------------------------------------------
+
 Location* ClassDecl::Emit(CodeGenerator *cg) {
     for (int i = 0, n = members->NumElements(); i < n; ++i) {
         members->Nth(i)->Emit(cg);
@@ -99,6 +115,8 @@ Location* ClassDecl::Emit(CodeGenerator *cg) {
 
     return NULL;
 }
+
+// --------------------------------------------------------------------------
 
 int ClassDecl::GetMemBytes() {
     int memBytes = 0;
@@ -116,6 +134,8 @@ int ClassDecl::GetMemBytes() {
     return memBytes;
 }
 
+// --------------------------------------------------------------------------
+
 int ClassDecl::GetVTblBytes() {
     int vtblBytes = 0;
 
@@ -130,6 +150,8 @@ int ClassDecl::GetVTblBytes() {
 
     return vtblBytes;
 }
+
+// --------------------------------------------------------------------------
 
 List<FnDecl*>* ClassDecl::GetMethodDecls() {
     List<FnDecl*> *decls = new List<FnDecl*>;
@@ -165,10 +187,16 @@ List<FnDecl*>* ClassDecl::GetMethodDecls() {
     return decls;
 }
 
+// **************************************************************************
+// --------------------------------------------------------------------------
+
 InterfaceDecl::InterfaceDecl(Identifier *n, List<Decl*> *m) : Decl(n) {
     Assert(n != NULL && m != NULL);
-    (members=m)->SetParentAll(this);
+    members = m = new List<Decl*>();
+    //(members=m)->SetParentAll(this);
 }
+
+// --------------------------------------------------------------------------
 
 void InterfaceDecl::BuildScope() {
     for (int i = 0, n = members->NumElements(); i < n; ++i) {
@@ -180,28 +208,40 @@ void InterfaceDecl::BuildScope() {
     }
 }
 
+// **************************************************************************
+// --------------------------------------------------------------------------
+
 FnDecl::FnDecl(Identifier *n, Type *r, List<VarDecl*> *d) : Decl(n) {
     Assert(n != NULL && r!= NULL && d != NULL);
     (returnType=r)->SetParent(this);
     (formals=d)->SetParentAll(this);
     body = NULL;
     label = new std::string(GetName());
-    if (*label != "main")
-        label->insert(0, "____"); // Prefix function labels to avoid conflicts
+    if (*label != "main") {
+        label->insert(0, "____");
+    }
     isMethod = false;
 }
+
+// --------------------------------------------------------------------------
 
 void FnDecl::SetFunctionBody(Stmt *b) {
     (body=b)->SetParent(this);
 }
 
+// --------------------------------------------------------------------------
+
 const char* FnDecl::GetLabel() {
     return label->c_str();
 }
 
+// --------------------------------------------------------------------------
+
 bool FnDecl::HasReturnVal() {
     return returnType == Type::voidType ? 0 : 1;
 }
+
+// --------------------------------------------------------------------------
 
 void FnDecl::BuildScope() {
     for (int i = 0, n = formals->NumElements(); i < n; ++i) {
@@ -216,6 +256,8 @@ void FnDecl::BuildScope() {
         body->BuildScope();  
     } 
 }
+
+// --------------------------------------------------------------------------
 
 Location* FnDecl::Emit(CodeGenerator *cg) {
     int offset = CodeGenerator::OffsetToFirstParam;
@@ -241,9 +283,13 @@ Location* FnDecl::Emit(CodeGenerator *cg) {
     return NULL;
 }
 
+// --------------------------------------------------------------------------
+
 int FnDecl::GetVTblBytes() {
     return CodeGenerator::VarSize;
 }
+
+// --------------------------------------------------------------------------
 
 void FnDecl::AddLabelPrefix(const char *p) {
     label->insert(0, p);
