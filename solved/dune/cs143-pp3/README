@@ -1,0 +1,88 @@
+************************************
+* CS 143 - Compilers - Summer 2011 *
+************************************
+
+Programming Project 3: Semantic Analysis
+----------------------------------------
+
+Homepage: http://github.com/dunecn/cs143-pp3
+
+Author: Prakash Surya <surya1@llnl.gov>
+
+Goal:
+
+In the third programming project your job is to implement a semantic analyzer
+for your compiler. We're now at the penultimate phase of the front end. If we
+confirm the source program is free from compile-time errors, we're ready to
+generate code!
+
+Design Decisions:
+
+The semantic analyzer was implemented with essentially two phases. The first
+phase gathers all of the declarations into a tree like data structure, and the
+second phase goes through and checks each node for typing and scope issues.
+Without the two separate phases, all classes, function, interfaces, etc. would
+have to be declared before they are used.
+
+The first phase of the analyzer is implemented almost solely using each class's
+BuildScope method. This method creates a new scope for each declaration, adds
+the required declarations to the scope, and sets up this new scope's parent
+scope pointer. The pointer to the parent scope allows the analyzer to travel up
+the scope hierarchy when it is searching for declarations and the like.
+
+The second phase of the analyzer is implemented using each class's Check
+method. For each declaration, this method will in turn call each sub
+declaration's and sub statement's Check method. It will also do any node
+specific checking to ensure type correctness and ensure statements are well
+formed.
+
+Polymorphism and Inheritance were utilized to try and make the implementation
+clean and extensible. Although, as unexpected issue arose, the code quickly
+became more spaghetti like than one would prefer. Thus, due to the poor initial
+design, many ugly hacks were introduced to get the test cases to pass.
+
+Building:
+
+To build the parser, the following are known dependences: make, flex, bison,
+and gcc. Once those dependencies are properly installed, simply type 'make'
+from within the top level directory. This should output the 'dcc' executable,
+this is the parser.
+
+Usage:
+
+The compiler reads input from stdin, and outputs to stdout and stderr. Thus, it
+can be run interactively simply by executing the parser:
+
+        $ ./dcc
+
+In this mode, dcc will read in the text typed into the terminal and parsed and
+analyzed when it encounters the EOF character. To exit while in this mode,
+input the EOF character (Ctrl+D on most systems). Alternatively, a file can be
+redirected into the program using standard shell redirection syntax:
+
+        $ ./dcc < main.decaf
+
+In this mode, dcc will read in the file and parse it line by line. In both
+of these modes, dcc will send normal output to stdout and error messages to
+stderr.
+
+Regression Testing:
+
+As active development continues, it is important to ensure the parser
+maintains it's proper behavior. Thus, the check.sh script, in conjunction with
+test cases within the samples directory can be used. To run the regression
+suite, simply execute the shell script:
+
+        $ ./check.sh
+
+This will try to execute the full regression suite contained in the samples
+directory, and output whether dcc passed or failed a specific test. On failure,
+a diff of the actual output with the expected output will also be displayed.
+
+When adding new regression test cases, make sure two files are created for each
+test case and are added to the samples directory. The input file fed to dcc
+should have a file extension of either 'decaf' or 'frag', and the expected
+output file should have a file extension of 'out'. Also, the input file and
+expected output file for each test need to have a common base filename. Please
+see the existing test cases contained in the samples directory if more
+clarification is needed.
