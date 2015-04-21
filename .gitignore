@@ -17,3 +17,8 @@ samples_original/
 tmp.*
 revision
 varios_pp5
+
+# Codigo generado
+*.s
+*.asm
+test 

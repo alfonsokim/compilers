@@ -45,7 +45,18 @@ class Mips {
     void SpillRegister(Location *dst, Register reg);
 
     void EmitCallInstr(Location *dst, const char *fn, bool isL);
-    
+
+    /*
+     * Funciones 'nativas' que no existen en la version de MIPS (SPIM)
+     * Tesis AK - MCC
+     */
+    void EmitReadLine();
+    void EmitReadInteger();
+    void EmitStringEqual();
+    void EmitPrintInt();
+    void EmitPrintString();
+    void EmitPrintBool();
+
     static const char *mipsName[BinaryOp::NumOps];
     static const char *NameForTac(BinaryOp::OpCode code);
 
@@ -82,6 +93,8 @@ class Mips {
     void EmitVTable(const char *label, List<const char*> *methodLabels);
 
     void EmitPreamble();
+
+    void EmitMissingBuiltins();
 };
 
 

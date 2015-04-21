@@ -280,6 +280,73 @@ void Mips::EmitCallInstr(Location *result, const char *fn, bool isLabel)
   }
 }
 
+/* Method: EmitReadLine
+ * ---------------------
+ * Funcion nativa que no esta presente en la version de SPIM
+ */
+/*
+  {"_ReadLine", 0, true},
+  {"_ReadInteger", 0, true},
+  {"_StringEqual", 2, true},
+  {"_PrintInt", 1, false},
+  {"_PrintString", 1, false},
+  {"_PrintBool", 1, false},
+*/
+void Mips::EmitReadLine() {
+    Emit("_ReadLine:\t\t# Funcion nativa faltante: _ReadLine");
+    // Aqui va la implementacion del metodo =(
+    Emit("\tjr $ra\t\t# return from function");
+}
+
+/* Method: EmitReadLine
+ * ---------------------
+ * Funcion nativa que no esta presente en la version de SPIM
+ */
+void Mips::EmitReadInteger() {
+    Emit("_ReadInteger:\t\t# Funcion nativa faltante: _ReadInteger");
+    // Aqui va la implementacion del metodo =(
+    Emit("\tjr $ra\t\t# return from function");
+}
+
+/* Method: EmitReadLine
+ * ---------------------
+ * Funcion nativa que no esta presente en la version de SPIM
+ */
+void Mips::EmitStringEqual() {
+    Emit("_StringEqual:\t\t# Funcion nativa faltante: _StringEqual");
+    // Aqui va la implementacion del metodo =(
+    Emit("\tjr $ra\t\t# return from function");
+}
+
+/* Method: EmitReadLine
+ * ---------------------
+ * Funcion nativa que no esta presente en la version de SPIM
+ */
+void Mips::EmitPrintInt() {
+    Emit("_PrintInt:\t\t# Funcion nativa faltante: _PrintInt");
+    // Aqui va la implementacion del metodo =(
+    Emit("\tjr $ra\t\t# return from function");
+}
+
+/* Method: EmitReadLine
+ * ---------------------
+ * Funcion nativa que no esta presente en la version de SPIM
+ */
+void Mips::EmitPrintString() {
+    Emit("_PrintString:\t\t# Funcion nativa faltante: _PrintString");
+    // Aqui va la implementacion del metodo =(
+    Emit("\tjr $ra\t\t# return from function");
+}
+
+/* Method: EmitReadLine
+ * ---------------------
+ * Funcion nativa que no esta presente en la version de SPIM
+ */
+void Mips::EmitPrintBool() {
+    Emit("_PrintBool:\t\t# Funcion nativa faltante: _PrintBool");
+    // Aqui va la implementacion del metodo =(
+    Emit("\tjr $ra\t\t# return from function");
+}
 
 // Two covers for the above method for specific LCall/ACall variants
 void Mips::EmitLCall(Location *dst, const char *label)
@@ -399,6 +466,23 @@ void Mips::EmitPreamble()
   Emit(".text");
   Emit(".align 2");
   Emit(".globl main");
+}
+
+/* Method: EmitMissingBuiltins
+ * --------------------
+ * Metodos supuestamente nativos en el interprete de SPIM, pero en la
+ * version que tengo (SPIM32) no existen
+ */
+void Mips::EmitMissingBuiltins()
+{
+  Emit("# Funciones nativas faltantes en SPIM ");
+  Emit("# Tesis MCC - Optimizacion de compiladores. A.K. ");
+  EmitReadLine();
+  EmitReadInteger();
+  EmitStringEqual();
+  EmitPrintInt();
+  EmitPrintString();
+  EmitPrintBool();
 }
 
 

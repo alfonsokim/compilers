@@ -22,7 +22,7 @@ OBJS = y.tab.o lex.yy.o $(patsubst %.cc, %.o, $(filter %.cc,$(SRCS))) $(patsubst
 JUNK =  *.o lex.yy.c dpp.yy.c y.tab.c y.tab.h *.core core $(COMPILER).purify purify.log 
 
 # Define the tools we are going to use
-CC= g++
+CC = g++
 LD = g++
 LEX = flex
 YACC = bison

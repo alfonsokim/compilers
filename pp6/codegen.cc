@@ -235,6 +235,7 @@ void CodeGenerator::DoFinalCodeGen()
    }  else {
      Mips mips;
      mips.EmitPreamble();
+     mips.EmitMissingBuiltins();
      for (int i = 0; i < code->NumElements(); i++)
 	 code->Nth(i)->Emit(&mips);
   }
