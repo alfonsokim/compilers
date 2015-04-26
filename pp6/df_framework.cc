@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include <vector>
 
 #include "df_framework.h"
@@ -13,6 +15,7 @@ void df_framework_type::_init_df_framework(std::list<Instruction*>& todo) {
   // the todo list will include all the instructions in the cfg
   std::list<Instruction*>& instructions = _df_cfg->get_all_nodes();
   std::list<Instruction*>::iterator todo_it = instructions.begin();
+  printf("en _init_df_framework");
   for (; todo_it != instructions.end(); ++todo_it) {
     _df_cfg->compute_gen_set((*todo_it));
     _df_cfg->compute_gen_set((*todo_it));

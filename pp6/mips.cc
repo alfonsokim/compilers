@@ -293,7 +293,7 @@ void Mips::EmitCallInstr(Location *result, const char *fn, bool isLabel)
   {"_PrintBool", 1, false},
 */
 void Mips::EmitReadLine() {
-    Emit("_ReadLine:\t\t# Funcion nativa faltante: _ReadLine");
+    Emit("_ReadLine:\t# Funcion nativa faltante: _ReadLine");
     // Aqui va la implementacion del metodo =(
     Emit("\tjr $ra\t\t# return from function");
 }
@@ -303,7 +303,7 @@ void Mips::EmitReadLine() {
  * Funcion nativa que no esta presente en la version de SPIM
  */
 void Mips::EmitReadInteger() {
-    Emit("_ReadInteger:\t\t# Funcion nativa faltante: _ReadInteger");
+    Emit("_ReadInteger:\t# Funcion nativa faltante: _ReadInteger");
     // Aqui va la implementacion del metodo =(
     Emit("\tjr $ra\t\t# return from function");
 }
@@ -313,7 +313,7 @@ void Mips::EmitReadInteger() {
  * Funcion nativa que no esta presente en la version de SPIM
  */
 void Mips::EmitStringEqual() {
-    Emit("_StringEqual:\t\t# Funcion nativa faltante: _StringEqual");
+    Emit("_StringEqual:\t# Funcion nativa faltante: _StringEqual");
     // Aqui va la implementacion del metodo =(
     Emit("\tjr $ra\t\t# return from function");
 }
@@ -323,7 +323,7 @@ void Mips::EmitStringEqual() {
  * Funcion nativa que no esta presente en la version de SPIM
  */
 void Mips::EmitPrintInt() {
-    Emit("_PrintInt:\t\t# Funcion nativa faltante: _PrintInt");
+    Emit("_PrintInt:\t# Funcion nativa faltante: _PrintInt");
     // Aqui va la implementacion del metodo =(
     Emit("\tjr $ra\t\t# return from function");
 }
@@ -333,7 +333,7 @@ void Mips::EmitPrintInt() {
  * Funcion nativa que no esta presente en la version de SPIM
  */
 void Mips::EmitPrintString() {
-    Emit("_PrintString:\t\t# Funcion nativa faltante: _PrintString");
+    Emit("_PrintString:\t# Funcion nativa faltante: _PrintString");
     // Aqui va la implementacion del metodo =(
     Emit("\tjr $ra\t\t# return from function");
 }
@@ -343,7 +343,7 @@ void Mips::EmitPrintString() {
  * Funcion nativa que no esta presente en la version de SPIM
  */
 void Mips::EmitPrintBool() {
-    Emit("_PrintBool:\t\t# Funcion nativa faltante: _PrintBool");
+    Emit("_PrintBool:\t# Funcion nativa faltante: _PrintBool");
     // Aqui va la implementacion del metodo =(
     Emit("\tjr $ra\t\t# return from function");
 }
