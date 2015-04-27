@@ -48,7 +48,7 @@ class Mips {
 
     /*
      * Funciones 'nativas' que no existen en la version de MIPS (SPIM)
-     * Tesis AK - MCC
+     * Tesis MCC - AK
      */
     void EmitReadLine();
     void EmitReadInteger();

@@ -9,6 +9,7 @@
 #include "scope.h"
 #include "errors.h"
 #include "codegen.h"
+#include "cfg_type.h"
 
 
 Program::Program(List<Decl*> *d) {
@@ -24,21 +25,25 @@ void Program::Check() {
 void Program::Emit() {
     bool found = false;
     for (int i=0; i < decls->NumElements(); i++) {
-	Decl *d = decls->Nth(i);
-	if (!strcmp(d->GetName(), "main") && d->IsFnDecl()) {
-	  found = true;
-	  break;
-	}
+	   Decl *d = decls->Nth(i);
+	   if (!strcmp(d->GetName(), "main") && d->IsFnDecl()) {
+	       found = true;
+	       break;
+	   }
     }
     if (!found) {
-	ReportError::NoMainFound();
-	return;
+	   ReportError::NoMainFound();
+	   return;
     }
     CodeGenerator *cg = new CodeGenerator();
     decls->EmitAll(cg);
-    if (ReportError::NumErrors() == 0)
+    if (ReportError::NumErrors() == 0) {
+        cg->Optimize();
         cg->DoFinalCodeGen();
+    }
 }
+
+// ===========================================================================
 
 StmtBlock::StmtBlock(List<VarDecl*> *d, List<Stmt*> *s) {
     Assert(d != NULL && s != NULL);

@@ -13,8 +13,8 @@ default: $(PRODUCTS)
 
 # Set up the list of source and object files
 SRCS = ast.cc ast_decl.cc ast_expr.cc ast_stmt.cc ast_type.cc scope.cc \
-	codegen.cc tac.cc mips.cc errors.cc utility.cc main.cc \
-	cfg_type.cc df_base_type.cc df_const_prop.cc df_framework.cc df_live_var.cc
+	df_live_var.cc codegen.cc tac.cc mips.cc errors.cc utility.cc main.cc \
+	cfg_type.cc df_base_type.cc df_const_prop.cc df_framework.cc 
 
 # OBJS can deal with either .cc or .c files listed in SRCS
 OBJS = y.tab.o lex.yy.o $(patsubst %.cc, %.o, $(filter %.cc,$(SRCS))) $(patsubst %.c, %.o, $(filter %.c, $(SRCS)))

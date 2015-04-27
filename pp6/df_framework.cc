@@ -15,7 +15,6 @@ void df_framework_type::_init_df_framework(std::list<Instruction*>& todo) {
   // the todo list will include all the instructions in the cfg
   std::list<Instruction*>& instructions = _df_cfg->get_all_nodes();
   std::list<Instruction*>::iterator todo_it = instructions.begin();
-  printf("en _init_df_framework");
   for (; todo_it != instructions.end(); ++todo_it) {
     _df_cfg->compute_gen_set((*todo_it));
     _df_cfg->compute_gen_set((*todo_it));
@@ -70,12 +69,12 @@ void df_framework_type::run_df_framework() {
     if (changed) {
       std::vector<Instruction*>& next_nodes = _df_cfg->out_edges(node);
       for (int cnt=0; cnt < next_nodes.size(); ++cnt) {
-	Instruction* next_node = next_nodes[cnt];
-	// only need to add to todo list if not there already
-	if (_df_cfg->status(next_node) != DF_IN_TODO) {
-	  _df_cfg->status(next_node,DF_IN_TODO);
-	  todo.push_back(next_node);
-	}
+	    Instruction* next_node = next_nodes[cnt];
+	    // only need to add to todo list if not there already
+	    if (_df_cfg->status(next_node) != DF_IN_TODO) {
+	      _df_cfg->status(next_node,DF_IN_TODO);
+	      todo.push_back(next_node);
+	    }
       }
     }
   }

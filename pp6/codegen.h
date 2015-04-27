@@ -166,6 +166,10 @@ class CodeGenerator {
          // useful in debugging to first make sure your Tac is correct.
     void DoFinalCodeGen();
 
+    // Inicia la optimizacion del codigo intermedio
+    // Alfonso Kim.
+    void Optimize();
+
     Location *GenNewArray(Location *numElements);
     Location *GenArrayLen(Location *array);
     Location *GenNew(const char *vTableLabel, int instanceSize);

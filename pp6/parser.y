@@ -106,11 +106,13 @@ Program   :    DeclList            {
                                       @1; 
                                       Program *program = new Program($1);
                                       // if no errors, advance to next phase
-                                      if (ReportError::NumErrors() == 0) 
-                                          program->Check(); 
-                                      // comment out prev line to skip semantic analysis
-                                      if (ReportError::NumErrors() == 0) 
+                                      if (ReportError::NumErrors() == 0) {
+                                        // comment out next line to skip semantic analysis
+                                        program->Check(); 
+                                      }
+                                      if (ReportError::NumErrors() == 0) {
                                           program->Emit();
+                                      }
                                     }
           ;
 

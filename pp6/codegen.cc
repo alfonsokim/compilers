@@ -11,6 +11,7 @@
 #include "mips.h"
 #include "ast_decl.h"
 #include "errors.h"
+#include "df_live_var.h"
   
 CodeGenerator::CodeGenerator()
 {
@@ -235,10 +236,15 @@ void CodeGenerator::DoFinalCodeGen()
    }  else {
      Mips mips;
      mips.EmitPreamble();
-     mips.EmitMissingBuiltins();
+     mips.EmitMissingBuiltins(); // Agregar los metodos nativos que no existen
      for (int i = 0; i < code->NumElements(); i++)
 	 code->Nth(i)->Emit(&mips);
   }
+}
+
+void CodeGenerator::Optimize(){
+    std::list<Instruction*>* codeList = new std::list<Instruction*>();
+    df_live_var *live_vars = new df_live_var(codeList);
 }
 
 
