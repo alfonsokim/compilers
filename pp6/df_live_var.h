@@ -11,7 +11,9 @@ public:
 
   void get_live_locations(Instruction* instruction);
 
-
+/* =================================================
+   =   Implementacion de metodos en df_base_type   =
+   ------------------------------------------------- */
 
   bool compute_gen_set(Instruction* node);
 

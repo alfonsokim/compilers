@@ -4,8 +4,8 @@
 #include <map>
 #include <vector>
 #include <list>
+#include "tac.h"
 
-class Instruction;
 
 typedef std::vector<Instruction*> edge_type;  
 

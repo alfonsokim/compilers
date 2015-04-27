@@ -17,9 +17,9 @@ void df_framework_type::_init_df_framework(std::list<Instruction*>& todo) {
   std::list<Instruction*>::iterator todo_it = instructions.begin();
   for (; todo_it != instructions.end(); ++todo_it) {
     _df_cfg->compute_gen_set((*todo_it));
-    _df_cfg->compute_gen_set((*todo_it));
+    _df_cfg->compute_kill_set((*todo_it));
     _df_cfg->init_in_set((*todo_it));
-    _df_cfg->init_in_set((*todo_it));
+    _df_cfg->init_out_set((*todo_it));
     todo.push_back((*todo_it));
   }
 
