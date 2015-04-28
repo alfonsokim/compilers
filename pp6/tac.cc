@@ -93,9 +93,11 @@ void Store::EmitSpecific(Mips *mips) {
 const char * const BinaryOp::opName[BinaryOp::NumOps]  = {"+", "-", "*", "/", "%", "==", "<", "&&", "||"};;
 
 BinaryOp::OpCode BinaryOp::OpCodeForName(const char *name) {
-  for (int i = 0; i < NumOps; i++) 
-    if (opName[i] && !strcmp(opName[i], name))
-	return (OpCode)i;
+  for (int i = 0; i < NumOps; i++) {
+    if (opName[i] && !strcmp(opName[i], name)) {
+        return (OpCode)i;
+    }
+  }
   Failure("Unrecognized Tac operator: '%s'\n", name);
   return Add; // can't get here, but compiler doesn't know that
 }

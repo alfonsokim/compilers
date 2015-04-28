@@ -56,7 +56,7 @@ void df_framework_type::run_df_framework() {
   // will be processed until a fixed point is reached 
   // (i.e. no change)  
   while (todo.size() > 0) {
-    Instruction* node =  todo.front();
+    Instruction* node = todo.front();
     todo.pop_front();
     _df_cfg->status(node,DF_NOT_IN_TODO);
     // first apply the meet operator
