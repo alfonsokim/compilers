@@ -35,10 +35,16 @@ void Program::Emit() {
 	   ReportError::NoMainFound();
 	   return;
     }
+
+    // Analisis de variables vivas
+    for (int i=0; i < decls->NumElements(); i++) {
+        decls->Nth(i)->Optimize();
+    }
+
     CodeGenerator *cg = new CodeGenerator();
     decls->EmitAll(cg);
     if (ReportError::NumErrors() == 0) {
-        cg->Optimize();
+        //cg->Optimize();
         cg->DoFinalCodeGen();
     }
 }
@@ -116,13 +122,13 @@ void IfStmt::Emit(CodeGenerator *cg) {
     cg->GenIfZ(test->result, elseL);
     body->Emit(cg);
     if (elseBody) {
-	afterElse = cg->NewLabel();
-	cg->GenGoto(afterElse);
+	    afterElse = cg->NewLabel();
+	    cg->GenGoto(afterElse);
     }
     cg->GenLabel(elseL);
     if (elseBody) {
-	elseBody->Emit(cg);
-	cg->GenLabel(afterElse);
+	    elseBody->Emit(cg);
+	    cg->GenLabel(afterElse);
     }
 }
 

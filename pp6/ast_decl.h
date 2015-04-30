@@ -40,9 +40,13 @@ class Decl : public Node
     virtual bool IsFnDecl() { return false; } 
     virtual bool IsMethodDecl() { return false; }
     virtual bool IsIvarDecl() { return false; }
-  int offset;// used for methods and ivars only
+    int offset;// used for methods and ivars only
     void SetOffset(int off) { offset = off; }
     int GetOffset() { return offset; }
+
+    // Metodo generico para optimizacion de codigo
+    // Alfonso Kim - MCC
+    virtual void Optimize() {} 
 };
 
 class VarDecl : public Decl 
@@ -121,6 +125,7 @@ class FnDecl : public Decl
     List<VarDecl*> *GetFormals() { return formals; }
     const char *GetFunctionLabel();
     void Emit(CodeGenerator *cg);
+    void Optimize();
 };
 
 #endif

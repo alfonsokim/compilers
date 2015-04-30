@@ -243,6 +243,7 @@ void CodeGenerator::DoFinalCodeGen()
   }
 }
 
+/*
 void CodeGenerator::Optimize(){
     std::list<Instruction*>* codeList = new std::list<Instruction*>();
     // El framework de optimizacion (analisis de variables vivas)
@@ -256,7 +257,7 @@ void CodeGenerator::Optimize(){
     df_framework_type *dff = new df_framework_type(live, DF_FORWARD);
     dff->run_df_framework();
 }
-
+*/
 
 
 Location *CodeGenerator::GenArrayLen(Location *array)

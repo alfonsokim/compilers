@@ -235,6 +235,11 @@ bool FnDecl::MatchesPrototype(FnDecl *other) {
     return true;
 }
 
+//
+void FnDecl::Optimize() {
+    printf("En FnDecl::Optimize !!\n");
+}
+
 void FnDecl::Emit(CodeGenerator *cg) {
     if (body) {
         cg->GenLabel(GetFunctionLabel());
