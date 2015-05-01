@@ -3,13 +3,13 @@
 
 #include "df_framework.h"
 
-class df_live_var : public CFGBaseType {
+class CFDLiveVariable : public CFGBaseType {
 
 public:
 
-  df_live_var(std::list<Instruction*>* code);
+  CFDLiveVariable(std::list<Instruction*>* code);
 
-  void get_live_locations(Instruction* instruction);
+  void GetLiveLocations(Instruction* instruction);
 
 /* =================================================
    =   Implementacion de metodos en CFGBaseType   =

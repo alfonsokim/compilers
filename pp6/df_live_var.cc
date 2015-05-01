@@ -3,46 +3,46 @@
 #include <stdio.h>
 #include "df_live_var.h"
 
-df_live_var::df_live_var(std::list<Instruction*>* code) : CFGBaseType(code) { }
+CFDLiveVariable::CFDLiveVariable(std::list<Instruction*>* code) : CFGBaseType(code) { }
 
-void df_live_var::get_live_locations(Instruction* instruction) {}
+void CFDLiveVariable::GetLiveLocations(Instruction* instruction) {}
 
 /* =================================================
    =   Implementacion de metodos en df_base_type   =
    ------------------------------------------------- */
 
-bool df_live_var::ComputeGenSet(Instruction* node) { 
+bool CFDLiveVariable::ComputeGenSet(Instruction* node) { 
     return false; 
 }
 
-bool df_live_var::ComputeKillSet(Instruction* node) { 
+bool CFDLiveVariable::ComputeKillSet(Instruction* node) { 
     return false; 
 }
 
-void df_live_var::InitInSet(Instruction* node) { 
+void CFDLiveVariable::InitInSet(Instruction* node) { 
 }
 
-void df_live_var::InitOutSet(Instruction* node) { 
+void CFDLiveVariable::InitOutSet(Instruction* node) { 
     printf("iniciando init_out_set con ");
     node->Print();
 }
 
-bool df_live_var::ApplyMeetOperator(Instruction* node) { 
+bool CFDLiveVariable::ApplyMeetOperator(Instruction* node) { 
     return false; 
 }
 
-bool df_live_var::ApplyTransferFunction(Instruction* node) { 
+bool CFDLiveVariable::ApplyTransferFunction(Instruction* node) { 
     return false; 
 }
   
-void df_live_var::Status(Instruction* node, DF_STATUS_TYPE status) {
+void CFDLiveVariable::Status(Instruction* node, DF_STATUS_TYPE status) {
 
 }
 
-DF_STATUS_TYPE df_live_var::Status(Instruction* node) { 
+DF_STATUS_TYPE CFDLiveVariable::Status(Instruction* node) { 
     return DF_NOT_INITIALIZED; 
 }
 
-void df_live_var::ApplyDFInfo() {
+void CFDLiveVariable::ApplyDFInfo() {
 
 }
