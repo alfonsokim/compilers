@@ -35,21 +35,21 @@ void CFGType::ReverseCFG() {
 
 EdgeType& CFGType::GetInEdges(Instruction* instruction) {
   // first check if this node is actually has any in_edges
-  EdgeType& in_nodes = emptyEdges;
+  EdgeType& inNodes = emptyEdges;
   if (inEdges.find(instruction) != inEdges.end()) {
-    in_nodes = (*inEdges.find(instruction)).second;
+    inNodes = (*inEdges.find(instruction)).second;
   }
-  return in_nodes;
+  return inNodes;
 }
 
 
 EdgeType& CFGType::GetOutEdges(Instruction* instruction) {
   // first check if this node is actually has any in_edges
-  EdgeType& out_nodes = emptyEdges;
+  EdgeType& outNodes = emptyEdges;
   if (OutEdges.find(instruction) != OutEdges.end()) {
-    out_nodes = (*OutEdges.find(instruction)).second;
+    outNodes = (*OutEdges.find(instruction)).second;
   }
-  return out_nodes;
+  return outNodes;
 }
 
 void CFGType::AddInEdge(Instruction* from, Instruction* to) {

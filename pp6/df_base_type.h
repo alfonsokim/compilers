@@ -21,22 +21,22 @@ class CFGBaseType : public CFGType {
 
   std::list<Instruction*>& GetAllNodes();
 
-  virtual bool compute_gen_set(Instruction* node) = 0;
+  virtual bool ComputeGenSet(Instruction* node) = 0;
 
-  virtual bool compute_kill_set(Instruction* node) = 0;
+  virtual bool ComputeKillSet(Instruction* node) = 0;
 
-  virtual void init_in_set(Instruction* node) = 0;
+  virtual void InitInSet(Instruction* node) = 0;
 
-  virtual void init_out_set(Instruction* node) = 0;
+  virtual void InitOutSet(Instruction* node) = 0;
 
-  virtual bool apply_meet_operator(Instruction* node) = 0;
+  virtual bool ApplyMeetOperator(Instruction* node) = 0;
 
-  virtual bool apply_transfer_function(Instruction* node) = 0;
+  virtual bool ApplyTransferFunction(Instruction* node) = 0;
   
-  virtual void status(Instruction* node, DF_STATUS_TYPE status) = 0;
-  virtual DF_STATUS_TYPE status(Instruction* node) = 0; 
+  virtual void Status(Instruction* node, DF_STATUS_TYPE status) = 0;
+  virtual DF_STATUS_TYPE Status(Instruction* node) = 0; 
 
-  virtual void apply_df_info() = 0;
+  virtual void ApplyDFInfo() = 0;
   
 
 };

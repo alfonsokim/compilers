@@ -15,23 +15,23 @@ public:
    =   Implementacion de metodos en CFGBaseType   =
    ------------------------------------------------- */
 
-  bool compute_gen_set(Instruction* node);
+  bool ComputeGenSet(Instruction* node);
 
-  bool compute_kill_set(Instruction* node);
+  bool ComputeKillSet(Instruction* node);
 
-  void init_in_set(Instruction* node);
+  void InitInSet(Instruction* node);
 
-  void init_out_set(Instruction* node);
+  void InitOutSet(Instruction* node);
 
-  bool apply_meet_operator(Instruction* node);
+  bool ApplyMeetOperator(Instruction* node);
 
-  bool apply_transfer_function(Instruction* node);
+  bool ApplyTransferFunction(Instruction* node);
   
-  void status(Instruction* node, DF_STATUS_TYPE status);
+  void Status(Instruction* node, DF_STATUS_TYPE status);
 
-  DF_STATUS_TYPE status(Instruction* node);
+  DF_STATUS_TYPE Status(Instruction* node);
 
-  void apply_df_info();
+  void ApplyDFInfo();
 
 };
 
