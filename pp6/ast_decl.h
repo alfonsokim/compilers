@@ -44,8 +44,7 @@ class Decl : public Node
     void SetOffset(int off) { offset = off; }
     int GetOffset() { return offset; }
 
-    // Metodo generico para optimizacion de codigo
-    // Alfonso Kim - MCC
+    // // Optimizacion de codigo intermedio
     virtual void Optimize() {} 
 };
 
@@ -125,6 +124,9 @@ class FnDecl : public Decl
     List<VarDecl*> *GetFormals() { return formals; }
     const char *GetFunctionLabel();
     void Emit(CodeGenerator *cg);
+
+    // Para el analisis de variables vivas solo se requiere que
+    // las funciones optimicen codigo
     void Optimize();
 };
 

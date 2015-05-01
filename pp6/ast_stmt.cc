@@ -36,7 +36,7 @@ void Program::Emit() {
 	   return;
     }
 
-    // Analisis de variables vivas
+    // Optimizacion de codigo intermedio
     for (int i=0; i < decls->NumElements(); i++) {
         decls->Nth(i)->Optimize();
     }
