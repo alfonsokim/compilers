@@ -16,7 +16,7 @@ class DFFrameworkType {
 
  public:
   
-  DFFrameworkType(CFGBaseType* df_cfg, DF_DIRECTION_TYPE direction);
+  DFFrameworkType(CFGBaseType* controlFlowGraph, DF_DIRECTION_TYPE direction);
   
   void RunFramework();
   

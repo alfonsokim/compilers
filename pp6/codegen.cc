@@ -244,17 +244,17 @@ void CodeGenerator::DoFinalCodeGen()
 }
 
 void CodeGenerator::Optimize(){
-    std::list<Instruction*>* codeList = new std::list<Instruction*>();
+    std::list<Instruction*> codeList; // = new std::list<Instruction*>();
     // El framework de optimizacion (analisis de variables vivas)
     // espera una std::list de instrucciones y no un List<>, es por
     // esto que es necesario transformar la lista al tipo esperado
     for (int i = 0; i < code->NumElements(); i++){
-        codeList->push_back(code->Nth(i));
+        codeList.push_back(code->Nth(i));
     }
     // TODO: En algun lugar hay que liberar la memoria de estos objetines
-    // df_live_var *live = new df_live_var(codeList);
-    // df_framework_type *dff = new df_framework_type(live, DF_FORWARD);
-    // dff->run_df_framework();
+    CFDLiveVariable *live = new CFDLiveVariable(&codeList);
+    DFFrameworkType *dff = new DFFrameworkType(live, DF_FORWARD);
+    dff->RunFramework();
 }
 
 

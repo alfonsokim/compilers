@@ -3,9 +3,9 @@
 EdgeType CFGType::emptyEdges;
 
 CFGType::CFGType(std::list<Instruction*>* code) {
-  instructions = code;
-  firstInstr = 0;
-  lastInstr = 0;
+    instructions = code;
+    firstInstr = 0;
+    lastInstr = 0;
 }
   
 void CFGType::FirstInstruction(Instruction* instruction) {

@@ -52,11 +52,11 @@ class Location
 	variableName(base->variableName), segment(base->segment),
 	offset(base->offset), refOffset(refOff), isReference(true) {}
  
-    const char *GetName()           { return variableName; }
-    Segment GetSegment()            { return segment; }
-    int GetOffset()                 { return offset; }
-    bool IsReference()              { return isReference; }
-    int GetRefOffset()              { return refOffset; }
+    const char *GetName() { return variableName; }
+    Segment GetSegment() { return segment; }
+    int GetOffset() { return offset; }
+    bool IsReference() { return isReference; }
+    int GetRefOffset() { return refOffset; }
 };
  
 

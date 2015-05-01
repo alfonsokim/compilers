@@ -6,5 +6,6 @@ CFGBaseType::CFGBaseType(std::list<Instruction*>* code) : CFGType(code) {
 }
 
 std::list<Instruction*>& CFGBaseType::GetAllNodes() {
-  return *instructions;
+    printf("Devolviendo lista con %lu instrucciones\n", instructions->size());
+    return *instructions;
 }

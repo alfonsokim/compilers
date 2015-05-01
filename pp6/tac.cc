@@ -21,8 +21,7 @@ void Instruction::Emit(Mips *mips) {
   EmitSpecific(mips);
 } 
 
-LoadConstant::LoadConstant(Location *d, int v)
-  : dst(d), val(v) {
+LoadConstant::LoadConstant(Location *d, int v) : dst(d), val(v) {
   Assert(dst != NULL);
   sprintf(printed, "%s = %d", dst->GetName(), val);
 }
@@ -31,8 +30,7 @@ void LoadConstant::EmitSpecific(Mips *mips) {
 }
 
 
-LoadStringConstant::LoadStringConstant(Location *d, const char *s)
-  : dst(d) {
+LoadStringConstant::LoadStringConstant(Location *d, const char *s) : dst(d) {
   Assert(dst != NULL && s != NULL);
   const char *quote = (*s == '"') ? "" : "\"";
   str = new char[strlen(s) + 2*strlen(quote) + 1];
@@ -45,8 +43,7 @@ void LoadStringConstant::EmitSpecific(Mips *mips) {
 }
      
 
-LoadLabel::LoadLabel(Location *d, const char *l)
-  : dst(d), label(strdup(l)) {
+LoadLabel::LoadLabel(Location *d, const char *l) : dst(d), label(strdup(l)) {
   Assert(dst != NULL && label != NULL);
   sprintf(printed, "%s = %s", dst->GetName(), label);
 }
@@ -55,8 +52,7 @@ void LoadLabel::EmitSpecific(Mips *mips) {
 }
 
 
-Assign::Assign(Location *d, Location *s)
-  : dst(d), src(s) {
+Assign::Assign(Location *d, Location *s) : dst(d), src(s) {
   Assert(dst != NULL && src != NULL);
   sprintf(printed, "%s = %s", dst->GetName(), src->GetName());
 }
@@ -65,8 +61,7 @@ void Assign::EmitSpecific(Mips *mips) {
 }
 
 
-Load::Load(Location *d, Location *s, int off)
-  : dst(d), src(s), offset(off) {
+Load::Load(Location *d, Location *s, int off) : dst(d), src(s), offset(off) {
   Assert(dst != NULL && src != NULL);
   if (offset) 
     sprintf(printed, "%s = *(%s + %d)", dst->GetName(), src->GetName(), offset);
@@ -78,8 +73,7 @@ void Load::EmitSpecific(Mips *mips) {
 }
 
 
-Store::Store(Location *d, Location *s, int off)
-  : dst(d), src(s), offset(off) {
+Store::Store(Location *d, Location *s, int off) : dst(d), src(s), offset(off) {
   Assert(dst != NULL && src != NULL);
   if (offset)
     sprintf(printed, "*(%s + %d) = %s", dst->GetName(), offset, src->GetName());
@@ -171,8 +165,7 @@ void Return::EmitSpecific(Mips *mips) {
 }
 
 
-PushParam::PushParam(Location *p)
-  :  param(p) {
+PushParam::PushParam(Location *p) : param(p) {
   Assert(param != NULL);
   sprintf(printed, "PushParam %s", param->GetName());
 }
@@ -190,16 +183,14 @@ void PopParams::EmitSpecific(Mips *mips) {
 
 
 
-LCall::LCall(const char *l, Location *d)
-  :  label(strdup(l)), dst(d) {
+LCall::LCall(const char *l, Location *d) :  label(strdup(l)), dst(d) {
   sprintf(printed, "%s%sLCall %s", dst? dst->GetName(): "", dst?" = ":"", label);
 }
 void LCall::EmitSpecific(Mips *mips) {
   mips->EmitLCall(dst, label);
 }
 
-ACall::ACall(Location *ma, Location *d)
-  : dst(d), methodAddr(ma) {
+ACall::ACall(Location *ma, Location *d) : dst(d), methodAddr(ma) {
   Assert(methodAddr != NULL);
   sprintf(printed, "%s%sACall %s", dst? dst->GetName(): "", dst?" = ":"",
 	    methodAddr->GetName());
@@ -209,8 +200,7 @@ void ACall::EmitSpecific(Mips *mips) {
 } 
 
 
-VTable::VTable(const char *l, List<const char *> *m)
-  : methodLabels(m), label(strdup(l)) {
+VTable::VTable(const char *l, List<const char *> *m) : methodLabels(m), label(strdup(l)) {
   Assert(methodLabels != NULL && label != NULL);
   sprintf(printed, "VTable for class %s", l);
 }

@@ -12,17 +12,16 @@
 
 
 void DFFrameworkType::InitFramework(std::list<Instruction*>& todo) {
-  // the todo list will include all the instructions in the cfg
-  std::list<Instruction*>& instructions = controlFlowGraph->GetAllNodes();
-  std::list<Instruction*>::iterator todo_it = instructions.begin();
-  for (; todo_it != instructions.end(); ++todo_it) {
-    controlFlowGraph->ComputeGenSet((*todo_it));
-    controlFlowGraph->ComputeKillSet((*todo_it));
-    controlFlowGraph->InitInSet((*todo_it));
-    controlFlowGraph->InitOutSet((*todo_it));
-    todo.push_back((*todo_it));
-  }
-
+    // the todo list will include all the instructions in the cfg
+    std::list<Instruction*>& instructions = controlFlowGraph->GetAllNodes();
+    std::list<Instruction*>::iterator todo_it = instructions.begin();
+    for (; todo_it != instructions.end(); ++todo_it) {
+        controlFlowGraph->ComputeGenSet((*todo_it));
+        controlFlowGraph->ComputeKillSet((*todo_it));
+        controlFlowGraph->InitInSet((*todo_it));
+        controlFlowGraph->InitOutSet((*todo_it));
+        todo.push_back((*todo_it));
+    }
 }
 
 
@@ -30,9 +29,9 @@ void DFFrameworkType::InitFramework(std::list<Instruction*>& todo) {
 //                      CONSTRUCTORS                            //
 //////////////////////////////////////////////////////////////////
 
-DFFrameworkType::DFFrameworkType(CFGBaseType* controlFlowGraph, DF_DIRECTION_TYPE direction) {
-  controlFlowGraph = controlFlowGraph;
-  direction = direction;
+DFFrameworkType::DFFrameworkType(CFGBaseType* cfg, DF_DIRECTION_TYPE dir) {
+  controlFlowGraph = cfg;
+  direction = dir;
 }
     
 
@@ -51,7 +50,7 @@ void DFFrameworkType::RunFramework() {
   std::list<Instruction*> todo;
   // next initialize the nodes
   InitFramework(todo);
-  
+
   // start the iterative data flow. All the nodes
   // will be processed until a fixed point is reached 
   // (i.e. no change)  
