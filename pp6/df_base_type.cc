@@ -6,5 +6,5 @@ CFGBaseType::CFGBaseType(std::list<Instruction*>* code) : CFGType(code) {
 }
 
 std::list<Instruction*>& CFGBaseType::GetAllNodes() {
-  return *_instructions;
+  return *instructions;
 }

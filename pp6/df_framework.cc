@@ -45,7 +45,7 @@ DFFrameworkType::DFFrameworkType(CFGBaseType* controlFlowGraph, DF_DIRECTION_TYP
 void DFFrameworkType::RunFramework() {
   // if backward we need to reverse the cfg
   if (direction == DF_BACKWARD) {
-    controlFlowGraph->reverse_cfg();
+    controlFlowGraph->ReverseCFG();
   }
 
   std::list<Instruction*> todo;
@@ -67,7 +67,7 @@ void DFFrameworkType::RunFramework() {
     // the out edges of this node need to be added to the todo
     // list since they might also change.
     if (changed) {
-      std::vector<Instruction*>& next_nodes = controlFlowGraph->out_edges(node);
+      std::vector<Instruction*>& next_nodes = controlFlowGraph->GetOutEdges(node);
       for (int cnt=0; cnt < next_nodes.size(); ++cnt) {
 	    Instruction* next_node = next_nodes[cnt];
 	    // only need to add to todo list if not there already

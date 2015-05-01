@@ -7,7 +7,7 @@
 #include "tac.h"
 
 
-typedef std::vector<Instruction*> edge_type;  
+typedef std::vector<Instruction*> EdgeType;  
 
 // this class is a wrapper that represents the cfg. There is a mapping 
 // for every (Stmt) node to all the nodes that can follow (or precede)
@@ -16,36 +16,36 @@ class CFGType {
 
  private:
 
-  static edge_type empty_edges;
+  static EdgeType emptyEdges;
 
-  std::map<Instruction*, edge_type> _in_edges;
-  std::map<Instruction*, edge_type> _out_edges;
-  Instruction* _first_instruction;
-  Instruction* _last_instruction;
+  std::map<Instruction*, EdgeType> inEdges;
+  std::map<Instruction*, EdgeType> OutEdges;
+  Instruction* firstInstr;
+  Instruction* lastInstr;
 
  protected:
 
-  std::list<Instruction*>* _instructions;
+  std::list<Instruction*>* instructions;
   
  public:
   
   CFGType(std::list<Instruction*>* code);
   
-  void  first_instruction(Instruction* first);
-  Instruction* first_instruction();
+  void  FirstInstruction(Instruction* first);
+  Instruction* FirstInstruction();
   
-  void  last_instruction(Instruction* last);
-  Instruction* last_instruction();
+  void  lastInstruction(Instruction* last);
+  Instruction* lastInstruction();
 
-  void reverse_cfg();
+  void ReverseCFG();
 
-  edge_type& in_edges(Instruction* stmt);
+  EdgeType& GetInEdges(Instruction* stmt);
 
-  edge_type& out_edges(Instruction* stmt);
+  EdgeType& GetOutEdges(Instruction* stmt);
 
-  void add_in_edge(Instruction* from, Instruction* to);
+  void AddInEdge(Instruction* from, Instruction* to);
 
-  void add_out_edge(Instruction* from, Instruction* to);
+  void AddOutEdge(Instruction* from, Instruction* to);
   
 };
 
