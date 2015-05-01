@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "df_live_var.h"
 
-df_live_var::df_live_var(std::list<Instruction*>* code) : df_base_type(code) { }
+df_live_var::df_live_var(std::list<Instruction*>* code) : CFGBaseType(code) { }
 
 void df_live_var::get_live_locations(Instruction* instruction) {}
 

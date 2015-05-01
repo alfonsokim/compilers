@@ -13,13 +13,13 @@ enum DF_STATUS_TYPE {
 
 
 
-class df_base_type : public cfg_type {
+class CFGBaseType : public CFGType {
 
  public:
 
-  df_base_type(std::list<Instruction*>* code);
+  CFGBaseType(std::list<Instruction*>* code);
 
-  std::list<Instruction*>& get_all_nodes();
+  std::list<Instruction*>& GetAllNodes();
 
   virtual bool compute_gen_set(Instruction* node) = 0;
 

@@ -12,14 +12,14 @@ typedef std::vector<Instruction*> edge_type;
 // this class is a wrapper that represents the cfg. There is a mapping 
 // for every (Stmt) node to all the nodes that can follow (or precede)
 // in the control flow graph. 
-class cfg_type {
+class CFGType {
 
  private:
 
   static edge_type empty_edges;
 
-  std::map<Instruction*,edge_type> _in_edges;
-  std::map<Instruction*,edge_type> _out_edges;
+  std::map<Instruction*, edge_type> _in_edges;
+  std::map<Instruction*, edge_type> _out_edges;
   Instruction* _first_instruction;
   Instruction* _last_instruction;
 
@@ -29,7 +29,7 @@ class cfg_type {
   
  public:
   
-  cfg_type(std::list<Instruction*>* code);
+  CFGType(std::list<Instruction*>* code);
   
   void  first_instruction(Instruction* first);
   Instruction* first_instruction();

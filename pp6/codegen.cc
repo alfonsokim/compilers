@@ -252,9 +252,9 @@ void CodeGenerator::Optimize(){
         codeList->push_back(code->Nth(i));
     }
     // TODO: En algun lugar hay que liberar la memoria de estos objetines
-    df_live_var *live = new df_live_var(codeList);
-    df_framework_type *dff = new df_framework_type(live, DF_FORWARD);
-    dff->run_df_framework();
+    // df_live_var *live = new df_live_var(codeList);
+    // df_framework_type *dff = new df_framework_type(live, DF_FORWARD);
+    // dff->run_df_framework();
 }
 
 

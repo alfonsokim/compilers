@@ -3,7 +3,7 @@
 
 #include "df_framework.h"
 
-class df_live_var : public df_base_type {
+class df_live_var : public CFGBaseType {
 
 public:
 
@@ -12,7 +12,7 @@ public:
   void get_live_locations(Instruction* instruction);
 
 /* =================================================
-   =   Implementacion de metodos en df_base_type   =
+   =   Implementacion de metodos en CFGBaseType   =
    ------------------------------------------------- */
 
   bool compute_gen_set(Instruction* node);

@@ -12,22 +12,22 @@ enum DF_DIRECTION_TYPE {
 };
 
 
-class df_framework_type {
+class DFFrameworkType {
 
  public:
   
-  df_framework_type(df_base_type* df_cfg, DF_DIRECTION_TYPE direction);
+  DFFrameworkType(CFGBaseType* df_cfg, DF_DIRECTION_TYPE direction);
   
-  void run_df_framework();
+  void RunFramework();
   
  private: // private methods
   
-  void _init_df_framework(std::list<Instruction*>& todo);
+  void InitFramework(std::list<Instruction*>& todo);
 
  private: // private members
   
-  DF_DIRECTION_TYPE _direction;
-  df_base_type* _df_cfg;
+  DF_DIRECTION_TYPE direction;
+  CFGBaseType* controlFlowGraph;
 
 };
 
