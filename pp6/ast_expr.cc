@@ -87,6 +87,15 @@ bool CompoundExpr::EitherOperandIsError(Type *lhs, Type *rhs) {
     return (lhs && lhs == Type::errorType) || rhs == Type::errorType;
 }
 
+VariableAssignation *CompoundExpr::Assignations () { 
+    VariableAssignation* assign = new VariableAssignation(); 
+    Type*lhs = left->CheckAndComputeResultType(), *rhs = right->CheckAndComputeResultType();
+    assign->xName = lhs->TypeName();
+    assign->yName = lhs->TypeName();
+    assign->zName = rhs->TypeName();
+    return assign;
+}
+
 
 void CompoundExpr::Emit(CodeGenerator *cg) {
     Assert(left);
@@ -313,13 +322,13 @@ Type* Call::CheckAndComputeResultType() {
 	return Type::intType;
     }
     if (baseType == Type::errorType) {
-	return Type::errorType;
+	    return Type::errorType;
     }
     if (baseType && !fd) { // had receiver, but no field in receiver (not class, wrong name, etc.)
-	ReportError::FieldNotFoundInBase(field, baseType);
+	    ReportError::FieldNotFoundInBase(field, baseType);
         return Type::errorType;
     } else if (!fd) { // no base, bad function
-	ReportError::IdentifierNotDeclared(field, LookingForFunction);
+	    ReportError::IdentifierNotDeclared(field, LookingForFunction);
         return Type::errorType;
     }  
 
@@ -340,14 +349,14 @@ void Call::Emit(CodeGenerator *cg)
 {
     Type *baseType = base ? base->CheckAndComputeResultType() :NULL;
     if (baseType && baseType->IsArrayType()) { // assume length() (i.e. semantically correct)
-	base->Emit(cg);
-	result = cg->GenArrayLen(base->result);
-	return;
+	   base->Emit(cg);
+	   result = cg->GenArrayLen(base->result);
+	   return;
     }
     List<Location*> l;	// this is not convenient...
     for (int i = 0; i < actuals->NumElements(); i++) {
-	actuals->Nth(i)->Emit(cg);
-	l.Append(actuals->Nth(i)->result);
+	   actuals->Nth(i)->Emit(cg);
+	   l.Append(actuals->Nth(i)->result);
     }
     Type *resultType = CheckAndComputeResultType(); // force base to get set
     FnDecl *func = dynamic_cast<FnDecl *>(field->GetDeclRelativeToBase(baseType));

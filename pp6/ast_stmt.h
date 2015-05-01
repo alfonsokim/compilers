@@ -33,6 +33,9 @@ class Stmt : public Node
   public:
      Stmt() : Node() {}
      Stmt(yyltype loc) : Node(loc) {}
+
+     // Variables para generar el grafo de control de flujo
+     virtual bool UseVariables() { return false; }
 };
 
 class StmtBlock : public Stmt 

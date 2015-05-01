@@ -237,7 +237,9 @@ bool FnDecl::MatchesPrototype(FnDecl *other) {
 
 //
 void FnDecl::Optimize() {
-    printf("En FnDecl::Optimize !!\n");
+    if (body) {
+        printf("En FnDecl::Optimize!!\n");
+    }
 }
 
 void FnDecl::Emit(CodeGenerator *cg) {
@@ -246,7 +248,6 @@ void FnDecl::Emit(CodeGenerator *cg) {
         cg->GenBeginFunc(this);
         body->Emit(cg);
         cg->GenEndFunc();
-        
     }
 }
 

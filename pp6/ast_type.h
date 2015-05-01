@@ -26,6 +26,7 @@ class Type : public Node
     Type(yyltype loc) : Node(loc) {}
     Type(const char *str);
     
+    char* TypeName() { return typeName; }
     virtual void PrintToStream(std::ostream& out) { out << typeName; }
     friend std::ostream& operator<<(std::ostream& out, Type *t) { t->PrintToStream(out); return out; }
     virtual bool IsEquivalentTo(Type *other) { return this == other; }

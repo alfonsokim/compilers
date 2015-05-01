@@ -19,6 +19,11 @@ class Type; // for NewArray
 class ClassDecl; // for This
 class Location;
 
+struct VariableAssignation {
+    char* xName;
+    char* yName;
+    char* zName;
+};
 
 class Expr : public Stmt 
 {
@@ -29,6 +34,9 @@ class Expr : public Stmt
     virtual Type* CheckAndComputeResultType() = 0;
     Location *result;
     Location *GetResult() { return result; }
+
+    // Analisis de variables vivas
+    virtual VariableAssignation *Assignations () { return NULL; }
 };
 
 /* This node type is used for those places where an expression is optional.
@@ -114,6 +122,8 @@ class CompoundExpr : public Expr
     CompoundExpr(Operator *op, Expr *rhs);             // for unary
     void ReportErrorForIncompatibleOperands(Type *lhs, Type *rhs);
     bool EitherOperandIsError(Type *lhs, Type *rhs);
+    
+    VariableAssignation *Assignations ();
     void Emit(CodeGenerator *cg);
 };
 
