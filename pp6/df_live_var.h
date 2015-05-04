@@ -2,6 +2,8 @@
 #define _H_DF_LIVE_VAR
 
 #include "df_framework.h"
+#include <map>
+#include <string>
 
 class CFDLiveVariable : public CFGBaseType {
 
@@ -32,6 +34,14 @@ public:
   DF_STATUS_TYPE Status(Instruction* node);
 
   void ApplyDFInfo();
+
+/* =================================================
+   =      Prueba de simplificacion de codigo       =
+   ------------------------------------------------- */
+
+  std::map<int, std::map<std::string, std::pair<int,int> > > variable_timeline;
+  
+  void get_live_locations(std::list<Instruction*>, int);
 
 };
 

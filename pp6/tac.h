@@ -24,6 +24,8 @@
 #define _H_tac
 
 #include "list.h" // for VTable
+#include <string>
+
 class Mips;
 
 
@@ -76,6 +78,7 @@ class Instruction {
     // Metodos para la construccion del CFG
     virtual bool IsStartBlock() { return false; }
     virtual bool IsEndBlock()  { return false; }
+    std::string Command() { return printed; }
 };
 
   
