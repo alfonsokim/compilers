@@ -37,8 +37,8 @@ class Mips;
  
 typedef enum {fpRelative, gpRelative} Segment;
 
-class Location
-{
+class Location {
+
   protected:
     const char *variableName;
     Segment segment;
@@ -72,6 +72,10 @@ class Instruction {
 	virtual void Print();
 	virtual void EmitSpecific(Mips *mips) = 0;
 	virtual void Emit(Mips *mips);
+
+    // Metodos para la construccion del CFG
+    virtual bool IsStartBlock() { return false; }
+    virtual bool IsEndBlock()  { return false; }
 };
 
   
@@ -193,12 +197,18 @@ class BeginFunc: public Instruction {
     // used to backpatch the instruction with frame size once known
     void SetFrameSize(int numBytesForAllLocalsAndTemps);
     void EmitSpecific(Mips *mips);
+
+    // Metodos para la construccion del CFG
+    bool IsStartBlock() { return true; }
 };
 
 class EndFunc: public Instruction {
   public:
     EndFunc();
     void EmitSpecific(Mips *mips);
+
+    // Metodos para la construccion del CFG
+    bool IsEndBlock()  { return true; }
 };
 
 class Return: public Instruction {

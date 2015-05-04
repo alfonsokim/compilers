@@ -23,8 +23,7 @@ void CFDLiveVariable::InitInSet(Instruction* node) {
 }
 
 void CFDLiveVariable::InitOutSet(Instruction* node) { 
-    printf("iniciando init_out_set con ");
-    node->Print();
+    PrintDebug("optim", "iniciando init_out_set Inicio?(%i) Fin?(%i)", node->IsStartBlock(), node->IsEndBlock());
 }
 
 bool CFDLiveVariable::ApplyMeetOperator(Instruction* node) { 
