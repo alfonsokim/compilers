@@ -14,13 +14,13 @@
 void DFFrameworkType::InitFramework(std::list<Instruction*>& todo) {
     // the todo list will include all the instructions in the cfg
     std::list<Instruction*>& instructions = controlFlowGraph->GetAllNodes();
-    std::list<Instruction*>::iterator todo_it = instructions.begin();
-    for (; todo_it != instructions.end(); ++todo_it) {
-        controlFlowGraph->ComputeGenSet((*todo_it));
-        controlFlowGraph->ComputeKillSet((*todo_it));
-        controlFlowGraph->InitInSet((*todo_it));
-        controlFlowGraph->InitOutSet((*todo_it));
-        todo.push_back((*todo_it));
+    std::list<Instruction*>::iterator todoIterator = instructions.begin();
+    for (; todoIterator != instructions.end(); ++todoIterator) {
+        controlFlowGraph->ComputeGenSet((*todoIterator));
+        controlFlowGraph->ComputeKillSet((*todoIterator));
+        controlFlowGraph->InitInSet((*todoIterator));
+        controlFlowGraph->InitOutSet((*todoIterator));
+        todo.push_back((*todoIterator));
     }
 }
 

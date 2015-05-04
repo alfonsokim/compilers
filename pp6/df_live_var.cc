@@ -39,7 +39,6 @@ CFDLiveVariable::CFDLiveVariable(std::list<Instruction*>* code) : CFGBaseType(co
 
     // Formar los vertices in y out del grafo
     for(int numBlock = 0; numBlock < NumCodeBlocks(); numBlock++) { 
-        // no in-edges if first time through
         if( numBlock == 0 ){
             AddInEdge(numBlock, currentInEdges);
             AddOutEdge(numBlock+1, currentOutEdges);
@@ -57,11 +56,6 @@ CFDLiveVariable::CFDLiveVariable(std::list<Instruction*>* code) : CFGBaseType(co
 
 }
 
-/*
-void CFDLiveVariable::GetLiveLocations(Instruction* instruction) {
-    get_live_locations(cfg.basic_block[z], z);
-}
-*/
 
 /* =================================================
    =   Implementacion de metodos en df_base_type   =
@@ -77,9 +71,7 @@ bool CFDLiveVariable::ComputeKillSet(Instruction* node) {
 
 void CFDLiveVariable::InitInSet(Instruction* node) {}
 
-void CFDLiveVariable::InitOutSet(Instruction* node) { 
-    // PrintDebug("optim", "iniciando init_out_set Inicio?(%i) Fin?(%i)", node->IsStartBlock(), node->IsEndBlock());
-}
+void CFDLiveVariable::InitOutSet(Instruction* node) { }
 
 bool CFDLiveVariable::ApplyMeetOperator(Instruction* node) { 
     return false; 
@@ -165,6 +157,6 @@ void CFDLiveVariable::get_live_locations(std::list<Instruction*> stmt, int id) {
         );
         fails.pop_back();
     }
-    variable_timeline.insert( std::pair<int, std::map<std::string, std::pair<int,int> > > (id,current_live_vars) );
+    variable_timeline.insert( std::pair<int, std::map<std::string, std::pair<int,int> > > (id, current_live_vars) );
 }
 
