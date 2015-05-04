@@ -36,9 +36,32 @@ CFDLiveVariable::CFDLiveVariable(std::list<Instruction*>* code) : CFGBaseType(co
             inBlock = false;
         }
     } // for de iteracion de instrucciones
+
+    // Formar los vertices in y out del grafo
+    for(int numBlock = 0; numBlock < NumCodeBlocks(); numBlock++) { 
+        // no in-edges if first time through
+        if( numBlock == 0 ){
+            AddInEdge(numBlock, currentInEdges);
+            AddOutEdge(numBlock+1, currentOutEdges);
+        } else {
+            currentInEdges.push_back(numBlock);
+            currentOutEdges.push_back(numBlock+2);
+        }
+        AddInEdge(numBlock, currentInEdges);
+        AddOutEdge(numBlock+1, currentOutEdges);
+    } // for de iterar los bloques de codigo
+
+    for(int numBlock = 0; numBlock < NumCodeBlocks(); numBlock++) {
+        get_live_locations(GetCodeBlockAt(numBlock), numBlock);
+    } // for de iterar los bloques de codigo    
+
 }
 
-void CFDLiveVariable::GetLiveLocations(Instruction* instruction) {}
+/*
+void CFDLiveVariable::GetLiveLocations(Instruction* instruction) {
+    get_live_locations(cfg.basic_block[z], z);
+}
+*/
 
 /* =================================================
    =   Implementacion de metodos en df_base_type   =
@@ -75,6 +98,8 @@ DF_STATUS_TYPE CFDLiveVariable::Status(Instruction* node) {
 void CFDLiveVariable::ApplyDFInfo() {}
 
 void CFDLiveVariable::get_live_locations(std::list<Instruction*> stmt, int id) {
+    PrintDebug("optim", "Generando conjunto live para bloque %i", id);
+
     std::string str_tmp ("=");
     size_t found;
     std::map<std::string, std::pair<int,int> > current_live_vars;

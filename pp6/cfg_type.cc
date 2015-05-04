@@ -65,3 +65,20 @@ void CFGType::AddCodeBlock(std::list<Instruction*> codeBlock){
     PrintDebug("optim", "Agregando bloque (%i: %i)", codeBlockNum, codeBlock.size());
     codeBlocks.insert(std::pair<int, std::list<Instruction*> >(codeBlockNum++, codeBlock));
 }
+
+int CFGType::NumCodeBlocks() {
+  return codeBlockNum;
+}
+
+
+void CFGType::AddInEdge(int id, std::list<int> blockIds) {
+  PrintDebug("optim", "Agregando nodo In (%i)", id);
+}
+
+void CFGType::AddOutEdge(int id, std::list<int> blockIds) {
+  PrintDebug("optim", "Agregando nodo Out (%i)", id);
+}
+
+std::list<Instruction*> CFGType::GetCodeBlockAt(int idCodeBlock) {
+  return codeBlocks[idCodeBlock];
+}

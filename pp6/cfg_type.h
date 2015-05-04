@@ -50,6 +50,14 @@ class CFGType {
   void AddOutEdge(Instruction* from, Instruction* to);
 
   void AddCodeBlock(std::list<Instruction*>);
+
+  int NumCodeBlocks();
+
+  void AddInEdge(int, std::list<int>);
+
+  void AddOutEdge(int, std::list<int>);
+
+  std::list<Instruction*> GetCodeBlockAt(int);
   
 };
 
