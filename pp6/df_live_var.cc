@@ -9,13 +9,17 @@ CFDLiveVariable::CFDLiveVariable(std::list<Instruction*>* code) : CFGBaseType(co
     std::list<Instruction*> currentBlock;
     std::list<int> currentInEdges;
     std::list<int> currentOutEdges;
-    int id = 0;
     bool inBlock = false;
 
     std::list<Instruction*>::iterator instructionIt = code->begin(); 
     for (; instructionIt != code->end(); instructionIt++) {
         Instruction *instruction = *instructionIt;
-        if (!inBlock && instruction->IsStartBlock()) { // Buscar inicio de bloque
+
+        if (inBlock && instruction != NULL) { // Agregar instrucciones al bloque
+            currentBlock.push_back(instruction);
+        }
+
+        if (! inBlock && instruction->IsStartBlock()) { // Buscar inicio de bloque
             if (instruction != NULL) {
                 PrintDebug("optim", "Inicio de bloque (%s)", instruction->Command().c_str());
                 currentBlock.push_back(instruction);
@@ -23,14 +27,13 @@ CFDLiveVariable::CFDLiveVariable(std::list<Instruction*>* code) : CFGBaseType(co
             }
         }
 
-        if(inBlock && instruction->IsEndBlock()) {
+        if(inBlock && instruction->IsEndBlock()) { // Buscar fin de bloque
             PrintDebug("optim", "Fin de bloque (%s)", instruction->Command().c_str());
-            // cfg.add_basic_block(id, current_block);
-            while(!currentBlock.empty()) {
+            AddCodeBlock(currentBlock);
+            while(! currentBlock.empty()) {
                 currentBlock.pop_front();
             }
             inBlock = false;
-            id += 1;
         }
     } // for de iteracion de instrucciones
 }

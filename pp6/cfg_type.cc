@@ -6,6 +6,7 @@ CFGType::CFGType(std::list<Instruction*>* code) {
     instructions = code;
     firstInstr = 0;
     lastInstr = 0;
+    codeBlockNum = 0;
 }
   
 void CFGType::FirstInstruction(Instruction* instruction) {
@@ -58,4 +59,9 @@ void CFGType::AddInEdge(Instruction* from, Instruction* to) {
 
 void CFGType::AddOutEdge(Instruction* from, Instruction* to) {
   OutEdges[from].push_back(to);
+}
+
+void CFGType::AddCodeBlock(std::list<Instruction*> codeBlock){
+    PrintDebug("optim", "Agregando bloque (%i: %i)", codeBlockNum, codeBlock.size());
+    codeBlocks.insert(std::pair<int, std::list<Instruction*> >(codeBlockNum++, codeBlock));
 }

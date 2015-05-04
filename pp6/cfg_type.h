@@ -18,6 +18,7 @@ class CFGType {
 
   static EdgeType emptyEdges;
 
+  std::map<int, std::list<Instruction*> > codeBlocks;
   std::map<Instruction*, EdgeType> inEdges;
   std::map<Instruction*, EdgeType> OutEdges;
   Instruction* firstInstr;
@@ -26,6 +27,7 @@ class CFGType {
  protected:
 
   std::list<Instruction*>* instructions;
+  int codeBlockNum;
   
  public:
   
@@ -46,6 +48,8 @@ class CFGType {
   void AddInEdge(Instruction* from, Instruction* to);
 
   void AddOutEdge(Instruction* from, Instruction* to);
+
+  void AddCodeBlock(std::list<Instruction*>);
   
 };
 
