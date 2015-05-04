@@ -85,14 +85,6 @@ class Instruction {
   
   // for convenience, the instruction classes are listed here.
   // the interfaces for the classes follows below
-  
-/*
-  string str_goto ("Goto");
-  string str_return ("Return");
-  string str_jmp ("IfZ");
-  string str_end ("EndFunc");
-  string str_call("LCall");
-*/
 
   class LoadConstant;
   class LoadStringConstant;

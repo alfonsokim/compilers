@@ -4,7 +4,36 @@
 #include <algorithm>
 #include "df_live_var.h"
 
-CFDLiveVariable::CFDLiveVariable(std::list<Instruction*>* code) : CFGBaseType(code) { }
+CFDLiveVariable::CFDLiveVariable(std::list<Instruction*>* code) : CFGBaseType(code) {
+    PrintDebug("optim", "Iniciando CFD Live Var con %i instrucciones", code->size());
+    std::list<Instruction*> currentBlock;
+    std::list<int> currentInEdges;
+    std::list<int> currentOutEdges;
+    int id = 0;
+    bool inBlock = false;
+
+    std::list<Instruction*>::iterator instructionIt = code->begin(); 
+    for (; instructionIt != code->end(); instructionIt++) {
+        Instruction *instruction = *instructionIt;
+        if (!inBlock && instruction->IsStartBlock()) { // Buscar inicio de bloque
+            if (instruction != NULL) {
+                PrintDebug("optim", "Inicio de bloque (%s)", instruction->Command().c_str());
+                currentBlock.push_back(instruction);
+                inBlock = true;
+            }
+        }
+
+        if(inBlock && instruction->IsEndBlock()) {
+            PrintDebug("optim", "Fin de bloque (%s)", instruction->Command().c_str());
+            // cfg.add_basic_block(id, current_block);
+            while(!currentBlock.empty()) {
+                currentBlock.pop_front();
+            }
+            inBlock = false;
+            id += 1;
+        }
+    } // for de iteracion de instrucciones
+}
 
 void CFDLiveVariable::GetLiveLocations(Instruction* instruction) {}
 
@@ -23,7 +52,7 @@ bool CFDLiveVariable::ComputeKillSet(Instruction* node) {
 void CFDLiveVariable::InitInSet(Instruction* node) {}
 
 void CFDLiveVariable::InitOutSet(Instruction* node) { 
-    PrintDebug("optim", "iniciando init_out_set Inicio?(%i) Fin?(%i)", node->IsStartBlock(), node->IsEndBlock());
+    // PrintDebug("optim", "iniciando init_out_set Inicio?(%i) Fin?(%i)", node->IsStartBlock(), node->IsEndBlock());
 }
 
 bool CFDLiveVariable::ApplyMeetOperator(Instruction* node) { 
