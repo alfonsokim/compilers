@@ -86,6 +86,14 @@ class Instruction {
   // for convenience, the instruction classes are listed here.
   // the interfaces for the classes follows below
   
+/*
+  string str_goto ("Goto");
+  string str_return ("Return");
+  string str_jmp ("IfZ");
+  string str_end ("EndFunc");
+  string str_call("LCall");
+*/
+
   class LoadConstant;
   class LoadStringConstant;
   class LoadLabel;
@@ -183,6 +191,7 @@ class Goto: public Instruction {
   public:
     Goto(const char *label);
     void EmitSpecific(Mips *mips);
+    bool IsEndBlock()  { return true; }
 };
 
 class IfZ: public Instruction {
@@ -191,6 +200,7 @@ class IfZ: public Instruction {
   public:
     IfZ(Location *test, const char *label);
     void EmitSpecific(Mips *mips);
+    bool IsEndBlock()  { return true; }
 };
 
 class BeginFunc: public Instruction {
@@ -219,6 +229,7 @@ class Return: public Instruction {
   public:
     Return(Location *val);
     void EmitSpecific(Mips *mips);
+    bool IsEndBlock()  { return true; }
 };   
 
 class PushParam: public Instruction {
@@ -241,6 +252,7 @@ class LCall: public Instruction {
   public:
     LCall(const char *labe, Location *result);
     void EmitSpecific(Mips *mips);
+    bool IsEndBlock()  { return true; }
 };
 
 class ACall: public Instruction {
