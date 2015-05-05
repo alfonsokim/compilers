@@ -69,8 +69,10 @@ class Location {
 class Instruction {
     protected:
       char printed[128];
+      bool writeInOutput;
 	  
     public:
+    Instruction();
 	virtual void Print();
 	virtual void EmitSpecific(Mips *mips) = 0;
 	virtual void Emit(Mips *mips);
@@ -78,6 +80,8 @@ class Instruction {
     // Metodos para la construccion del CFG
     virtual bool IsStartBlock() { return false; }
     virtual bool IsEndBlock()  { return false; }
+    virtual bool WriteInOutput() { return writeInOutput; }
+    void SetWriteInOutput(bool write) { writeInOutput = write; }
     std::string Command() { return printed; }
 };
 

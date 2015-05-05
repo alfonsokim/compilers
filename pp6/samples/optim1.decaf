@@ -11,7 +11,35 @@ void main() {
   string s;
   a = 1;
   c1 = 2;
+  // c2 = 3;
+  // c3 = 4;
+  // c4 = 5;
   // b = false;
-  s = "hello";
+  // s = "hello";
   // Print(s);
+}
+
+void joe(int x) {
+  int c;
+  int c1;
+  int c2;
+  int c3;
+  int c4;
+
+  c = 1;
+  c1 = 2;
+}
+
+
+void merol(int x) {
+  int c;
+  int c1;
+  int c2;
+  int c3;
+  int c4;
+
+  c = 1;
+  c1 = 2;
+  c2 = 3;
+  c4 = 3;
 }

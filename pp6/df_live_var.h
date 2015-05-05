@@ -3,9 +3,15 @@
 
 #include "df_framework.h"
 #include <map>
+#include <set>
 #include <string>
 
 class CFDLiveVariable : public CFGBaseType {
+
+private:
+
+    std::map<int, std::map<std::string, std::pair<int,int> > > variable_timeline;
+    std::set<const char*> globalLiveVariables;
 
 public:
 
@@ -39,9 +45,11 @@ public:
    =      Prueba de simplificacion de codigo       =
    ------------------------------------------------- */
 
-  std::map<int, std::map<std::string, std::pair<int,int> > > variable_timeline;
+  // std::map<int, std::map<std::string, std::pair<int,int> > > variable_timeline;
   
-  void get_live_locations(std::list<Instruction*>, int);
+  void ProcessLiveLocations(std::list<Instruction*>, int);
+
+  bool IsVariableLive(const char*);
 
 };
 

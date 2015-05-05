@@ -10,6 +10,9 @@
 Location::Location(Segment s, int o, const char *name) :
   variableName(strdup(name)), segment(s), offset(o), isReference(false){}
 
+Instruction::Instruction() {
+    writeInOutput = true;
+}
  
 void Instruction::Print() {
   printf("\t%s ;\n", printed);

@@ -178,11 +178,14 @@ Location *CodeGenerator::GenACall(Location *fnAddr, bool fnHasReturnValue)
   return result;
 }
   
-Location *CodeGenerator::GenMethodCall(Location *rcvr,
-			     Location *meth, List<Location*> *args, bool fnHasReturnValue)
+Location *CodeGenerator::GenMethodCall(
+    Location *rcvr, Location *meth, 
+    List<Location*> *args, bool fnHasReturnValue)
 {
-  for (int i = args->NumElements()-1; i >= 0; i--)
+  for (int i = args->NumElements()-1; i >= 0; i--) {
     GenPushParam(args->Nth(i));
+  }
+    
   GenPushParam(rcvr);	// hidden "this" parameter
   Location *result= GenACall(meth, fnHasReturnValue);
   GenPopParams((args->NumElements()+1)*VarSize);
@@ -191,18 +194,19 @@ Location *CodeGenerator::GenMethodCall(Location *rcvr,
  
  
 static struct _builtin {
-  const char *label;
-  int numArgs;
-  bool hasReturn;
-} builtins[] =
- {{"_Alloc", 1, true},
-  {"_ReadLine", 0, true},
-  {"_ReadInteger", 0, true},
-  {"_StringEqual", 2, true},
-  {"_PrintInt", 1, false},
-  {"_PrintString", 1, false},
-  {"_PrintBool", 1, false},
-  {"_Halt", 0, false}};
+    const char *label;
+    int numArgs;
+    bool hasReturn;
+} builtins[] = {
+    {"_Alloc", 1, true},
+    {"_ReadLine", 0, true},
+    {"_ReadInteger", 0, true},
+    {"_StringEqual", 2, true},
+    {"_PrintInt", 1, false},
+    {"_PrintString", 1, false},
+    {"_PrintBool", 1, false},
+    {"_Halt", 0, false}
+};
 
 Location *CodeGenerator::GenBuiltInCall(BuiltIn bn,Location *arg1, Location *arg2)
 {
@@ -229,18 +233,23 @@ void CodeGenerator::GenVTable(const char *className, List<const char *> *methodL
 }
 
 
-void CodeGenerator::DoFinalCodeGen()
-{
-  if (IsDebugOn("tac")) { // if debug don't translate to mips, just print Tac
-    for (int i = 0; i < code->NumElements(); i++)
-	code->Nth(i)->Print();
-   }  else {
-     Mips mips;
-     mips.EmitPreamble();
-     mips.EmitMissingBuiltins(); // Agregar los metodos nativos que no existen
-     for (int i = 0; i < code->NumElements(); i++)
-	 code->Nth(i)->Emit(&mips);
-  }
+void CodeGenerator::DoFinalCodeGen() {
+    if (IsDebugOn("tac")) { // if debug don't translate to mips, just print Tac
+        for (int i = 0; i < code->NumElements(); i++) {
+            code->Nth(i)->Print();    
+        }
+     }  else {
+         Mips mips;
+         mips.EmitPreamble();
+         mips.EmitMissingBuiltins(); // Agregar los metodos nativos que no existen
+         for (int i = 0; i < code->NumElements(); i++) {
+            if (code->Nth(i)->WriteInOutput()) {
+                code->Nth(i)->Emit(&mips);    
+            } else {
+                
+            }
+         } 
+    }
 }
 
 void CodeGenerator::Optimize(){
@@ -251,10 +260,12 @@ void CodeGenerator::Optimize(){
     for (int i = 0; i < code->NumElements(); i++){
         codeList.push_back(code->Nth(i));
     }
-    // TODO: En algun lugar hay que liberar la memoria de estos objetines
+    
     CFDLiveVariable *live = new CFDLiveVariable(&codeList);
     DFFrameworkType *dff = new DFFrameworkType(live, DF_FORWARD);
     dff->RunFramework();
+    free(live);
+    free(dff);
 }
 
 

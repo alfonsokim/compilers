@@ -51,7 +51,7 @@ CFDLiveVariable::CFDLiveVariable(std::list<Instruction*>* code) : CFGBaseType(co
     } // for de iterar los bloques de codigo
 
     for(int numBlock = 0; numBlock < NumCodeBlocks(); numBlock++) {
-        get_live_locations(GetCodeBlockAt(numBlock), numBlock);
+        ProcessLiveLocations(GetCodeBlockAt(numBlock), numBlock);
     } // for de iterar los bloques de codigo    
 
 }
@@ -89,25 +89,26 @@ DF_STATUS_TYPE CFDLiveVariable::Status(Instruction* node) {
 
 void CFDLiveVariable::ApplyDFInfo() {}
 
-void CFDLiveVariable::get_live_locations(std::list<Instruction*> stmt, int id) {
+void CFDLiveVariable::ProcessLiveLocations(std::list<Instruction*> stmt, int id) {
     PrintDebug("optim", "Generando conjunto live para bloque %i", id);
 
-    std::string str_tmp ("=");
+    std::string equal ("=");    // se parsean las instrcciones a nivel asignacion
+                                // mejorar agregando una propiedad a las instrucciones
     size_t found;
-    std::map<std::string, std::pair<int,int> > current_live_vars;
+    std::map<std::string, std::pair<int,int> > currentLiveVariables;
     std::vector<std::string> fails;
-    std::string what_temp = "";
-    std::list<Instruction*>::iterator it;
+    std::string temp = "";
+    std::list<Instruction*>::iterator instructionIterator;
     
-    for(it=stmt.begin(); it != stmt.end(); it++) {
-        found = (*it)->Command().find(str_tmp);
-        if(found!=std::string::npos) {
+    for(instructionIterator = stmt.begin(); instructionIterator != stmt.end(); instructionIterator++) {
+        found = (*instructionIterator)->Command().find(equal);
+        if(found != std::string::npos) {
             std::string str_varName ("tmp");
-            found = (*it)->Command().find(str_varName);
-            int beg = (*it)->Command().find_first_of("tmp");
-            int end = (*it)->Command().find_last_of("tmp");
-            what_temp = (*it)->Command().substr(beg,end+1);
-            fails.push_back( what_temp );   
+            found = (*instructionIterator)->Command().find(str_varName);
+            int beg = (*instructionIterator)->Command().find_first_of("tmp");
+            int end = (*instructionIterator)->Command().find_last_of("tmp");
+            temp = (*instructionIterator)->Command().substr(beg, end+1);
+            fails.push_back(temp);   
         }
     }
     
@@ -120,21 +121,21 @@ void CFDLiveVariable::get_live_locations(std::list<Instruction*> stmt, int id) {
         int end;
         bool got_one = false;
         bool got_end = false;
-        std::string what_temp = "";
         std::list<Instruction*>::iterator it; 
 
-        for(it=stmt.begin(); it != stmt.end(); it++) {
+        for(it = stmt.begin(); it != stmt.end(); it++) {
+            Instruction* instruction = *it;
             if(got_one){
                 got_end = true;
             }
 
-            found = (*it)->Command().find( fails.at( fails.size()-1 ) );
+            found = instruction->Command().find( fails.at( fails.size()-1 ) );
             if (!got_one && !got_end && found!=std::string::npos) {
                 start = line;
                 got_one = true;
             }
         
-            found = (*it)->Command().find( fails.at( fails.size()-1 ) );
+            found = instruction->Command().find( fails.at( fails.size()-1 ) );
             if(got_one && got_end && found!=std::string::npos) {
                 end = line;
                 break;
@@ -145,13 +146,17 @@ void CFDLiveVariable::get_live_locations(std::list<Instruction*> stmt, int id) {
         
         std::string liveVar = fails.at(fails.size()-1);
         PrintDebug("optim", "Agregando variable viva: (%s)", liveVar.c_str());
-        current_live_vars.insert( std::pair<std::string, std::pair<int,int> >(
-            liveVar, std::pair<int,int>(start,end))
+        globalLiveVariables.insert(liveVar.c_str());
+        // instruction->SetWriteInOutput(false);
+        currentLiveVariables.insert( std::pair<std::string, std::pair<int, int> >(
+            liveVar, std::pair<int, int>(start, end))
         );
         fails.pop_back();
     } // while
-    
-    variable_timeline.insert( std::pair<int, std::map<std::string, std::pair<int,int> > > (id, current_live_vars) );
+
+    variable_timeline.insert( std::pair<int, std::map<std::string, std::pair<int, int> > > (id, currentLiveVariables) );
 
 }
+
+bool IsVariableLive(const char* varName) { return false; }
 
