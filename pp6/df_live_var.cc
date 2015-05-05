@@ -99,6 +99,7 @@ void CFDLiveVariable::ProcessLiveLocations(std::list<Instruction*> stmt, int id)
     std::vector<std::string> fails;
     std::string temp = "";
     std::list<Instruction*>::iterator instructionIterator;
+    std::map<std::string, Instruction*> instructionVarNames;
     
     for(instructionIterator = stmt.begin(); instructionIterator != stmt.end(); instructionIterator++) {
         found = (*instructionIterator)->Command().find(equal);
@@ -109,11 +110,15 @@ void CFDLiveVariable::ProcessLiveLocations(std::list<Instruction*> stmt, int id)
             int end = (*instructionIterator)->Command().find_last_of("tmp");
             temp = (*instructionIterator)->Command().substr(beg, end+1);
             fails.push_back(temp);   
+            instructionVarNames.insert(std::pair<std::string, Instruction*> (temp, *instructionIterator));
         }
     }
     
     // remove duplicates
     fails.erase(unique(fails.begin(), fails.end()), fails.end());
+
+    PrintDebug("optim", "Tamanio del mapa de instrucciones final: %i", instructionVarNames.size());
+    PrintDebug("optim", "Tamanio de la lista de instrucciones final: %i", fails.size());
 
     while(!fails.empty()){   
         int line = 1;
@@ -147,7 +152,7 @@ void CFDLiveVariable::ProcessLiveLocations(std::list<Instruction*> stmt, int id)
         std::string liveVar = fails.at(fails.size()-1);
         PrintDebug("optim", "Agregando variable viva: (%s)", liveVar.c_str());
         globalLiveVariables.insert(liveVar.c_str());
-        // instruction->SetWriteInOutput(false);
+        instructionVarNames[liveVar]->SetWriteInOutput(false);
         currentLiveVariables.insert( std::pair<std::string, std::pair<int, int> >(
             liveVar, std::pair<int, int>(start, end))
         );

@@ -246,7 +246,10 @@ void CodeGenerator::DoFinalCodeGen() {
             if (code->Nth(i)->WriteInOutput()) {
                 code->Nth(i)->Emit(&mips);    
             } else {
-                
+                char comment[128];
+                sprintf(comment, "# Asignacion de variable [%s] no se usa", code->Nth(i)->Command().c_str());
+                mips.Emit(comment);
+                i = i + 2;
             }
          } 
     }
