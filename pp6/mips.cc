@@ -386,14 +386,12 @@ void Mips::EmitPopParams(int bytes)
  * $fp and $ra so everything is returned to the state we entered.
  * We then emit jr to jump to the saved $ra.
  */
- void Mips::EmitReturn(Location *returnVal)
-{ 
-  if (returnVal != NULL) 
-    {
+ void Mips::EmitReturn(Location *returnVal) { 
+  if (returnVal != NULL) {
       FillRegister(returnVal, rd);
       Emit("move $v0, %s\t\t# assign return value into $v0",
 	   regs[rd].name);
-    }
+  }
   Emit("move $sp, $fp\t\t# pop callee frame off stack");
   Emit("lw $ra, -4($fp)\t# restore saved ra");
   Emit("lw $fp, 0($fp)\t# restore saved fp");
@@ -483,6 +481,12 @@ void Mips::EmitMissingBuiltins()
   EmitPrintInt();
   EmitPrintString();
   EmitPrintBool();
+}
+
+void Mips::EmitSystemCall(Location *reg, int value) {
+    Emit("# Salida desde llamada a sistema para la funcion main");
+    Emit("li $v0, 10\t# Parametro de la llamada");
+    Emit("syscall\t\t# Salida del programa");
 }
 
 

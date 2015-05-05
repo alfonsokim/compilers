@@ -150,6 +150,12 @@ class CodeGenerator {
     BeginFunc *GenBeginFunc(FnDecl *fn);
     void GenEndFunc();
 
+    // Metodo que genera una llamada a sistema para la salida
+    // del programa. Usada en lugar del return del metodo main
+    // ver http://stackoverflow.com/questions/2826935/invalid-program-counter-value-0
+    void GenSystemCall(Location *, int);
+    void GenSystemExit();
+
     
     // Generates the Tac instructions for defining vtable for a
     // The methods parameter is expected to contain the vtable

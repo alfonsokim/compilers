@@ -218,3 +218,9 @@ void VTable::EmitSpecific(Mips *mips) {
   mips->EmitVTable(label, methodLabels);
 }
 
+SystemCall::SystemCall(Location *r, int v) : reg(r), value(v) { }
+
+void SystemCall::EmitSpecific(Mips *mips) {
+    mips->EmitSystemCall(reg, value);
+}
+

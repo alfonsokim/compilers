@@ -109,6 +109,8 @@ class Instruction {
   class ACall;
   class VTable;
 
+  // llamadas al sistema para la salida del programa
+  class SystemCall;
 
 
 
@@ -264,6 +266,15 @@ class VTable: public Instruction {
  public:
     VTable(const char *labelForTable, List<const char *> *methodLabels);
     void Print();
+    void EmitSpecific(Mips *mips);
+};
+
+class SystemCall : public Instruction {
+    Location *reg;
+    int value;
+    
+public:
+    SystemCall(Location *reg, int value);
     void EmitSpecific(Mips *mips);
 };
 

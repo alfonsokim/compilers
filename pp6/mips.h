@@ -95,6 +95,8 @@ class Mips {
     void EmitPreamble();
 
     void EmitMissingBuiltins();
+
+    void EmitSystemCall(Location *reg, int value);
 };
 
 

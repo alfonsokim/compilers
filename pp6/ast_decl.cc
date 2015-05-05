@@ -240,8 +240,12 @@ void FnDecl::Emit(CodeGenerator *cg) {
         cg->GenLabel(GetFunctionLabel());
         cg->GenBeginFunc(this);
         body->Emit(cg);
-        cg->GenEndFunc();
-        
+        if(strcmp("main", GetFunctionLabel()) == 0) {
+            PrintDebug("optim", "Generando TAC para %s", GetFunctionLabel());
+            cg->GenSystemExit();
+        } else {
+            cg->GenEndFunc();    
+        }
     }
 }
 

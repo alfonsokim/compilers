@@ -143,6 +143,18 @@ void CodeGenerator::GenEndFunc()
   insideFn = NULL;
 }
 
+void CodeGenerator::GenSystemCall(Location *reg, int value) {
+    code->Append(new SystemCall(reg, value));
+    insideFn->SetFrameSize(OffsetToFirstLocal-curStackOffset);
+    insideFn = NULL;
+}
+
+void CodeGenerator::GenSystemExit() {
+    code->Append(new SystemCall(NULL, 0));
+    insideFn->SetFrameSize(OffsetToFirstLocal-curStackOffset);
+    insideFn = NULL;
+}
+
 void CodeGenerator::GenPushParam(Location *param)
 {
   code->Append(new PushParam(param));
