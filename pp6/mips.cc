@@ -460,9 +460,13 @@ void Mips::EmitVTable(const char *label, List<const char*> *methodLabels)
  */
 void Mips::EmitPreamble()
 {
+  if (NO_OPTIM) {
+    Emit("# === Codigo generado SIN optimizacion de variables vivas ===");
+  }
   Emit("# standard Decaf preamble ");
   Emit(".text");
-  Emit(".align 2");
+  Emit("# El interprete MARS no acepta .align dentro del bloque text");
+  Emit("# .align 2");
   Emit(".globl main");
 }
 

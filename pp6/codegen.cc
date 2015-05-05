@@ -255,7 +255,7 @@ void CodeGenerator::DoFinalCodeGen() {
          mips.EmitPreamble();
          mips.EmitMissingBuiltins(); // Agregar los metodos nativos que no existen
          for (int i = 0; i < code->NumElements(); i++) {
-            if (code->Nth(i)->WriteInOutput()) {
+            if (code->Nth(i)->WriteInOutput() || NO_OPTIM) {
                 code->Nth(i)->Emit(&mips);    
             } else {
                 char comment[128];
@@ -275,7 +275,6 @@ void CodeGenerator::Optimize(){
     for (int i = 0; i < code->NumElements(); i++){
         codeList.push_back(code->Nth(i));
     }
-    
     CFDLiveVariable *live = new CFDLiveVariable(&codeList);
     DFFrameworkType *dff = new DFFrameworkType(live, DF_FORWARD);
     dff->RunFramework();
