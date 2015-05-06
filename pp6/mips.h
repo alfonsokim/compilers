@@ -56,6 +56,8 @@ class Mips {
     void EmitPrintInt();
     void EmitPrintString();
     void EmitPrintBool();
+    void EmitHalt();
+    void EmitAlloc();
 
     static const char *mipsName[BinaryOp::NumOps];
     static const char *NameForTac(BinaryOp::OpCode code);

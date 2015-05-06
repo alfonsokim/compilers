@@ -1,0 +1,4 @@
+Error in /Users/Alfonso/mcc-workspace/compilers/pp6/results/optimized/blackjack.asm line 75 column 10: Symbol "_Random.GenRandom" not found in symbol table.
+Error in /Users/Alfonso/mcc-workspace/compilers/pp6/results/optimized/blackjack.asm line 2950 column 10: Symbol "_Dealer.TakeTurn" not found in symbol table.
+
+Processing terminated due to errors.

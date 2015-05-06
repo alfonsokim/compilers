@@ -348,6 +348,26 @@ void Mips::EmitPrintBool() {
     Emit("\tjr $ra\t\t# return from function");
 }
 
+/* Method: EmitHalt
+ * ---------------------
+ * Funcion nativa que no esta presente en la version de SPIM
+ */
+void Mips::EmitHalt() {
+    Emit("_Halt:\t# Funcion nativa faltante: _Halt");
+    Emit("li $v0, 10\t# Parametro de la llamada");
+    Emit("syscall\t\t# Salida del programa");
+}
+
+/* Method: EmitAlloc
+ * ---------------------
+ * Funcion nativa que no esta presente en la version de SPIM
+ */
+void Mips::EmitAlloc(){
+    Emit("_Alloc:\t# Funcion nativa faltante: _Alloc");
+    // Aqui va la implementacion del metodo =(
+    Emit("\tjr $ra\t\t# return from function");
+}
+
 // Two covers for the above method for specific LCall/ACall variants
 void Mips::EmitLCall(Location *dst, const char *label)
 { 
@@ -485,6 +505,8 @@ void Mips::EmitMissingBuiltins()
   EmitPrintInt();
   EmitPrintString();
   EmitPrintBool();
+  EmitAlloc();
+  EmitHalt();
 }
 
 void Mips::EmitSystemCall(Location *reg, int value) {
