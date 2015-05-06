@@ -266,8 +266,8 @@ Expr      :    LValue               { $$ = $1; }
           |    T_ReadInteger '(' ')'   
                                     { $$ = new ReadIntegerExpr(Join(@1,@3)); }
           |    T_ReadLine '(' ')'   { $$ = new ReadLineExpr(Join(@1,@3)); }
-          |    T_New T_Identifier
-                                    { $$ = new NewExpr(Join(@1,@2),new NamedType(new Identifier(@2,$2))); }
+          |    T_New '(' T_Identifier ')'
+                                    { $$ = new NewExpr(Join(@1,@2),new NamedType(new Identifier(@2,$3))); }
           |    T_NewArray '(' Expr ',' Type ')' 
                                     { $$ = new NewArrayExpr(Join(@1,@6),$3, $5); }
           |    T_This               { $$ = new This(@1); }
